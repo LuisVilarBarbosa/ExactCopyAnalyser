@@ -3,9 +3,8 @@ import java.util.HashMap;
 
 public class Loader {
 
-    public static void getFiles(String baseDir, File file, HashMap<String, File> files) {
-        File[] fs = file.listFiles();
-        for (File f : fs) {
+    public static void getFiles(String baseDir, File directory, HashMap<String, File> files) {
+        for (File f : directory.listFiles()) {
             if (f.isDirectory())
                 getFiles(baseDir, f, files);
             else {

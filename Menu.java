@@ -30,18 +30,18 @@ public class Menu {
     }
 
     private void compareDirectories() throws Exception {
-        String dir1 = getDirectory("Source directory: ");
-        String dir2 = getDirectory("Destination directory: ");
+        String dir1 = getString("Source directory: ");
+        String dir2 = getString("Destination directory: ");
         dir1 = adjustDirectory(dir1);
         dir2 = adjustDirectory(dir2);
 
         HashMap<String, File> source = new HashMap<>();
         HashMap<String, File> destination = new HashMap<>();
 
-        File f1 = getFile(dir1);
-        File f2 = getFile(dir2);
-        Loader.getFiles(dir1, f1, source);
-        Loader.getFiles(dir2, f2, destination);
+        File directory1 = getDirectory(dir1);
+        File directory2 = getDirectory(dir2);
+        Loader.getFiles(dir1, directory1, source);
+        Loader.getFiles(dir2, directory2, destination);
 
         ArrayList<File> notFoundOnDestination = Checker.findNonExistingOnDestination(source, destination);
         ArrayList<File> notFoundOnSource = Checker.findNonExistingOnDestination(destination, source);
@@ -68,7 +68,7 @@ public class Menu {
         return option;
     }
 
-    private String getDirectory(String message) {
+    private String getString(String message) {
         display(message);
         Scanner scanner = new Scanner(System.in);
         String dir = scanner.nextLine();
@@ -97,7 +97,7 @@ public class Menu {
         return newDir;
     }
 
-    private File getFile(String dir) throws Exception {
+    private File getDirectory(String dir) throws Exception {
         File f = new File(dir);
         if (!f.isDirectory())
             throw new Exception("'" + dir + "' is not a directory.");
