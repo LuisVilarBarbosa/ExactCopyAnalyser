@@ -10,7 +10,7 @@ public class Menu {
         int option;
         StringBuilder sb = new StringBuilder();
         sb.append("\nOptions:\n")
-                .append("1. Compare the content of all corresponding files in two directories.\n")
+                .append("1. Compare the content of all corresponding files in two directories with the same structure.\n")
                 .append(EXIT).append(". Exit.\n");
 
         do {
@@ -50,6 +50,7 @@ public class Menu {
 
         HashMap<File, File> notEqual = Comparator.compareContent(source, destination);
         System.out.println("Not equal content: " + notEqual.size());
+        list(notEqual);
     }
 
     private int selectOption(int begin, int end) {
@@ -70,8 +71,18 @@ public class Menu {
     private String getDirectory(String message) {
         display(message);
         Scanner scanner = new Scanner(System.in);
-        String dir = scanner.next();
+        String dir = scanner.nextLine();
         return dir;
+    }
+
+    private void list(HashMap<File, File> map) {
+        StringBuilder sb = new StringBuilder();
+        for (File f1 : map.keySet()) {
+            File f2 = map.get(f1);
+            sb.append(f1.getAbsolutePath()).append("\n")
+                    .append(f2.getAbsolutePath()).append("\n\n");
+        }
+        display(sb.toString());
     }
 
     private void display(String str) {
