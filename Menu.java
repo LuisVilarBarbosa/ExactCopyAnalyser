@@ -14,13 +14,15 @@ public class Menu {
                 .append("2. Compare the content of two files.\n")
                 .append("3. Compare all corresponding files in two directories with the same structure by size and modification date.\n")
                 .append("4. Compare two files by size and modification date.\n")
-                .append("5. List files that are not in the source directory, but are in the destination directory and have a equal files placed on other location in the source. (Possibly time consuming operation)\n")
-                .append("6. List files that are not in the destination directory, but are in the source directory and have a equal files placed on other location in the destination. (Possibly time consuming operation)\n")
+                .append("5. List files that are in the destination directory, but are not in the source directory and have equal files placed on other location in the source. (Possibly time consuming operation)\n")
+                .append("6. List files that are in the source directory, but are not in the destination directory and have equal files placed on other location in the destination. (Possibly time consuming operation)\n")
+                .append("7. Remove files that are in the destination directory, but are not in the source directory and have equal files placed on other location in the source. (Possibly time consuming operation)\n")
+                .append("8. Remove files that are in the source directory, but are not in the destination directory and have equal files placed on other location in the destination. (Possibly time consuming operation)\n")
                 .append(EXIT).append(". Exit.\n");
 
         do {
             display(sb.toString());
-            option = selectOption(EXIT, 6);
+            option = selectOption(EXIT, 8);
 
             try {
                 switch (option) {
@@ -41,6 +43,12 @@ public class Menu {
                         break;
                     case 6:
                         listFilesThatAreNotInDestinationButHaveCopiesThere();
+                        break;
+                    case 7:
+                        removeFilesThatAreNotInSourceButHaveCopiesThere();
+                        break;
+                    case 8:
+                        removeFilesThatAreNotInDestinationButHaveCopiesThere();
                         break;
                 }
             } catch (Exception e) {
@@ -94,15 +102,13 @@ public class Menu {
             display("The files are not equal.\n");
     }
 
-    private void listFilesThatAreNotInSourceButHaveCopiesThere() throws Exception {
+    private ArrayList<ArrayList<File>> listFilesThatAreNotInSourceButHaveCopiesThere() throws Exception {
         HashMap<String, File> source = new HashMap<>();
         HashMap<String, File> destination = new HashMap<>();
         getDirectoriesFiles(source, destination);
 
-        ArrayList<File> notFound = Checker.findNonExistingOnDestination(destination, source);
-
         Finder finder = new Finder();
-        ArrayList<ArrayList<File>> repeatedFiles = finder.findRepeatedFiles(source, notFound);
+        ArrayList<ArrayList<File>> repeatedFiles = finder.findFilesThatAreNotInSourceButHaveCopiesThere(source, destination);
 
         if (repeatedFiles.isEmpty())
             display("No repeated files have been found.\n");
@@ -110,23 +116,41 @@ public class Menu {
             display("Repeated files:\n");
             list(repeatedFiles);
         }
+        return repeatedFiles;
     }
 
-    private void listFilesThatAreNotInDestinationButHaveCopiesThere() throws Exception {
+    private ArrayList<ArrayList<File>> listFilesThatAreNotInDestinationButHaveCopiesThere() throws Exception {
         HashMap<String, File> source = new HashMap<>();
         HashMap<String, File> destination = new HashMap<>();
         getDirectoriesFiles(source, destination);
 
-        ArrayList<File> notFound = Checker.findNonExistingOnDestination(source, destination);
-
         Finder finder = new Finder();
-        ArrayList<ArrayList<File>> repeatedFiles = finder.findRepeatedFiles(destination, notFound);
+        ArrayList<ArrayList<File>> repeatedFiles = finder.findFilesThatAreNotInDestinationButHaveCopiesThere(source, destination);
 
         if (repeatedFiles.isEmpty())
             display("No repeated files have been found.\n");
         else {
             display("Repeated files:\n");
             list(repeatedFiles);
+        }
+        return repeatedFiles;
+    }
+
+    private void removeFilesThatAreNotInSourceButHaveCopiesThere() throws Exception {
+        ArrayList<ArrayList<File>> repeatedFiles = listFilesThatAreNotInSourceButHaveCopiesThere();
+        if (!repeatedFiles.isEmpty() && confirm()) {
+            display("Removing files...");
+            Changer changer = new Changer();
+            changer.deleteFirstFileInList(repeatedFiles);
+        }
+    }
+
+    private void removeFilesThatAreNotInDestinationButHaveCopiesThere() throws Exception {
+        ArrayList<ArrayList<File>> repeatedFiles = listFilesThatAreNotInDestinationButHaveCopiesThere();
+        if (!repeatedFiles.isEmpty() && confirm()) {
+            display("Removing files...");
+            Changer changer = new Changer();
+            changer.deleteFirstFileInList(repeatedFiles);
         }
     }
 
@@ -143,6 +167,24 @@ public class Menu {
                 display("Invalid option.\n");
         } while (invalid);
         return option;
+    }
+
+    private boolean confirm() {
+        boolean confirm = false;
+        String line;
+        boolean invalid = true;
+        do {
+            line = getString("Are you sure that you want to proceed? (Y/N): ");
+            if (line.equals("Y") || line.endsWith("y")) {
+                confirm = true;
+                invalid = false;
+            } else if (line.equals("N") || line.equals("n")) {
+                confirm = false;
+                invalid = false;
+            } else
+                display("Invalid option.\n");
+        } while (invalid);
+        return confirm;
     }
 
     private void getDirectoriesFiles(HashMap<String, File> source, HashMap<String, File> destination) throws Exception {

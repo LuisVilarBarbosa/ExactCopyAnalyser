@@ -4,6 +4,20 @@ import java.util.HashMap;
 
 public class Finder {
 
+    public ArrayList<ArrayList<File>> findFilesThatAreNotInSourceButHaveCopiesThere(HashMap<String, File> source,HashMap<String, File> destination) throws Exception {
+        Checker checker = new Checker();
+        ArrayList<File> notFound = checker.findNonExistingOnDestination(destination, source);
+        ArrayList<ArrayList<File>> repeatedFiles = findRepeatedFiles(source, notFound);
+        return repeatedFiles;
+    }
+
+    public ArrayList<ArrayList<File>> findFilesThatAreNotInDestinationButHaveCopiesThere(HashMap<String, File> source,HashMap<String, File> destination) throws Exception {
+        Checker checker = new Checker();
+        ArrayList<File> notFound = checker.findNonExistingOnDestination(source,destination);
+        ArrayList<ArrayList<File>> repeatedFiles = findRepeatedFiles(destination, notFound);
+        return repeatedFiles;
+    }
+
     public ArrayList<ArrayList<File>> findRepeatedFiles(HashMap<String, File> files, ArrayList<File> notFound) throws Exception {
         Comparator comparator = new Comparator(true);
         ArrayList<ArrayList<File>> repeatedWithoutDirectCorrespondent = new ArrayList<>();
