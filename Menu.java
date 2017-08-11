@@ -12,11 +12,13 @@ public class Menu {
         sb.append("\nOptions:\n")
                 .append("1. Compare the content of all corresponding files in two directories with the same structure.\n")
                 .append("2. Compare the content of two files.\n")
+                .append("3. Compare all corresponding files in two directories with the same structure by size and modification date.\n")
+                .append("4. Compare two files by size and modification date.\n")
                 .append(EXIT).append(". Exit.\n");
 
         do {
             display(sb.toString());
-            option = selectOption(EXIT, 2);
+            option = selectOption(EXIT, 4);
 
             try {
                 switch (option) {
@@ -26,6 +28,12 @@ public class Menu {
                     case 2:
                         compareFilesByContent();
                         break;
+                    case 3:
+                        compareDirectoriesBySizeAndDate();
+                        break;
+                    case 4:
+                        compareFilesBySizeAndDate();
+                        break;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -34,6 +42,22 @@ public class Menu {
     }
 
     private void compareDirectoriesByContent() throws Exception {
+        compareDirectories(true);
+    }
+
+    private void compareFilesByContent() throws Exception {
+        compareFiles(true);
+    }
+
+    private void compareDirectoriesBySizeAndDate() throws Exception {
+        compareDirectories(false);
+    }
+
+    private void compareFilesBySizeAndDate() throws Exception {
+        compareFiles(false);
+    }
+
+    private void compareDirectories(boolean compareContent) throws Exception {
         String dir1 = getString("Source directory: ");
         String dir2 = getString("Destination directory: ");
         dir1 = adjustDirectory(dir1);
@@ -52,18 +76,20 @@ public class Menu {
         System.out.println("Not found on source: " + notFoundOnSource.size());
         System.out.println("Not found on destiny: " + notFoundOnDestination.size());
 
-        HashMap<File, File> notEqual = Comparator.compareContent(source, destination);
+        Comparator comparator = new Comparator(compareContent);
+        HashMap<File, File> notEqual = comparator.compareContent(source, destination);
         System.out.println("Not equal content: " + notEqual.size());
         list(notEqual);
     }
 
-    private void compareFilesByContent() throws Exception {
+    private void compareFiles(boolean compareContent) throws Exception {
         String path1 = getString("File 1: ");
         String path2 = getString("File 2: ");
         File f1 = getFile(path1);
         File f2 = getFile(path2);
 
-        if (Comparator.areFilesEqual(f1, f2))
+        Comparator comparator = new Comparator(compareContent);
+        if (comparator.areFilesEqual(f1, f2))
             display("The files are equal.\n");
         else
             display("The files are not equal.\n");

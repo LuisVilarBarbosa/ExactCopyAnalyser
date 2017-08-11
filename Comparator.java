@@ -7,8 +7,13 @@ import java.util.Set;
 
 public class Comparator {
     private static int BUFFER_SIZE = 10485760;   // 10 MB
+    private boolean compareContent;
 
-    public static HashMap<File, File> compareContent(HashMap<String, File> source, HashMap<String, File> destination) throws Exception {
+    public Comparator(boolean compareContent) {
+        this.compareContent = compareContent;
+    }
+
+    public HashMap<File, File> compareContent(HashMap<String, File> source, HashMap<String, File> destination) throws Exception {
         HashMap<File, File> notEqual = new HashMap<>();
         Set<String> keys = source.keySet();
         double interval = keys.size() > 100 ? keys.size() / 100 : 1;
@@ -29,37 +34,39 @@ public class Comparator {
         return notEqual;
     }
 
-    public static boolean areFilesEqual(File f1, File f2) throws Exception {
+    public boolean areFilesEqual(File f1, File f2) throws Exception {
         long f1Length = f1.length();
         if (f1Length != f2.length() || f1.lastModified() != f2.lastModified())
             return false;
 
-        FileInputStream fis1 = new FileInputStream(f1.getAbsolutePath());
-        FileInputStream fis2 = new FileInputStream(f2.getAbsolutePath());
-
-        byte data1[] = new byte[BUFFER_SIZE];
-        byte data2[] = new byte[BUFFER_SIZE];
         boolean equal = true;
-        boolean readError = false;
+        if (compareContent) {
+            FileInputStream fis1 = new FileInputStream(f1.getAbsolutePath());
+            FileInputStream fis2 = new FileInputStream(f2.getAbsolutePath());
 
-        for (long i = 0; i < f1Length && equal; i += BUFFER_SIZE) {
-            int read1 = fis1.read(data1);
-            int read2 = fis2.read(data2);
+            byte data1[] = new byte[BUFFER_SIZE];
+            byte data2[] = new byte[BUFFER_SIZE];
+            boolean readError = false;
 
-            if (read1 != read2) {
-                readError = true;
-                break;
+            for (long i = 0; i < f1Length && equal; i += BUFFER_SIZE) {
+                int read1 = fis1.read(data1);
+                int read2 = fis2.read(data2);
+
+                if (read1 != read2) {
+                    readError = true;
+                    break;
+                }
+
+                if (!Arrays.equals(data1, data2))
+                    equal = false;
             }
 
-            if (!Arrays.equals(data1, data2))
-                equal = false;
+            fis1.close();
+            fis2.close();
+
+            if (readError)
+                throw new Exception("An error occurred reading the data from the files.");
         }
-
-        fis1.close();
-        fis2.close();
-
-        if (readError)
-            throw new Exception("An error occurred reading the data from the files.");
 
         return equal;
     }
