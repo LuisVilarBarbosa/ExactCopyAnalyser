@@ -11,16 +11,20 @@ public class Menu {
         StringBuilder sb = new StringBuilder();
         sb.append("\nOptions:\n")
                 .append("1. Compare the content of all corresponding files in two directories with the same structure.\n")
+                .append("2. Compare the content of two files.\n")
                 .append(EXIT).append(". Exit.\n");
 
         do {
             display(sb.toString());
-            option = selectOption(EXIT, 1);
+            option = selectOption(EXIT, 2);
 
             try {
                 switch (option) {
                     case 1:
-                        compareDirectories();
+                        compareDirectoriesByContent();
+                        break;
+                    case 2:
+                        compareFilesByContent();
                         break;
                 }
             } catch (Exception e) {
@@ -29,7 +33,7 @@ public class Menu {
         } while (option != EXIT);
     }
 
-    private void compareDirectories() throws Exception {
+    private void compareDirectoriesByContent() throws Exception {
         String dir1 = getString("Source directory: ");
         String dir2 = getString("Destination directory: ");
         dir1 = adjustDirectory(dir1);
@@ -51,6 +55,18 @@ public class Menu {
         HashMap<File, File> notEqual = Comparator.compareContent(source, destination);
         System.out.println("Not equal content: " + notEqual.size());
         list(notEqual);
+    }
+
+    private void compareFilesByContent() throws Exception {
+        String path1 = getString("File 1: ");
+        String path2 = getString("File 2: ");
+        File f1 = getFile(path1);
+        File f2 = getFile(path2);
+
+        if (Comparator.areFilesEqual(f1, f2))
+            display("The files are equal.\n");
+        else
+            display("The files are not equal.\n");
     }
 
     private int selectOption(int begin, int end) {
@@ -101,6 +117,13 @@ public class Menu {
         File f = new File(dir);
         if (!f.isDirectory())
             throw new Exception("'" + dir + "' is not a directory.");
+        return f;
+    }
+
+    private File getFile(String path) throws Exception {
+        File f = new File(path);
+        if (!f.isFile())
+            throw new Exception("'" + path + "' is not a file. File extension missing?");
         return f;
     }
 }
