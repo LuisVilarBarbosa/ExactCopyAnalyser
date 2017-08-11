@@ -77,7 +77,7 @@ public class Menu {
         System.out.println("Not found on destiny: " + notFoundOnDestination.size());
 
         Comparator comparator = new Comparator(compareContent);
-        HashMap<File, File> notEqual = comparator.compareContent(source, destination);
+        HashMap<File, File> notEqual = comparator.compareDirectories(source, destination);
         System.out.println("Not equal content: " + notEqual.size());
         list(notEqual);
     }

@@ -13,7 +13,7 @@ public class Comparator {
         this.compareContent = compareContent;
     }
 
-    public HashMap<File, File> compareContent(HashMap<String, File> source, HashMap<String, File> destination) throws Exception {
+    public HashMap<File, File> compareDirectories(HashMap<String, File> source, HashMap<String, File> destination) throws Exception {
         HashMap<File, File> notEqual = new HashMap<>();
         Set<String> keys = source.keySet();
         double interval = keys.size() > 100 ? keys.size() / 100 : 1;
