@@ -18,11 +18,12 @@ public class Menu {
                 .append("6. List files that are in the source directory, but are not in the destination directory and have equal files placed on other location in the destination. (Possibly time consuming operation)\n")
                 .append("7. Remove files that are in the destination directory, but are not in the source directory and have equal files placed on other location in the source. (Possibly time consuming operation)\n")
                 .append("8. Remove files that are in the source directory, but are not in the destination directory and have equal files placed on other location in the destination. (Possibly time consuming operation)\n")
+                .append("9. List all duplicates in a given directory. (Possibly time consuming operation)\n")
                 .append(EXIT).append(". Exit.\n");
 
         do {
             display(sb.toString());
-            option = selectOption(EXIT, 8);
+            option = selectOption(EXIT, 9);
 
             try {
                 switch (option) {
@@ -49,6 +50,9 @@ public class Menu {
                         break;
                     case 8:
                         removeFilesThatAreNotInDestinationButHaveCopiesThere();
+                        break;
+                    case 9:
+                        listDuplicates();
                         break;
                 }
             } catch (Exception e) {
@@ -154,6 +158,21 @@ public class Menu {
         }
     }
 
+    private void listDuplicates() throws Exception {
+        HashMap<String, File> files = new HashMap<>();
+        getDirectoryFiles("Directory: ", files);
+
+        Finder finder = new Finder();
+        ArrayList<ArrayList<File>> duplicates = finder.findDuplicates(files);
+
+        if (duplicates.isEmpty())
+            display("No duplicates files have been found.\n");
+        else {
+            display("Duplicated files:\n");
+            list(duplicates);
+        }
+    }
+
     private int selectOption(int begin, int end) {
         int option;
         boolean invalid = true;
@@ -188,15 +207,15 @@ public class Menu {
     }
 
     private void getDirectoriesFiles(HashMap<String, File> source, HashMap<String, File> destination) throws Exception {
-        String dir1 = getString("Source directory: ");
-        String dir2 = getString("Destination directory: ");
-        dir1 = adjustDirectory(dir1);
-        dir2 = adjustDirectory(dir2);
+        getDirectoryFiles("Source directory: ", source);
+        getDirectoryFiles("Destination directory: ", destination);
+    }
 
-        File directory1 = getDirectory(dir1);
-        File directory2 = getDirectory(dir2);
-        Loader.getFiles(dir1, directory1, source);
-        Loader.getFiles(dir2, directory2, destination);
+    private void getDirectoryFiles(String message, HashMap<String, File> files) throws Exception {
+        String dir = getString(message);
+        dir = adjustDirectory(dir);
+        File directory = getDirectory(dir);
+        Loader.getFiles(dir, directory, files);
     }
 
     private String getString(String message) {
