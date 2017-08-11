@@ -14,11 +14,12 @@ public class Menu {
                 .append("2. Compare the content of two files.\n")
                 .append("3. Compare all corresponding files in two directories with the same structure by size and modification date.\n")
                 .append("4. Compare two files by size and modification date.\n")
+                .append("5. List files that are not in the source directory, but are in the destination directory and have a equal files placed on other location in the source. (Time consuming operation)\n")
                 .append(EXIT).append(". Exit.\n");
 
         do {
             display(sb.toString());
-            option = selectOption(EXIT, 4);
+            option = selectOption(EXIT, 5);
 
             try {
                 switch (option) {
@@ -33,6 +34,9 @@ public class Menu {
                         break;
                     case 4:
                         compareFilesBySizeAndDate();
+                        break;
+                    case 5:
+                        listFilesThatAreNotInSourceButHaveCopiesThere();
                         break;
                 }
             } catch (Exception e) {
@@ -58,18 +62,9 @@ public class Menu {
     }
 
     private void compareDirectories(boolean compareContent) throws Exception {
-        String dir1 = getString("Source directory: ");
-        String dir2 = getString("Destination directory: ");
-        dir1 = adjustDirectory(dir1);
-        dir2 = adjustDirectory(dir2);
-
         HashMap<String, File> source = new HashMap<>();
         HashMap<String, File> destination = new HashMap<>();
-
-        File directory1 = getDirectory(dir1);
-        File directory2 = getDirectory(dir2);
-        Loader.getFiles(dir1, directory1, source);
-        Loader.getFiles(dir2, directory2, destination);
+        getDirectoriesFiles(source, destination);
 
         ArrayList<File> notFoundOnDestination = Checker.findNonExistingOnDestination(source, destination);
         ArrayList<File> notFoundOnSource = Checker.findNonExistingOnDestination(destination, source);
@@ -95,6 +90,24 @@ public class Menu {
             display("The files are not equal.\n");
     }
 
+    private void listFilesThatAreNotInSourceButHaveCopiesThere() throws Exception {
+        HashMap<String, File> source = new HashMap<>();
+        HashMap<String, File> destination = new HashMap<>();
+        getDirectoriesFiles(source, destination);
+
+        ArrayList<File> notFound = Checker.findNonExistingOnDestination(destination, source);
+
+        Finder finder = new Finder();
+        ArrayList<ArrayList<File>> repeatedFiles = finder.findRepeatedFiles(source, notFound);
+
+        if (repeatedFiles.isEmpty())
+            display("No repeated files have been found.\n");
+        else {
+            display("Repeated files:\n");
+            list(repeatedFiles);
+        }
+    }
+
     private int selectOption(int begin, int end) {
         int option;
         boolean invalid = true;
@@ -110,6 +123,18 @@ public class Menu {
         return option;
     }
 
+    private void getDirectoriesFiles(HashMap<String, File> source, HashMap<String, File> destination) throws Exception {
+        String dir1 = getString("Source directory: ");
+        String dir2 = getString("Destination directory: ");
+        dir1 = adjustDirectory(dir1);
+        dir2 = adjustDirectory(dir2);
+
+        File directory1 = getDirectory(dir1);
+        File directory2 = getDirectory(dir2);
+        Loader.getFiles(dir1, directory1, source);
+        Loader.getFiles(dir2, directory2, destination);
+    }
+
     private String getString(String message) {
         display(message);
         Scanner scanner = new Scanner(System.in);
@@ -123,6 +148,17 @@ public class Menu {
             File f2 = map.get(f1);
             sb.append(f1.getAbsolutePath()).append("\n")
                     .append(f2.getAbsolutePath()).append("\n\n");
+        }
+        display(sb.toString());
+    }
+
+    private void list(ArrayList<ArrayList<File>> list) {
+        StringBuilder sb = new StringBuilder();
+        for (ArrayList<File> l : list) {
+            for (File f : l) {
+                sb.append(f.getAbsolutePath()).append("\n");
+            }
+            sb.append("\n");
         }
         display(sb.toString());
     }
