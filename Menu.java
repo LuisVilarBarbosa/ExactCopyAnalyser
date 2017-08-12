@@ -35,16 +35,16 @@ public class Menu {
 
                 switch (option) {
                     case 1:
-                        compareDirectoriesByContent();
+                        compareDirectories(true);
                         break;
                     case 2:
-                        compareFilesByContent();
+                        compareFiles(true);
                         break;
                     case 3:
-                        compareDirectoriesBySizeAndDate();
+                        compareDirectories(false);
                         break;
                     case 4:
-                        compareFilesBySizeAndDate();
+                        compareFiles(false);
                         break;
                     case 5:
                         listFilesThatAreNotInSourceButHaveCopiesThere();
@@ -73,22 +73,6 @@ public class Menu {
                 }
             }
         } while (option != EXIT);
-    }
-
-    private void compareDirectoriesByContent() throws Exception {
-        compareDirectories(true);
-    }
-
-    private void compareFilesByContent() throws Exception {
-        compareFiles(true);
-    }
-
-    private void compareDirectoriesBySizeAndDate() throws Exception {
-        compareDirectories(false);
-    }
-
-    private void compareFilesBySizeAndDate() throws Exception {
-        compareFiles(false);
     }
 
     private void compareDirectories(boolean compareContent) throws Exception {
