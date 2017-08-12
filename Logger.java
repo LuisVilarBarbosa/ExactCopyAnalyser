@@ -13,7 +13,8 @@ public class Logger {
         boolean invalidFilename = true;
 
         do {
-            filename = Long.toHexString(Double.doubleToLongBits(Math.random()));
+            filename = "ExactCopyAnalyser ";
+            filename = filename.concat(Long.toHexString(Double.doubleToLongBits(Math.random())));
             filename = filename.concat(".txt");
             file = new File(filename);
             if (!file.exists())
