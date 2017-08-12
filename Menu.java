@@ -1,10 +1,12 @@
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class Menu {
     private static int EXIT = 0;
+    private Logger logger = null;
 
     public void start() {
         int option;
@@ -26,6 +28,11 @@ public class Menu {
             option = selectOption(EXIT, 9);
 
             try {
+                if (option != 0) {
+                    logger = new Logger();
+                    display("Extra data will be logged on '" + logger.getPath() + "'.\n");
+                }
+
                 switch (option) {
                     case 1:
                         compareDirectoriesByContent();
@@ -57,6 +64,13 @@ public class Menu {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    if (logger != null)
+                        logger.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         } while (option != EXIT);
     }
@@ -116,10 +130,8 @@ public class Menu {
 
         if (repeatedFiles.isEmpty())
             display("No repeated files have been found.\n");
-        else {
-            display("Repeated files:\n");
-            list(repeatedFiles);
-        }
+        else
+            logger.list("Files that are not in source but have copies there:", repeatedFiles);
         return repeatedFiles;
     }
 
@@ -134,8 +146,7 @@ public class Menu {
         if (repeatedFiles.isEmpty())
             display("No repeated files have been found.\n");
         else {
-            display("Repeated files:\n");
-            list(repeatedFiles);
+            logger.list("Files that are not in destination but have copies there:", repeatedFiles);
         }
         return repeatedFiles;
     }
@@ -168,8 +179,7 @@ public class Menu {
         if (duplicates.isEmpty())
             display("No duplicates files have been found.\n");
         else {
-            display("Duplicated files:\n");
-            list(duplicates);
+            logger.list("Duplicated files:", duplicates);
         }
     }
 
@@ -231,17 +241,6 @@ public class Menu {
             File f2 = map.get(f1);
             sb.append(f1.getAbsolutePath()).append("\n")
                     .append(f2.getAbsolutePath()).append("\n\n");
-        }
-        display(sb.toString());
-    }
-
-    private void list(ArrayList<ArrayList<File>> list) {
-        StringBuilder sb = new StringBuilder();
-        for (ArrayList<File> l : list) {
-            for (File f : l) {
-                sb.append(f.getAbsolutePath()).append("\n");
-            }
-            sb.append("\n");
         }
         display(sb.toString());
     }
