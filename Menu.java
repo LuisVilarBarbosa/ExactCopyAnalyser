@@ -35,13 +35,13 @@ public class Menu {
 
                 switch (option) {
                     case 1:
-                        compareDirectories(true);
+                        compareDirectoriesWithTheSameStructure(true);
                         break;
                     case 2:
                         compareFiles(true);
                         break;
                     case 3:
-                        compareDirectories(false);
+                        compareDirectoriesWithTheSameStructure(false);
                         break;
                     case 4:
                         compareFiles(false);
@@ -75,7 +75,7 @@ public class Menu {
         } while (option != EXIT);
     }
 
-    private void compareDirectories(boolean compareContent) throws Exception {
+    private void compareDirectoriesWithTheSameStructure(boolean compareContent) throws Exception {
         HashMap<String, File> source = getDirectoryFiles("Source directory: ");
         HashMap<String, File> destination = getDirectoryFiles("Destination directory: ");
 
@@ -133,8 +133,7 @@ public class Menu {
         ArrayList<ArrayList<File>> repeatedFiles = listFilesThatAreNotInSourceButHaveCopiesThere();
         if (!repeatedFiles.isEmpty() && confirm()) {
             display("Removing files...");
-            Changer changer = new Changer();
-            changer.deleteFirstFileInList(repeatedFiles);
+            Changer.deleteFirstFileInList(repeatedFiles);
         }
     }
 
@@ -142,8 +141,7 @@ public class Menu {
         ArrayList<ArrayList<File>> repeatedFiles = listFilesThatAreNotInDestinationButHaveCopiesThere();
         if (!repeatedFiles.isEmpty() && confirm()) {
             display("Removing files...");
-            Changer changer = new Changer();
-            changer.deleteFirstFileInList(repeatedFiles);
+            Changer.deleteFirstFileInList(repeatedFiles);
         }
     }
 
