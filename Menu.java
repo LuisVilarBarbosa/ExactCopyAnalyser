@@ -77,7 +77,7 @@ public class Menu {
 
     private void compareDirectories(boolean compareContent) throws Exception {
         HashMap<String, File> source = getDirectoryFiles("Source directory: ");
-        HashMap<String, File> destination =  getDirectoryFiles("Destination directory: ");
+        HashMap<String, File> destination = getDirectoryFiles("Destination directory: ");
 
         HashMap<String, File> notFoundOnDestination = Checker.findNonExistingOnDestination(source, destination);
         HashMap<String, File> notFoundOnSource = Checker.findNonExistingOnDestination(destination, source);
@@ -106,10 +106,8 @@ public class Menu {
 
     private ArrayList<ArrayList<File>> listFilesThatAreNotInSourceButHaveCopiesThere() throws Exception {
         HashMap<String, File> source = getDirectoryFiles("Source directory: ");
-        HashMap<String, File> destination =  getDirectoryFiles("Destination directory: ");
-
-        Finder finder = new Finder();
-        ArrayList<ArrayList<File>> repeatedFiles = finder.findFilesThatAreNotInSourceButHaveCopiesThere(source, destination);
+        HashMap<String, File> destination = getDirectoryFiles("Destination directory: ");
+        ArrayList<ArrayList<File>> repeatedFiles = Finder.findFilesThatAreNotInSourceButHaveCopiesThere(source, destination);
 
         if (repeatedFiles.isEmpty())
             display("No repeated files have been found.\n");
@@ -120,10 +118,8 @@ public class Menu {
 
     private ArrayList<ArrayList<File>> listFilesThatAreNotInDestinationButHaveCopiesThere() throws Exception {
         HashMap<String, File> source = getDirectoryFiles("Source directory: ");
-        HashMap<String, File> destination =  getDirectoryFiles("Destination directory: ");
-
-        Finder finder = new Finder();
-        ArrayList<ArrayList<File>> repeatedFiles = finder.findFilesThatAreNotInDestinationButHaveCopiesThere(source, destination);
+        HashMap<String, File> destination = getDirectoryFiles("Destination directory: ");
+        ArrayList<ArrayList<File>> repeatedFiles = Finder.findFilesThatAreNotInDestinationButHaveCopiesThere(source, destination);
 
         if (repeatedFiles.isEmpty())
             display("No repeated files have been found.\n");
@@ -153,9 +149,7 @@ public class Menu {
 
     private void listDuplicates() throws Exception {
         HashMap<String, File> files = getDirectoryFiles("Directory: ");
-
-        Finder finder = new Finder();
-        ArrayList<ArrayList<File>> duplicates = finder.findDuplicates(files);
+        ArrayList<ArrayList<File>> duplicates = Finder.findDuplicates(files);
 
         if (duplicates.isEmpty())
             display("No duplicates files have been found.\n");
@@ -208,7 +202,7 @@ public class Menu {
     private HashMap<String, File> getDirectoryFiles(String message) throws Exception {
         String dir = getString(message);
         dir = adjustDirectory(dir);
-        HashMap<String, File> files=Loader.getDirectoryFiles(dir);
+        HashMap<String, File> files = Loader.getDirectoryFiles(dir);
         return files;
     }
 
