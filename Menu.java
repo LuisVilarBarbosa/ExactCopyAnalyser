@@ -79,8 +79,8 @@ public class Menu {
         HashMap<String, File> source = getDirectoryFiles("Source directory: ");
         HashMap<String, File> destination = getDirectoryFiles("Destination directory: ");
 
-        HashMap<String, File> notFoundOnDestination = Checker.findNonExistingOnDestination(source, destination);
-        HashMap<String, File> notFoundOnSource = Checker.findNonExistingOnDestination(destination, source);
+        HashMap<String, File> notFoundOnDestination = Finder.findNonExistingOnDestination(source, destination);
+        HashMap<String, File> notFoundOnSource = Finder.findNonExistingOnDestination(destination, source);
         System.out.println("Not found on source: " + notFoundOnSource.size());
         System.out.println("Not found on destiny: " + notFoundOnDestination.size());
 
