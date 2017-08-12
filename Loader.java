@@ -3,12 +3,22 @@ import java.util.HashMap;
 
 public class Loader {
 
-    public static void getFiles(String baseDir, File directory, HashMap<String, File> files) {
+    public static HashMap<String, File> getDirectoryFiles(String baseDirectory) throws Exception {
+        File directory = new File(baseDirectory);
+        if (!directory.isDirectory())
+            throw new Exception("'" + baseDirectory + "' is not a directory.");
+
+        HashMap<String, File> files = new HashMap<>();
+        getDirectoryFilesAux(baseDirectory, directory, files);
+        return files;
+    }
+
+    private static void getDirectoryFilesAux(String baseDirectory, File directory, HashMap<String, File> files) {
         for (File f : directory.listFiles()) {
             if (f.isDirectory())
-                getFiles(baseDir, f, files);
+                getDirectoryFilesAux(baseDirectory, f, files);
             else {
-                String dir = f.getAbsolutePath().substring(baseDir.length());
+                String dir = f.getAbsolutePath().substring(baseDirectory.length());
                 files.put(dir, f);
             }
         }

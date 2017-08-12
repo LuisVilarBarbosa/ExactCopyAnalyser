@@ -92,9 +92,8 @@ public class Menu {
     }
 
     private void compareDirectories(boolean compareContent) throws Exception {
-        HashMap<String, File> source = new HashMap<>();
-        HashMap<String, File> destination = new HashMap<>();
-        getDirectoriesFiles(source, destination);
+        HashMap<String, File> source = getDirectoryFiles("Source directory: ");
+        HashMap<String, File> destination =  getDirectoryFiles("Destination directory: ");
 
         HashMap<String, File> notFoundOnDestination = Checker.findNonExistingOnDestination(source, destination);
         HashMap<String, File> notFoundOnSource = Checker.findNonExistingOnDestination(destination, source);
@@ -121,9 +120,8 @@ public class Menu {
     }
 
     private ArrayList<ArrayList<File>> listFilesThatAreNotInSourceButHaveCopiesThere() throws Exception {
-        HashMap<String, File> source = new HashMap<>();
-        HashMap<String, File> destination = new HashMap<>();
-        getDirectoriesFiles(source, destination);
+        HashMap<String, File> source = getDirectoryFiles("Source directory: ");
+        HashMap<String, File> destination =  getDirectoryFiles("Destination directory: ");
 
         Finder finder = new Finder();
         ArrayList<ArrayList<File>> repeatedFiles = finder.findFilesThatAreNotInSourceButHaveCopiesThere(source, destination);
@@ -136,9 +134,8 @@ public class Menu {
     }
 
     private ArrayList<ArrayList<File>> listFilesThatAreNotInDestinationButHaveCopiesThere() throws Exception {
-        HashMap<String, File> source = new HashMap<>();
-        HashMap<String, File> destination = new HashMap<>();
-        getDirectoriesFiles(source, destination);
+        HashMap<String, File> source = getDirectoryFiles("Source directory: ");
+        HashMap<String, File> destination =  getDirectoryFiles("Destination directory: ");
 
         Finder finder = new Finder();
         ArrayList<ArrayList<File>> repeatedFiles = finder.findFilesThatAreNotInDestinationButHaveCopiesThere(source, destination);
@@ -170,8 +167,7 @@ public class Menu {
     }
 
     private void listDuplicates() throws Exception {
-        HashMap<String, File> files = new HashMap<>();
-        getDirectoryFiles("Directory: ", files);
+        HashMap<String, File> files = getDirectoryFiles("Directory: ");
 
         Finder finder = new Finder();
         ArrayList<ArrayList<File>> duplicates = finder.findDuplicates(files);
@@ -224,16 +220,11 @@ public class Menu {
         return confirm;
     }
 
-    private void getDirectoriesFiles(HashMap<String, File> source, HashMap<String, File> destination) throws Exception {
-        getDirectoryFiles("Source directory: ", source);
-        getDirectoryFiles("Destination directory: ", destination);
-    }
-
-    private void getDirectoryFiles(String message, HashMap<String, File> files) throws Exception {
+    private HashMap<String, File> getDirectoryFiles(String message) throws Exception {
         String dir = getString(message);
         dir = adjustDirectory(dir);
-        File directory = getDirectory(dir);
-        Loader.getFiles(dir, directory, files);
+        HashMap<String, File> files=Loader.getDirectoryFiles(dir);
+        return files;
     }
 
     private String getString(String message) {
@@ -263,13 +254,6 @@ public class Menu {
         if (newDir.endsWith("/") || newDir.endsWith("\\"))
             newDir = newDir.substring(0, newDir.length() - 1);
         return newDir;
-    }
-
-    private File getDirectory(String dir) throws Exception {
-        File f = new File(dir);
-        if (!f.isDirectory())
-            throw new Exception("'" + dir + "' is not a directory.");
-        return f;
     }
 
     private File getFile(String path) throws Exception {
