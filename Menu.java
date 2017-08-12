@@ -179,7 +179,15 @@ public class Menu {
         if (duplicates.isEmpty())
             display("No duplicates files have been found.\n");
         else {
-            logger.list("Duplicated files:", duplicates);
+            int quantity = 0;
+            long size = 0;
+            for (ArrayList<File> list : duplicates)
+                for (int i = 1; i < list.size(); i++) {
+                    quantity++;
+                    size += list.get(i).length();
+                }
+            String message = "Duplicated files: " + quantity + " = " + size + " bytes";
+            logger.list(message, duplicates);
         }
     }
 
