@@ -1,6 +1,7 @@
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class Finder {
 
@@ -43,21 +44,28 @@ public class Finder {
     public ArrayList<ArrayList<File>> findDuplicates(HashMap<String, File> files) throws Exception {
         Comparator comparator = new Comparator(true);
         ArrayList<ArrayList<File>> duplicates = new ArrayList<>();
-        int i = 0;
-        int size = files.size();
 
-        for (File f1 : files.values()) {
-            System.out.println(i + " / " + size);
+        ArrayList<File> myFiles = Converter.convertToArrayListOfValues(files);
+        HashSet<File> alreadyFound = new HashSet<>();
+        int size = myFiles.size();
+
+        for (int i = 0; i < size; i++) {
+            System.out.println(i + " / " + size + " : " + alreadyFound.size());
             ArrayList<File> equalsToF1 = new ArrayList<>();
+
+            File f1 = myFiles.get(i);
             equalsToF1.add(f1);
 
-            for (File f2 : files.values())
-                if (!f1.equals(f2) && comparator.areFilesEqual(f1, f2))
+            for (int j = i + 1; j < size; j++) {
+                File f2 = myFiles.get(j);
+                if (!alreadyFound.contains(f2) && comparator.areFilesEqual(f1, f2)) {
                     equalsToF1.add(f2);
+                    alreadyFound.add(f2);
+                }
+            }
 
             if (equalsToF1.size() > 1)
                 duplicates.add(equalsToF1);
-            i++;
         }
         return duplicates;
     }
