@@ -86,8 +86,9 @@ public class Menu {
 
         Comparator comparator = new Comparator(compareContent);
         HashMap<File, File> notEqual = comparator.compareDirectories(source, destination);
-        System.out.println("Not equal content: " + notEqual.size());
-        list(notEqual);
+        String message = "Not equal content: " + notEqual.size();
+        System.out.println(message);
+        logger.list(message, notEqual);
     }
 
     private void compareFiles(boolean compareContent) throws Exception {
@@ -216,16 +217,6 @@ public class Menu {
         Scanner scanner = new Scanner(System.in);
         String dir = scanner.nextLine();
         return dir;
-    }
-
-    private void list(HashMap<File, File> map) {
-        StringBuilder sb = new StringBuilder();
-        for (File f1 : map.keySet()) {
-            File f2 = map.get(f1);
-            sb.append(f1.getAbsolutePath()).append("\n")
-                    .append(f2.getAbsolutePath()).append("\n\n");
-        }
-        display(sb.toString());
     }
 
     private void display(String str) {
