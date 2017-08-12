@@ -5,12 +5,6 @@ import java.util.HashSet;
 
 public class Finder {
 
-    public static ArrayList<ArrayList<File>> findFilesThatAreNotInSourceButHaveCopiesThere(HashMap<String, File> source, HashMap<String, File> destination) throws Exception {
-        HashMap<String, File> notFound = findNonExistingOnDestination(destination, source);
-        ArrayList<ArrayList<File>> repeatedFiles = findRepeatedFiles(source, notFound);
-        return repeatedFiles;
-    }
-
     public static ArrayList<ArrayList<File>> findFilesThatAreNotInDestinationButHaveCopiesThere(HashMap<String, File> source, HashMap<String, File> destination) throws Exception {
         HashMap<String, File> notFound = findNonExistingOnDestination(source, destination);
         ArrayList<ArrayList<File>> repeatedFiles = findRepeatedFiles(destination, notFound);

@@ -16,16 +16,14 @@ public class Menu {
                 .append("2. Compare the content of two files.\n")
                 .append("3. Compare all corresponding files in two directories with the same structure by size and modification date.\n")
                 .append("4. Compare two files by size and modification date.\n")
-                .append("5. List files that are in the destination directory, but are not in the source directory and have equal files placed on other location in the source. (Possibly time consuming operation)\n")
-                .append("6. List files that are in the source directory, but are not in the destination directory and have equal files placed on other location in the destination. (Possibly time consuming operation)\n")
-                .append("7. Remove files that are in the destination directory, but are not in the source directory and have equal files placed on other location in the source. (Possibly time consuming operation)\n")
-                .append("8. Remove files that are in the source directory, but are not in the destination directory and have equal files placed on other location in the destination. (Possibly time consuming operation)\n")
-                .append("9. List all duplicates in a given directory. (Possibly time consuming operation)\n")
+                .append("5. List files that are in the source directory, but are not in the destination directory and have equal files placed on other location in the destination. (Possibly time consuming operation)\n")
+                .append("6. Remove files that are in the source directory, but are not in the destination directory and have equal files placed on other location in the destination. (Possibly time consuming operation)\n")
+                .append("7. List all duplicates in a given directory. (Possibly time consuming operation)\n")
                 .append(EXIT).append(". Exit.\n");
 
         do {
             display(sb.toString());
-            option = selectOption(EXIT, 9);
+            option = selectOption(EXIT, 7);
 
             try {
                 if (option != 0) {
@@ -47,18 +45,12 @@ public class Menu {
                         compareFiles(false);
                         break;
                     case 5:
-                        listFilesThatAreNotInSourceButHaveCopiesThere();
-                        break;
-                    case 6:
                         listFilesThatAreNotInDestinationButHaveCopiesThere();
                         break;
-                    case 7:
-                        removeFilesThatAreNotInSourceButHaveCopiesThere();
-                        break;
-                    case 8:
+                    case 6:
                         removeFilesThatAreNotInDestinationButHaveCopiesThere();
                         break;
-                    case 9:
+                    case 7:
                         listDuplicates();
                         break;
                 }
@@ -104,18 +96,6 @@ public class Menu {
             display("The files are not equal.\n");
     }
 
-    private ArrayList<ArrayList<File>> listFilesThatAreNotInSourceButHaveCopiesThere() throws Exception {
-        HashMap<String, File> source = getDirectoryFiles("Source directory: ");
-        HashMap<String, File> destination = getDirectoryFiles("Destination directory: ");
-        ArrayList<ArrayList<File>> repeatedFiles = Finder.findFilesThatAreNotInSourceButHaveCopiesThere(source, destination);
-
-        if (repeatedFiles.isEmpty())
-            display("No repeated files have been found.\n");
-        else
-            logger.list("Files that are not in source but have copies there:", repeatedFiles);
-        return repeatedFiles;
-    }
-
     private ArrayList<ArrayList<File>> listFilesThatAreNotInDestinationButHaveCopiesThere() throws Exception {
         HashMap<String, File> source = getDirectoryFiles("Source directory: ");
         HashMap<String, File> destination = getDirectoryFiles("Destination directory: ");
@@ -127,14 +107,6 @@ public class Menu {
             logger.list("Files that are not in destination but have copies there:", repeatedFiles);
         }
         return repeatedFiles;
-    }
-
-    private void removeFilesThatAreNotInSourceButHaveCopiesThere() throws Exception {
-        ArrayList<ArrayList<File>> repeatedFiles = listFilesThatAreNotInSourceButHaveCopiesThere();
-        if (!repeatedFiles.isEmpty() && confirm()) {
-            display("Removing files...");
-            Changer.deleteFirstFileInList(repeatedFiles);
-        }
     }
 
     private void removeFilesThatAreNotInDestinationButHaveCopiesThere() throws Exception {
