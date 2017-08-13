@@ -64,13 +64,13 @@ public class Menu {
     }
 
     private void compareDirectoriesWithSameStructure(boolean compareContent) throws Exception {
-        HashMap<String, File> dir1 = getDirectoryFiles("Directory 1: ");
-        HashMap<String, File> dir2 = getDirectoryFiles("Directory 2: ");
+        HashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
+        HashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
 
-        HashMap<String, File> notFoundOnDir2 = Finder.findDir1FilesNonExistingOnDir2(dir1,dir2);
-        HashMap<String, File> notFoundOnDir1 = Finder.findDir1FilesNonExistingOnDir2(dir2,dir1);
-        display("Not found on directory 1: " + notFoundOnDir1.size() + "\n");
-        display("Not found on directory 2: " + notFoundOnDir2.size() + "\n");
+        HashMap<String, File> notFoundOnDir2 = Finder.findDir1FilesNonExistingOnDir2(dir1, dir2);
+        HashMap<String, File> notFoundOnDir1 = Finder.findDir1FilesNonExistingOnDir2(dir2, dir1);
+        display(text.getNotFoundOnDir1Msg(notFoundOnDir1.size()));
+        display(text.getNotFoundOnDir2Msg(notFoundOnDir2.size()));
 
         Comparator comparator = new Comparator(compareContent);
         HashMap<File, File> notEqual = comparator.compareDirectoriesWithSameStructure(dir1, dir2, this);
@@ -80,8 +80,8 @@ public class Menu {
     }
 
     private void compareFiles(boolean compareContent) throws Exception {
-        String path1 = getString("File 1: ");
-        String path2 = getString("File 2: ");
+        String path1 = getString(text.getFile1Msg());
+        String path2 = getString(text.getFile2Msg());
         File f1 = getFile(path1);
         File f2 = getFile(path2);
 
@@ -93,9 +93,9 @@ public class Menu {
     }
 
     private ArrayList<ArrayList<File>> listDir1FilesThatAreNotInDir2ButHaveCopiesThere() throws Exception {
-        HashMap<String, File> dir1 = getDirectoryFiles("Directory 1: ");
-        HashMap<String, File> dir2 = getDirectoryFiles("Directory 2: ");
-        ArrayList<ArrayList<File>> copies = Finder.findDir1FilesThatAreNotInDir2ButHaveCopiesThere(dir1,dir2, this);
+        HashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
+        HashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
+        ArrayList<ArrayList<File>> copies = Finder.findDir1FilesThatAreNotInDir2ButHaveCopiesThere(dir1, dir2, this);
 
         if (copies.isEmpty())
             display("No repeated files have been found.\n");
@@ -114,7 +114,7 @@ public class Menu {
     }
 
     private void listDuplicates() throws Exception {
-        HashMap<String, File> files = getDirectoryFiles("Directory: ");
+        HashMap<String, File> files = getDirectoryFiles(text.getDirMsg());
         ArrayList<ArrayList<File>> duplicates = Finder.findDuplicates(files, this);
 
         if (duplicates.isEmpty())
@@ -136,7 +136,7 @@ public class Menu {
         Integer option = null;
         boolean invalid = true;
         do {
-            String input = getString("Select an option (example: " + begin + "): ");
+            String input = getString(text.getSelectOptionMsg(begin));
             if (input.matches("[0-9]+")) {
                 option = Integer.parseInt(input);
                 if (option >= begin && option <= end)
