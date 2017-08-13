@@ -10,16 +10,11 @@ public class Logger {
 
     public Logger() throws Exception {
         String filename;
-        boolean invalidFilename = true;
 
         do {
-            filename = "ExactCopyAnalyser ";
-            filename = filename.concat(Long.toHexString(Double.doubleToLongBits(Math.random())));
-            filename = filename.concat(".txt");
+            filename = "ExactCopyAnalyser " + Long.toHexString(Double.doubleToLongBits(Math.random())) + ".txt";
             file = new File(filename);
-            if (!file.exists())
-                invalidFilename = false;
-        } while (invalidFilename);
+        } while (file.exists());
 
         this.fileOutputStream = new FileOutputStream(file);
         this.fileOutputStream.write("ExactCopyAnalyser data will be stored below.\n\n".getBytes());
