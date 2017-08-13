@@ -27,15 +27,18 @@ public class Finder {
         ArrayList<ArrayList<File>> repeatedWithoutDirectCorrespondent = new ArrayList<>();
         int i = 0;
         int size = notFound.size();
+        int repeated = 0;
 
         for (File f1 : notFound.values()) {
-            menu.displayProgress(i + " / " + size);
+            menu.displayProgress(i, size, repeated);
             ArrayList<File> equalsToF1 = new ArrayList<>();
             equalsToF1.add(f1);
 
             for (File f2 : files.values())
-                if (!f1.equals(f2) && comparator.areFilesEqual(f1, f2))
+                if (!f1.equals(f2) && comparator.areFilesEqual(f1, f2)) {
                     equalsToF1.add(f2);
+                    repeated++;
+                }
 
             if (equalsToF1.size() > 1)
                 repeatedWithoutDirectCorrespondent.add(equalsToF1);
@@ -53,7 +56,7 @@ public class Finder {
         int size = myFiles.size();
 
         for (int i = 0; i < size; i++) {
-            menu.displayProgress(i + " / " + size + " : " + alreadyFound.size());
+            menu.displayProgress(i, size, alreadyFound.size());
             ArrayList<File> equalsToF1 = new ArrayList<>();
 
             File f1 = myFiles.get(i);

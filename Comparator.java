@@ -3,7 +3,6 @@ import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 
 public class Comparator {
     private static int BUFFER_SIZE = 10485760;   // 10 MB
@@ -15,9 +14,11 @@ public class Comparator {
 
     public HashMap<File, File> compareDirectories(HashMap<String, File> source, HashMap<String, File> destination, Menu menu) throws Exception {
         HashMap<File, File> notEqual = new HashMap<>();
-        Set<String> keys = source.keySet();
-        double interval = keys.size() > 100 ? keys.size() / 100 : 1;
-        Iterator<String> it = keys.iterator();
+
+        int size = source.size();
+        double interval = size > 100 ? size / 100 : 1;
+        Iterator<String> it = source.keySet().iterator();
+
         for (int i = 0; it.hasNext(); ) {
             for (int j = 0; j < interval && it.hasNext(); j++, i++) {
                 String key = it.next();
@@ -28,8 +29,7 @@ public class Comparator {
                         notEqual.put(f1, f2);
                 }
             }
-            double percentage = i * 100 / keys.size();
-            menu.displayProgress("Compared " + percentage + "%.");
+            menu.displayProgress(i, size, notEqual.size());
         }
         return notEqual;
     }

@@ -27,7 +27,7 @@ public class Menu {
             option = selectOption(EXIT, 7);
 
             try {
-                if (option != 0) {
+                if (option != EXIT) {
                     logger = new Logger();
                     display("Extra data will be logged on '" + logger.getPath() + "'.\n");
                 }
@@ -195,9 +195,12 @@ public class Menu {
         backtrackCounter = 0;
     }
 
-    public void displayProgress(String message) {
-        display(message);
-        backtrackCounter = message.length();
+    public void displayProgress(int done, int total, int found) {
+        double percentage = done * 100 / total;
+        StringBuilder sb = new StringBuilder();
+        sb.append(done).append(" / ").append(total).append(" = ").append(percentage).append("% ").append("Found: ").append(found);
+        display(sb.toString());
+        backtrackCounter = sb.length();
     }
 
     private String adjustDirectory(String dir) {
