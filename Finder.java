@@ -5,36 +5,36 @@ import java.util.HashSet;
 
 public class Finder {
 
-    public static ArrayList<ArrayList<File>> findFilesThatAreNotInDestinationButHaveCopiesThere(HashMap<String, File> source, HashMap<String, File> destination, Menu menu) throws Exception {
-        HashMap<String, File> notFound = findNonExistingOnDestination(source, destination);
-        ArrayList<ArrayList<File>> repeatedFiles = findRepeatedFiles(destination, notFound, menu);
-        return repeatedFiles;
+    public static ArrayList<ArrayList<File>> findDir1FilesThatAreNotInDir2ButHaveCopiesThere(HashMap<String, File> dir1, HashMap<String, File> dir2, Menu menu) throws Exception {
+        HashMap<String, File> notFound = findDir1FilesNonExistingOnDir2(dir1, dir2);
+        ArrayList<ArrayList<File>> copies = findCopiesOfFilesToSearch(dir2, notFound, menu);
+        return copies;
     }
 
-    public static HashMap<String, File> findNonExistingOnDestination(HashMap<String, File> source, HashMap<String, File> destination) {
+    public static HashMap<String, File> findDir1FilesNonExistingOnDir2(HashMap<String, File> dir1, HashMap<String, File> dir2) {
         HashMap<String, File> notFound = new HashMap<>();
-        for (String key1 : source.keySet()) {
-            File f1 = source.get(key1);
-            File f2 = destination.get(key1);
+        for (String key1 : dir1.keySet()) {
+            File f1 = dir1.get(key1);
+            File f2 = dir2.get(key1);
             if (f2 == null)
                 notFound.put(key1, f1);
         }
         return notFound;
     }
 
-    public static ArrayList<ArrayList<File>> findRepeatedFiles(HashMap<String, File> files, HashMap<String, File> notFound, Menu menu) throws Exception {
+    public static ArrayList<ArrayList<File>> findCopiesOfFilesToSearch(HashMap<String, File> allFiles, HashMap<String, File> filesToSearch, Menu menu) throws Exception {
         Comparator comparator = new Comparator(true);
         ArrayList<ArrayList<File>> repeatedWithoutDirectCorrespondent = new ArrayList<>();
         int i = 0;
-        int size = notFound.size();
+        int size = filesToSearch.size();
         int repeated = 0;
 
-        for (File f1 : notFound.values()) {
+        for (File f1 : filesToSearch.values()) {
             menu.displayProgress(i, size, repeated);
             ArrayList<File> equalsToF1 = new ArrayList<>();
             equalsToF1.add(f1);
 
-            for (File f2 : files.values())
+            for (File f2 : allFiles.values())
                 if (!f1.equals(f2) && comparator.areFilesEqual(f1, f2)) {
                     equalsToF1.add(f2);
                     repeated++;

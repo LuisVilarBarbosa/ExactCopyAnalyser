@@ -25,22 +25,22 @@ public class Menu {
 
                 switch (option) {
                     case 1:
-                        compareDirectoriesWithTheSameStructure(true);
+                        compareDirectoriesWithSameStructure(true);
                         break;
                     case 2:
                         compareFiles(true);
                         break;
                     case 3:
-                        compareDirectoriesWithTheSameStructure(false);
+                        compareDirectoriesWithSameStructure(false);
                         break;
                     case 4:
                         compareFiles(false);
                         break;
                     case 5:
-                        listFilesThatAreNotInDestinationButHaveCopiesThere();
+                        listDir1FilesThatAreNotInDir2ButHaveCopiesThere();
                         break;
                     case 6:
-                        removeFilesThatAreNotInDestinationButHaveCopiesThere();
+                        removeDir1FilesThatAreNotInDir2ButHaveCopiesThere();
                         break;
                     case 7:
                         listDuplicates();
@@ -63,17 +63,17 @@ public class Menu {
         return text;
     }
 
-    private void compareDirectoriesWithTheSameStructure(boolean compareContent) throws Exception {
-        HashMap<String, File> source = getDirectoryFiles("Source directory: ");
-        HashMap<String, File> destination = getDirectoryFiles("Destination directory: ");
+    private void compareDirectoriesWithSameStructure(boolean compareContent) throws Exception {
+        HashMap<String, File> dir1 = getDirectoryFiles("Directory 1: ");
+        HashMap<String, File> dir2 = getDirectoryFiles("Directory 2: ");
 
-        HashMap<String, File> notFoundOnDestination = Finder.findNonExistingOnDestination(source, destination);
-        HashMap<String, File> notFoundOnSource = Finder.findNonExistingOnDestination(destination, source);
-        display("Not found on source: " + notFoundOnSource.size() + "\n");
-        display("Not found on destiny: " + notFoundOnDestination.size() + "\n");
+        HashMap<String, File> notFoundOnDir2 = Finder.findDir1FilesNonExistingOnDir2(dir1,dir2);
+        HashMap<String, File> notFoundOnDir1 = Finder.findDir1FilesNonExistingOnDir2(dir2,dir1);
+        display("Not found on directory 1: " + notFoundOnDir1.size() + "\n");
+        display("Not found on directory 2: " + notFoundOnDir2.size() + "\n");
 
         Comparator comparator = new Comparator(compareContent);
-        HashMap<File, File> notEqual = comparator.compareDirectories(source, destination, this);
+        HashMap<File, File> notEqual = comparator.compareDirectoriesWithSameStructure(dir1, dir2, this);
         String message = "Not equal content: " + notEqual.size();
         display(message + "\n");
         logger.list(message, notEqual);
@@ -92,24 +92,24 @@ public class Menu {
             display("The files are not equal.\n");
     }
 
-    private ArrayList<ArrayList<File>> listFilesThatAreNotInDestinationButHaveCopiesThere() throws Exception {
-        HashMap<String, File> source = getDirectoryFiles("Source directory: ");
-        HashMap<String, File> destination = getDirectoryFiles("Destination directory: ");
-        ArrayList<ArrayList<File>> repeatedFiles = Finder.findFilesThatAreNotInDestinationButHaveCopiesThere(source, destination, this);
+    private ArrayList<ArrayList<File>> listDir1FilesThatAreNotInDir2ButHaveCopiesThere() throws Exception {
+        HashMap<String, File> dir1 = getDirectoryFiles("Directory 1: ");
+        HashMap<String, File> dir2 = getDirectoryFiles("Directory 2: ");
+        ArrayList<ArrayList<File>> copies = Finder.findDir1FilesThatAreNotInDir2ButHaveCopiesThere(dir1,dir2, this);
 
-        if (repeatedFiles.isEmpty())
+        if (copies.isEmpty())
             display("No repeated files have been found.\n");
         else {
-            logger.list("Files that are not in destination but have copies there:", repeatedFiles);
+            logger.list("Files that are not in destination but have copies there:", copies);
         }
-        return repeatedFiles;
+        return copies;
     }
 
-    private void removeFilesThatAreNotInDestinationButHaveCopiesThere() throws Exception {
-        ArrayList<ArrayList<File>> repeatedFiles = listFilesThatAreNotInDestinationButHaveCopiesThere();
-        if (!repeatedFiles.isEmpty() && confirm()) {
+    private void removeDir1FilesThatAreNotInDir2ButHaveCopiesThere() throws Exception {
+        ArrayList<ArrayList<File>> copies = listDir1FilesThatAreNotInDir2ButHaveCopiesThere();
+        if (!copies.isEmpty() && confirm()) {
             display("Removing files...");
-            Changer.deleteFirstFileInList(repeatedFiles, this);
+            Changer.deleteFirstFileInList(copies, this);
         }
     }
 
@@ -176,8 +176,8 @@ public class Menu {
     private String getString(String message) {
         display(message);
         Scanner scanner = new Scanner(System.in);
-        String dir = scanner.nextLine();
-        return dir;
+        String str = scanner.nextLine();
+        return str;
     }
 
     public void display(String str) {
