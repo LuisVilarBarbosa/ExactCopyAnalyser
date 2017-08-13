@@ -6,30 +6,21 @@ import java.util.Scanner;
 
 public class Menu {
     private static int EXIT = 0;
+    private Text text = new Text();
     private Logger logger = null;
     private int backtrackCounter = 0;
 
     public void start() {
         int option;
-        StringBuilder sb = new StringBuilder();
-        sb.append("\nOptions:\n")
-                .append("1. Compare the content of all corresponding files in two directories with the same structure.\n")
-                .append("2. Compare the content of two files.\n")
-                .append("3. Compare all corresponding files in two directories with the same structure by size and modification date.\n")
-                .append("4. Compare two files by size and modification date.\n")
-                .append("5. List files that are in the source directory, but are not in the destination directory and have equal files placed on other location in the destination. (Possibly time consuming operation)\n")
-                .append("6. Remove files that are in the source directory, but are not in the destination directory and have equal files placed on other location in the destination. (Possibly time consuming operation)\n")
-                .append("7. List all duplicates in a given directory. (Possibly time consuming operation)\n")
-                .append(EXIT).append(". Exit.\n");
 
         do {
-            display(sb.toString());
+            display(text.getOptionsMsg());
             option = selectOption(EXIT, 7);
 
             try {
                 if (option != EXIT) {
                     logger = new Logger();
-                    display("Extra data will be logged on '" + logger.getPath() + "'.\n");
+                    display(text.getGeneratedLoggerMsg(logger.getPath()));
                 }
 
                 switch (option) {
@@ -66,6 +57,10 @@ public class Menu {
                 }
             }
         } while (option != EXIT);
+    }
+
+    public Text getText() {
+        return text;
     }
 
     private void compareDirectoriesWithTheSameStructure(boolean compareContent) throws Exception {
@@ -148,7 +143,7 @@ public class Menu {
                     invalid = false;
             }
             if (invalid)
-                display("Invalid option.\n");
+                display(text.getInvalidOptionMsg());
         } while (invalid);
         return option;
     }
@@ -166,7 +161,7 @@ public class Menu {
                 confirm = false;
                 invalid = false;
             } else
-                display("Invalid option.\n");
+                display(text.getInvalidOptionMsg());
         } while (invalid);
         return confirm;
     }
@@ -198,7 +193,7 @@ public class Menu {
     public void displayProgress(int done, int total, int found) {
         double percentage = done * 100 / total;
         StringBuilder sb = new StringBuilder();
-        sb.append(done).append(" / ").append(total).append(" = ").append(percentage).append("% ").append("Found: ").append(found);
+        sb.append(done).append(" / ").append(total).append(" = ").append(percentage).append("% ").append(text.getFoundMsg()).append(": ").append(found);
         display(sb.toString());
         backtrackCounter = sb.length();
     }
@@ -213,7 +208,7 @@ public class Menu {
     private File getFile(String path) throws Exception {
         File f = new File(path);
         if (!f.isFile())
-            throw new Exception("'" + path + "' is not a file. File extension missing?");
+            throw new Exception(text.getNotFileErrorMsg(path));
         return f;
     }
 }

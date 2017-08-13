@@ -9,7 +9,7 @@ public class Changer {
                 File f = list.get(0);
                 if (f.isFile())
                     if (!f.delete())
-                        menu.display("It was not possible to remove '" + f.getAbsolutePath() + "'.\n");
+                        menu.display(menu.getText().getDeletionErrorMsg(f.getAbsolutePath()));
             }
         }
     }
