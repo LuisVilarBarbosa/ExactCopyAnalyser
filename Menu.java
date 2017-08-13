@@ -137,15 +137,16 @@ public class Menu {
     }
 
     private int selectOption(int begin, int end) {
-        int option;
+        Integer option = null;
         boolean invalid = true;
-        Scanner scanner = new Scanner(System.in);
         do {
-            display("Select an option (example: " + begin + "): ");
-            option = scanner.nextInt();
-            if (option >= begin && option <= end)
-                invalid = false;
-            else
+            String input = getString("Select an option (example: " + begin + "): ");
+            if (input.matches("[0-9]+")) {
+                option = Integer.parseInt(input);
+                if (option >= begin && option <= end)
+                    invalid = false;
+            }
+            if (invalid)
                 display("Invalid option.\n");
         } while (invalid);
         return option;
