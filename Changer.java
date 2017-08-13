@@ -3,13 +3,13 @@ import java.util.ArrayList;
 
 public class Changer {
 
-    public static void deleteFirstFileInList(ArrayList<ArrayList<File>> files) {
+    public static void deleteFirstFileInList(ArrayList<ArrayList<File>> files, Menu menu) {
         for (ArrayList<File> list : files) {
             if (list.size() >= 1) {
                 File f = list.get(0);
                 if (f.isFile())
                     if (!f.delete())
-                        System.out.println("It was not possible to remove '" + f.getAbsolutePath() + "'.");
+                        menu.display("It was not possible to remove '" + f.getAbsolutePath() + "'.\n");
             }
         }
     }

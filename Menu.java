@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class Menu {
     private static int EXIT = 0;
     private Logger logger = null;
+    private int backtrackCounter = 0;
 
     public void start() {
         int option;
@@ -73,13 +74,13 @@ public class Menu {
 
         HashMap<String, File> notFoundOnDestination = Finder.findNonExistingOnDestination(source, destination);
         HashMap<String, File> notFoundOnSource = Finder.findNonExistingOnDestination(destination, source);
-        System.out.println("Not found on source: " + notFoundOnSource.size());
-        System.out.println("Not found on destiny: " + notFoundOnDestination.size());
+        display("Not found on source: " + notFoundOnSource.size() + "\n");
+        display("Not found on destiny: " + notFoundOnDestination.size() + "\n");
 
         Comparator comparator = new Comparator(compareContent);
-        HashMap<File, File> notEqual = comparator.compareDirectories(source, destination);
+        HashMap<File, File> notEqual = comparator.compareDirectories(source, destination, this);
         String message = "Not equal content: " + notEqual.size();
-        System.out.println(message);
+        display(message + "\n");
         logger.list(message, notEqual);
     }
 
@@ -99,7 +100,7 @@ public class Menu {
     private ArrayList<ArrayList<File>> listFilesThatAreNotInDestinationButHaveCopiesThere() throws Exception {
         HashMap<String, File> source = getDirectoryFiles("Source directory: ");
         HashMap<String, File> destination = getDirectoryFiles("Destination directory: ");
-        ArrayList<ArrayList<File>> repeatedFiles = Finder.findFilesThatAreNotInDestinationButHaveCopiesThere(source, destination);
+        ArrayList<ArrayList<File>> repeatedFiles = Finder.findFilesThatAreNotInDestinationButHaveCopiesThere(source, destination, this);
 
         if (repeatedFiles.isEmpty())
             display("No repeated files have been found.\n");
@@ -113,13 +114,13 @@ public class Menu {
         ArrayList<ArrayList<File>> repeatedFiles = listFilesThatAreNotInDestinationButHaveCopiesThere();
         if (!repeatedFiles.isEmpty() && confirm()) {
             display("Removing files...");
-            Changer.deleteFirstFileInList(repeatedFiles);
+            Changer.deleteFirstFileInList(repeatedFiles, this);
         }
     }
 
     private void listDuplicates() throws Exception {
         HashMap<String, File> files = getDirectoryFiles("Directory: ");
-        ArrayList<ArrayList<File>> duplicates = Finder.findDuplicates(files);
+        ArrayList<ArrayList<File>> duplicates = Finder.findDuplicates(files, this);
 
         if (duplicates.isEmpty())
             display("No duplicates files have been found.\n");
@@ -184,9 +185,19 @@ public class Menu {
         return dir;
     }
 
-    private void display(String str) {
+    public void display(String str) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < backtrackCounter; i++)
+            sb.append("\b");
+        System.out.print(sb);
         System.out.print(str);
         System.out.flush();
+        backtrackCounter = 0;
+    }
+
+    public void displayProgress(String message) {
+        display(message);
+        backtrackCounter = message.length();
     }
 
     private String adjustDirectory(String dir) {
