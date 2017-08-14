@@ -20,7 +20,8 @@ public class Logger {
         } while (file.exists());
 
         this.fileOutputStream = new FileOutputStream(file);
-        this.fileOutputStream.write(text.getLoggerStartMsg().getBytes());
+        String loggerStartMsg = text.getLoggerStartMsg().replaceAll("\n", "\r\n");
+        this.fileOutputStream.write(loggerStartMsg.getBytes());
     }
 
     public String getPath() {
@@ -28,23 +29,25 @@ public class Logger {
     }
 
     public void list(String message, ArrayList<ArrayList<File>> list) throws IOException {
+        String myMessage = message.replaceAll("\n", "\r\n");
         StringBuilder sb = new StringBuilder();
-        sb.append(message).append("\n");
+        sb.append(myMessage).append("\r\n");
         for (ArrayList<File> l : list) {
             for (File f : l)
-                sb.append(f.getAbsolutePath()).append("\n");
-            sb.append("\n");
+                sb.append(f.getAbsolutePath()).append("\r\n");
+            sb.append("\r\n");
         }
         fileOutputStream.write(sb.toString().getBytes());
     }
 
     public void list(String message, HashMap<File, File> map) throws IOException {
+        String myMessage = message.replaceAll("\n", "\r\n");
         StringBuilder sb = new StringBuilder();
-        sb.append(message).append("\n");
+        sb.append(myMessage).append("\r\n");
         for (File f1 : map.keySet()) {
             File f2 = map.get(f1);
-            sb.append(f1.getAbsolutePath()).append("\n")
-                    .append(f2.getAbsolutePath()).append("\n\n");
+            sb.append(f1.getAbsolutePath()).append("\r\n")
+                    .append(f2.getAbsolutePath()).append("\r\n\r\n");
         }
         fileOutputStream.write(sb.toString().getBytes());
     }
