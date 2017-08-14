@@ -190,7 +190,7 @@ public class Menu {
         backtrackCounter = 0;
     }
 
-    public void displayProgress(int done, int total, int found) {
+    public void displayProgress(long done, long total, int found) {
         double percentage = done * 100 / total;
         StringBuilder sb = new StringBuilder();
         sb.append(done).append(" / ").append(total).append(" = ").append(percentage).append("% ").append(text.getFoundMsg()).append(": ").append(found);

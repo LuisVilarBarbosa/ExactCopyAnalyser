@@ -26,8 +26,8 @@ public class Finder {
         Comparator comparator = new Comparator(true);
         ArrayList<ArrayList<File>> repeatedWithoutDirectCorrespondent = new ArrayList<>();
         int allFilesSize = allFiles.size();
-        int completedComparisons = 0;
-        int totalComparisons = filesToSearch.size() * allFilesSize;
+        long completedComparisons = 0;
+        long totalComparisons = filesToSearch.size() * allFilesSize;
         int repeated = 0;
 
         for (File f1 : filesToSearch.values()) {
@@ -55,8 +55,8 @@ public class Finder {
         ArrayList<File> myFiles = Converter.convertToArrayListOfValues(files);
         HashSet<File> alreadyFound = new HashSet<>();
         int size = myFiles.size();
-        int completedComparisons = 0;
-        int totalComparisons = 0;
+        long completedComparisons = 0;
+        long totalComparisons = 0;
 
         for (int i = 0; i < size; i++)
             totalComparisons += size - i - 1;
