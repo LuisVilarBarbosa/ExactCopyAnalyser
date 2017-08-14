@@ -1,7 +1,9 @@
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class Logger {
@@ -10,9 +12,10 @@ public class Logger {
 
     public Logger(Text text) throws Exception {
         String filename;
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(Calendar.getInstance().getTime());
 
         do {
-            filename = "ExactCopyAnalyser " + Long.toHexString(Double.doubleToLongBits(Math.random())) + ".txt";
+            filename = "ExactCopyAnalyser " + timeStamp + " " + Long.toHexString(Double.doubleToLongBits(Math.random())) + ".txt";
             file = new File(filename);
         } while (file.exists());
 
@@ -21,7 +24,7 @@ public class Logger {
     }
 
     public String getPath() {
-        return file.getAbsolutePath();
+        return file.getPath();
     }
 
     public void list(String message, ArrayList<ArrayList<File>> list) throws IOException {
