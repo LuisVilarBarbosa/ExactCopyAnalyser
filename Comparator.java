@@ -25,7 +25,7 @@ public class Comparator {
                 File f2 = destination.get(key);
                 if (f2 != null) {
                     File f1 = source.get(key);
-                    if (!areFilesEqual(f1, f2))
+                    if (!areFilesEqual(f1, f2, menu))
                         notEqual.put(f1, f2);
                 }
             }
@@ -34,7 +34,7 @@ public class Comparator {
         return notEqual;
     }
 
-    public boolean areFilesEqual(File f1, File f2) throws Exception {
+    public boolean areFilesEqual(File f1, File f2, Menu menu) throws Exception {
         long f1Length = f1.length();
         if (f1Length != f2.length() || f1.lastModified() != f2.lastModified())
             return false;
@@ -65,7 +65,7 @@ public class Comparator {
             fis2.close();
 
             if (readError)
-                throw new Exception("An error occurred reading the data from the files.");
+                throw new Exception(menu.getText().getFileReadErrorMsg());
         }
 
         return equal;

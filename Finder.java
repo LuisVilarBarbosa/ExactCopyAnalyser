@@ -35,7 +35,7 @@ public class Finder {
             equalsToF1.add(f1);
 
             for (File f2 : allFiles.values())
-                if (!f1.equals(f2) && comparator.areFilesEqual(f1, f2)) {
+                if (!f1.equals(f2) && comparator.areFilesEqual(f1, f2, menu)) {
                     equalsToF1.add(f2);
                     repeated++;
                 }
@@ -64,7 +64,7 @@ public class Finder {
 
             for (int j = i + 1; j < size; j++) {
                 File f2 = myFiles.get(j);
-                if (!alreadyFound.contains(f2) && comparator.areFilesEqual(f1, f2)) {
+                if (!alreadyFound.contains(f2) && comparator.areFilesEqual(f1, f2, menu)) {
                     equalsToF1.add(f2);
                     alreadyFound.add(f2);
                 }

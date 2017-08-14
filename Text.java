@@ -7,6 +7,8 @@ public class Text {
     private String selectOptionMsg;
     private String notFileErrorMsg;
     private String invalidOptionMsg;
+    private String notDirErrorMsg;
+    private String fileReadErrorMsg;
     private String dir1Msg;
     private String dir2Msg;
     private String notFoundOnDir1Msg;
@@ -26,6 +28,7 @@ public class Text {
     private String dirMsg;
     private String noDuplicatesFoundMsg;
     private String duplicatedFilesMsg;
+    private String loggerStartMsg;
     private String generatedLoggerMsg;
     private String foundMsg;
 
@@ -45,6 +48,8 @@ public class Text {
             selectOptionMsg = "Seleciona uma opção (exemplo: " + specialSequence + "): ";
             notFileErrorMsg = "'" + specialSequence + "' não é um ficheiro. Extensão do ficheiro em falta?";
             invalidOptionMsg = "Opção inválida.\n";
+            notDirErrorMsg = "'" + specialSequence + "' não é um diretório.";
+            fileReadErrorMsg = "Ocorreu um erro ao ler os dados dos ficheiros.";
             dir1Msg = "Diretório 1: ";
             dir2Msg = "Diretório 2: ";
             notFoundOnDir1Msg = "Não encontrados no diretório 1: " + specialSequence + "\n";
@@ -64,6 +69,7 @@ public class Text {
             dirMsg = "Diretório: ";
             noDuplicatesFoundMsg = "Não foram encontrados ficheiros duplicados.\n";
             duplicatedFilesMsg = "Ficheiros duplicados: " + specialSequence + " = " + specialSequence + " bytes";
+            loggerStartMsg = "Dados gerados pelo ExactCopyAnalyser serão guardados abaixo.\n\n";
             generatedLoggerMsg = "Dados adicionais serão guardados em '" + specialSequence + "'.\n";
             foundMsg = "Encontrado(s)";
         } else {
@@ -79,6 +85,8 @@ public class Text {
             selectOptionMsg = "Select an option (example: " + specialSequence + "): ";
             notFileErrorMsg = "'" + specialSequence + "' is not a file. File extension missing?";
             invalidOptionMsg = "Invalid option.\n";
+            notDirErrorMsg = "'" + specialSequence + "' is not a directory.";
+            fileReadErrorMsg = "An error occurred reading the data from the files.";
             dir1Msg = "Directory 1: ";
             dir2Msg = "Directory 2: ";
             notFoundOnDir1Msg = "Not found on directory 1: " + specialSequence + "\n";
@@ -98,6 +106,7 @@ public class Text {
             dirMsg = "Directory: ";
             noDuplicatesFoundMsg = "No duplicates files have been found.\n";
             duplicatedFilesMsg = "Duplicated files: " + specialSequence + " = " + specialSequence + " bytes";
+            loggerStartMsg = "ExactCopyAnalyser data will be stored below.\n\n";
             generatedLoggerMsg = "Additional data will be logged on '" + specialSequence + "'.\n";
             foundMsg = "Found";
         }
@@ -117,6 +126,14 @@ public class Text {
 
     public String getInvalidOptionMsg() {
         return invalidOptionMsg;
+    }
+
+    public String getNotDirErrorMsg(String directory) {
+        return notDirErrorMsg.replaceFirst(specialSequence, directory);
+    }
+
+    public String getFileReadErrorMsg() {
+        return fileReadErrorMsg;
     }
 
     public String getDir1Msg() {
@@ -193,6 +210,10 @@ public class Text {
 
     public String getDuplicatedFilesMsg(int number, long size) {
         return duplicatedFilesMsg.replaceFirst(specialSequence, Integer.toString(number)).replaceFirst(specialSequence, Long.toString(size));
+    }
+
+    public String getLoggerStartMsg() {
+        return loggerStartMsg;
     }
 
     public String getGeneratedLoggerMsg(String loggerPath) {

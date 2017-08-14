@@ -8,7 +8,7 @@ public class Logger {
     private File file;
     private FileOutputStream fileOutputStream;
 
-    public Logger() throws Exception {
+    public Logger(Text text) throws Exception {
         String filename;
 
         do {
@@ -17,7 +17,7 @@ public class Logger {
         } while (file.exists());
 
         this.fileOutputStream = new FileOutputStream(file);
-        this.fileOutputStream.write("ExactCopyAnalyser data will be stored below.\n\n".getBytes());
+        this.fileOutputStream.write(text.getLoggerStartMsg().getBytes());
     }
 
     public String getPath() {

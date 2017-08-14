@@ -19,7 +19,7 @@ public class Menu {
 
             try {
                 if (option != EXIT) {
-                    logger = new Logger();
+                    logger = new Logger(text);
                     display(text.getGeneratedLoggerMsg(logger.getPath()));
                 }
 
@@ -86,7 +86,7 @@ public class Menu {
         File f2 = getFile(path2);
 
         Comparator comparator = new Comparator(compareContent);
-        if (comparator.areFilesEqual(f1, f2))
+        if (comparator.areFilesEqual(f1, f2, this))
             display(text.getEqualFilesMsg());
         else
             display(text.getNotEqualFilesMsg());
@@ -169,7 +169,7 @@ public class Menu {
     private HashMap<String, File> getDirectoryFiles(String message) throws Exception {
         String dir = getString(message);
         dir = adjustDirectory(dir);
-        HashMap<String, File> files = Loader.getDirectoryFiles(dir);
+        HashMap<String, File> files = Loader.getDirectoryFiles(dir, this);
         return files;
     }
 

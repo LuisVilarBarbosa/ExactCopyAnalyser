@@ -3,10 +3,10 @@ import java.util.HashMap;
 
 public class Loader {
 
-    public static HashMap<String, File> getDirectoryFiles(String baseDirectory) throws Exception {
+    public static HashMap<String, File> getDirectoryFiles(String baseDirectory, Menu menu) throws Exception {
         File directory = new File(baseDirectory);
         if (!directory.isDirectory())
-            throw new Exception("'" + baseDirectory + "' is not a directory.");
+            throw new Exception(menu.getText().getNotDirErrorMsg(baseDirectory));
 
         HashMap<String, File> files = new HashMap<>();
         getDirectoryFilesAux(baseDirectory, directory, files);
