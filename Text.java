@@ -11,13 +11,21 @@ public class Text {
     private String dir2Msg;
     private String notFoundOnDir1Msg;
     private String notFoundOnDir2Msg;
+    private String notEqualContentMsg;
     private String file1Msg;
     private String file2Msg;
+    private String equalFilesMsg;
+    private String notEqualFilesMsg;
+    private String noRepeatedFilesFoundMsg;
+    private String filesNotInDestinationButWithCopiesThereMsg;
     private String deletionErrorMsg;
     private String confirmationMsg;
     private String confirmInput;
     private String denyInput;
+    private String removingFilesMsg;
     private String dirMsg;
+    private String noDuplicatesFoundMsg;
+    private String duplicatedFilesMsg;
     private String generatedLoggerMsg;
     private String foundMsg;
 
@@ -41,13 +49,21 @@ public class Text {
             dir2Msg = "Diretório 2: ";
             notFoundOnDir1Msg = "Não encontrados no diretório 1: " + specialSequence + "\n";
             notFoundOnDir2Msg = "Não encontrados no diretório 2: " + specialSequence + "\n";
+            notEqualContentMsg = "Conteúdo não igual: " + specialSequence;
             file1Msg = "Ficheiro 1: ";
             file2Msg = "Ficheiro 2: ";
+            equalFilesMsg = "Os ficheiros são iguais.\n";
+            notEqualFilesMsg = "Os ficheiros não são iguais";
+            noRepeatedFilesFoundMsg = "Não foram encontrados ficheiros repetidos.\n";
+            filesNotInDestinationButWithCopiesThereMsg = "Ficheiros que não estão no destino, mas têm cópias lá.";
             deletionErrorMsg = "Não foi possível remover '" + specialSequence + "'.\n";
             confirmationMsg = "Tem a certeza que deseja continuar? (S/N): ";
             confirmInput = "S";
             denyInput = "N";
+            removingFilesMsg = "Removendo os ficheiros...";
             dirMsg = "Diretório: ";
+            noDuplicatesFoundMsg = "Não foram encontrados ficheiros duplicados.\n";
+            duplicatedFilesMsg = "Ficheiros duplicados: " + specialSequence + " = " + specialSequence + " bytes";
             generatedLoggerMsg = "Dados adicionais serão guardados em '" + specialSequence + "'.\n";
             foundMsg = "Encontrado(s)";
         } else {
@@ -67,13 +83,21 @@ public class Text {
             dir2Msg = "Directory 2: ";
             notFoundOnDir1Msg = "Not found on directory 1: " + specialSequence + "\n";
             notFoundOnDir2Msg = "Not found on directory 2: " + specialSequence + "\n";
+            notEqualContentMsg = "Not equal content: " + specialSequence;
             file1Msg = "File 1: ";
             file2Msg = "File 2: ";
+            equalFilesMsg = "The files are equal.\n";
+            notEqualFilesMsg = "The files are not equal.\n";
+            noRepeatedFilesFoundMsg = "No repeated files have been found.\n";
+            filesNotInDestinationButWithCopiesThereMsg = "Files that are not in destination but have copies there:";
             deletionErrorMsg = "It was not possible to remove '" + specialSequence + "'.\n";
             confirmationMsg = "Are you sure that you want to proceed? (Y/N): ";
             confirmInput = "Y";
             denyInput = "N";
+            removingFilesMsg = "Removing files...";
             dirMsg = "Directory: ";
+            noDuplicatesFoundMsg = "No duplicates files have been found.\n";
+            duplicatedFilesMsg = "Duplicated files: " + specialSequence + " = " + specialSequence + " bytes";
             generatedLoggerMsg = "Additional data will be logged on '" + specialSequence + "'.\n";
             foundMsg = "Found";
         }
@@ -84,7 +108,7 @@ public class Text {
     }
 
     public String getSelectOptionMsg(int example) {
-        return selectOptionMsg.replace(specialSequence, Integer.toString(example));
+        return selectOptionMsg.replaceFirst(specialSequence, Integer.toString(example));
     }
 
     public String getNotFileErrorMsg(String filename) {
@@ -104,11 +128,15 @@ public class Text {
     }
 
     public String getNotFoundOnDir1Msg(int number) {
-        return notFoundOnDir1Msg.replace(specialSequence, Integer.toString(number));
+        return notFoundOnDir1Msg.replaceFirst(specialSequence, Integer.toString(number));
     }
 
     public String getNotFoundOnDir2Msg(int number) {
-        return notFoundOnDir2Msg.replace(specialSequence, Integer.toString(number));
+        return notFoundOnDir2Msg.replaceFirst(specialSequence, Integer.toString(number));
+    }
+
+    public String getNotEqualContentMsg(int number) {
+        return notEqualContentMsg.replaceFirst(specialSequence, Integer.toString(number));
     }
 
     public String getFile1Msg() {
@@ -119,8 +147,24 @@ public class Text {
         return file2Msg;
     }
 
+    public String getEqualFilesMsg() {
+        return equalFilesMsg;
+    }
+
+    public String getNotEqualFilesMsg() {
+        return notEqualFilesMsg;
+    }
+
+    public String getNoRepeatedFilesFoundMsg() {
+        return noRepeatedFilesFoundMsg;
+    }
+
+    public String getFilesNotInDestinationButWithCopiesThereMsg() {
+        return filesNotInDestinationButWithCopiesThereMsg;
+    }
+
     public String getDeletionErrorMsg(String name) {
-        return deletionErrorMsg.replace(specialSequence, name);
+        return deletionErrorMsg.replaceFirst(specialSequence, name);
     }
 
     public String getConfirmationMsg() {
@@ -135,12 +179,24 @@ public class Text {
         return denyInput;
     }
 
+    public String getRemovingFilesMsg() {
+        return removingFilesMsg;
+    }
+
     public String getDirMsg() {
         return dirMsg;
     }
 
+    public String getNoDuplicatesFoundMsg() {
+        return noDuplicatesFoundMsg;
+    }
+
+    public String getDuplicatedFilesMsg(int number, long size) {
+        return duplicatedFilesMsg.replaceFirst(specialSequence, Integer.toString(number)).replaceFirst(specialSequence, Long.toString(size));
+    }
+
     public String getGeneratedLoggerMsg(String loggerPath) {
-        return generatedLoggerMsg.replace(specialSequence, loggerPath);
+        return generatedLoggerMsg.replaceFirst(specialSequence, loggerPath);
     }
 
     public String getFoundMsg() {

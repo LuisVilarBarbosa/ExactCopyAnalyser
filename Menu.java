@@ -74,7 +74,7 @@ public class Menu {
 
         Comparator comparator = new Comparator(compareContent);
         HashMap<File, File> notEqual = comparator.compareDirectoriesWithSameStructure(dir1, dir2, this);
-        String message = "Not equal content: " + notEqual.size();
+        String message = text.getNotEqualContentMsg(notEqual.size());
         display(message + "\n");
         logger.list(message, notEqual);
     }
@@ -87,9 +87,9 @@ public class Menu {
 
         Comparator comparator = new Comparator(compareContent);
         if (comparator.areFilesEqual(f1, f2))
-            display("The files are equal.\n");
+            display(text.getEqualFilesMsg());
         else
-            display("The files are not equal.\n");
+            display(text.getNotEqualFilesMsg());
     }
 
     private ArrayList<ArrayList<File>> listDir1FilesThatAreNotInDir2ButHaveCopiesThere() throws Exception {
@@ -98,9 +98,9 @@ public class Menu {
         ArrayList<ArrayList<File>> copies = Finder.findDir1FilesThatAreNotInDir2ButHaveCopiesThere(dir1, dir2, this);
 
         if (copies.isEmpty())
-            display("No repeated files have been found.\n");
+            display(text.getNoRepeatedFilesFoundMsg());
         else {
-            logger.list("Files that are not in destination but have copies there:", copies);
+            logger.list(text.getFilesNotInDestinationButWithCopiesThereMsg(), copies);
         }
         return copies;
     }
@@ -108,7 +108,7 @@ public class Menu {
     private void removeDir1FilesThatAreNotInDir2ButHaveCopiesThere() throws Exception {
         ArrayList<ArrayList<File>> copies = listDir1FilesThatAreNotInDir2ButHaveCopiesThere();
         if (!copies.isEmpty() && confirm()) {
-            display("Removing files...");
+            display(text.getRemovingFilesMsg());
             Changer.deleteFirstFileInList(copies, this);
         }
     }
@@ -118,7 +118,7 @@ public class Menu {
         ArrayList<ArrayList<File>> duplicates = Finder.findDuplicates(files, this);
 
         if (duplicates.isEmpty())
-            display("No duplicates files have been found.\n");
+            display(text.getNoDuplicatesFoundMsg());
         else {
             int quantity = 0;
             long size = 0;
@@ -127,7 +127,7 @@ public class Menu {
                     quantity++;
                     size += list.get(i).length();
                 }
-            String message = "Duplicated files: " + quantity + " = " + size + " bytes";
+            String message = text.getDuplicatedFilesMsg(quantity, size);
             logger.list(message, duplicates);
         }
     }
