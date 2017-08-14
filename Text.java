@@ -14,6 +14,9 @@ public class Text {
     private String file1Msg;
     private String file2Msg;
     private String deletionErrorMsg;
+    private String confirmationMsg;
+    private String confirmInput;
+    private String denyInput;
     private String dirMsg;
     private String generatedLoggerMsg;
     private String foundMsg;
@@ -41,6 +44,9 @@ public class Text {
             file1Msg = "Ficheiro 1: ";
             file2Msg = "Ficheiro 2: ";
             deletionErrorMsg = "Não foi possível remover '" + specialSequence + "'.\n";
+            confirmationMsg = "Tem a certeza que deseja continuar? (S/N): ";
+            confirmInput = "S";
+            denyInput = "N";
             dirMsg = "Diretório: ";
             generatedLoggerMsg = "Dados adicionais serão guardados em '" + specialSequence + "'.\n";
             foundMsg = "Encontrado(s)";
@@ -64,6 +70,9 @@ public class Text {
             file1Msg = "File 1: ";
             file2Msg = "File 2: ";
             deletionErrorMsg = "It was not possible to remove '" + specialSequence + "'.\n";
+            confirmationMsg = "Are you sure that you want to proceed? (Y/N): ";
+            confirmInput = "Y";
+            denyInput = "N";
             dirMsg = "Directory: ";
             generatedLoggerMsg = "Additional data will be logged on '" + specialSequence + "'.\n";
             foundMsg = "Found";
@@ -112,6 +121,18 @@ public class Text {
 
     public String getDeletionErrorMsg(String name) {
         return deletionErrorMsg.replace(specialSequence, name);
+    }
+
+    public String getConfirmationMsg() {
+        return confirmationMsg;
+    }
+
+    public String getConfirmInput() {
+        return confirmInput;
+    }
+
+    public String getDenyInput() {
+        return denyInput;
     }
 
     public String getDirMsg() {

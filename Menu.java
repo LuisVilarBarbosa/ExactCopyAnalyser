@@ -153,11 +153,11 @@ public class Menu {
         String line;
         boolean invalid = true;
         do {
-            line = getString("Are you sure that you want to proceed? (Y/N): ");
-            if (line.equals("Y") || line.endsWith("y")) {
+            line = getString(text.getConfirmationMsg());
+            if (line.equalsIgnoreCase(text.getConfirmInput())) {
                 confirm = true;
                 invalid = false;
-            } else if (line.equals("N") || line.equals("n")) {
+            } else if (line.equalsIgnoreCase(text.getDenyInput())) {
                 confirm = false;
                 invalid = false;
             } else
