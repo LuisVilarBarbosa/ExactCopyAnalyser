@@ -25,12 +25,13 @@ public class Finder {
     public static ArrayList<ArrayList<File>> findCopiesOfFilesToSearch(HashMap<String, File> allFiles, HashMap<String, File> filesToSearch, Menu menu) throws Exception {
         Comparator comparator = new Comparator(true);
         ArrayList<ArrayList<File>> repeatedWithoutDirectCorrespondent = new ArrayList<>();
-        int i = 0;
-        int size = filesToSearch.size();
+        int allFilesSize = allFiles.size();
+        int completedComparisons = 0;
+        int totalComparisons = filesToSearch.size() * allFilesSize;
         int repeated = 0;
 
         for (File f1 : filesToSearch.values()) {
-            menu.displayProgress(i, size, repeated);
+            menu.displayProgress(completedComparisons, totalComparisons, repeated);
             ArrayList<File> equalsToF1 = new ArrayList<>();
             equalsToF1.add(f1);
 
@@ -39,10 +40,10 @@ public class Finder {
                     equalsToF1.add(f2);
                     repeated++;
                 }
+            completedComparisons += allFilesSize;
 
             if (equalsToF1.size() > 1)
                 repeatedWithoutDirectCorrespondent.add(equalsToF1);
-            i++;
         }
         return repeatedWithoutDirectCorrespondent;
     }
@@ -54,9 +55,14 @@ public class Finder {
         ArrayList<File> myFiles = Converter.convertToArrayListOfValues(files);
         HashSet<File> alreadyFound = new HashSet<>();
         int size = myFiles.size();
+        int completedComparisons = 0;
+        int totalComparisons = 0;
+
+        for (int i = 0; i < size; i++)
+            totalComparisons += size - i - 1;
 
         for (int i = 0; i < size; i++) {
-            menu.displayProgress(i, size, alreadyFound.size());
+            menu.displayProgress(completedComparisons, totalComparisons, alreadyFound.size());
             ArrayList<File> equalsToF1 = new ArrayList<>();
 
             File f1 = myFiles.get(i);
@@ -69,6 +75,7 @@ public class Finder {
                     alreadyFound.add(f2);
                 }
             }
+            completedComparisons += size - i - 1;
 
             if (equalsToF1.size() > 1)
                 duplicates.add(equalsToF1);
