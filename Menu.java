@@ -189,7 +189,7 @@ public class Menu {
     }
 
     public void displayProgress(long done, long total, int found) {
-        double percentage = Math.round(done * 100000 / total) / 100.0;
+        double percentage = Math.round(done * 100000 / total) / 1000.0;
 
         StringBuilder sb1 = new StringBuilder();
         for (int i = 0; i < backtrackCounter; i++)
