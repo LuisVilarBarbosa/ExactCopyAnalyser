@@ -189,13 +189,21 @@ public class Menu {
     }
 
     public void displayProgress(long done, long total, int found) {
-        double percentage = done * 100 / total;
-        StringBuilder sb = new StringBuilder();
+        double percentage = Math.round(done * 100000 / total) / 100.0;
+
+        StringBuilder sb1 = new StringBuilder();
         for (int i = 0; i < backtrackCounter; i++)
-            sb.append("\b");
-        sb.append(done).append(" / ").append(total).append(" = ").append(percentage).append("% ").append(text.getFoundMsg()).append(found);
-        displayAux(sb.toString());
-        backtrackCounter = sb.length() - backtrackCounter;
+            sb1.append("\b");
+
+        StringBuilder sb2 = new StringBuilder();
+        sb2.append(done).append(" / ").append(total).append(" = ").append(percentage).append("% ").append(text.getFoundMsg()).append(found);
+
+        for (int i = sb2.length(); i < backtrackCounter; i++)
+            sb2.append(" ");
+
+        backtrackCounter = sb2.length();
+        sb1.append(sb2);
+        displayAux(sb1.toString());
     }
 
     private void displayAux(String str) {
