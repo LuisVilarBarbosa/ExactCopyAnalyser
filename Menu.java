@@ -9,6 +9,7 @@ public class Menu {
     private Text text = new Text();
     private Logger logger = null;
     private int backtrackCounter = 0;
+    private RemainingTime remainingTime = null;
 
     public void start() {
         int option;
@@ -186,10 +187,13 @@ public class Menu {
             myStr = "\n" + myStr;
         displayAux(myStr);
         backtrackCounter = 0;
+        remainingTime = null;
     }
 
     public void displayProgress(long done, long total, int found) {
         double percentage = Math.round(done * 100000 / total) / 1000.0;
+        if (remainingTime == null)
+            remainingTime = new RemainingTime(total);
 
         StringBuilder sb1 = new StringBuilder();
         for (int i = 0; i < backtrackCounter; i++)
@@ -197,6 +201,7 @@ public class Menu {
 
         StringBuilder sb2 = new StringBuilder();
         sb2.append(done).append(" / ").append(total).append(" = ").append(percentage).append("% ").append(text.getFoundMsg()).append(found);
+        sb2.append(" ").append(text.getRemainingTimeMsg()).append(remainingTime.getRemainingTime(done, text));
 
         for (int i = sb2.length(); i < backtrackCounter; i++)
             sb2.append(" ");
