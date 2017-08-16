@@ -10,7 +10,7 @@ public class Logger {
     private File file;
     private FileOutputStream fileOutputStream;
 
-    public Logger(Text text) throws Exception {
+    public Logger(Text text) throws IOException {
         String filename;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(Calendar.getInstance().getTime());
 

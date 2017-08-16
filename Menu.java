@@ -41,7 +41,7 @@ public class Menu {
                         listDir1FilesThatAreNotInDir2ButHaveCopiesThere();
                         break;
                     case 6:
-                        removeDir1FilesThatAreNotInDir2ButHaveCopiesThere();
+                        deleteDir1FilesThatAreNotInDir2ButHaveCopiesThere();
                         break;
                     case 7:
                         listDuplicates();
@@ -103,7 +103,7 @@ public class Menu {
         return copies;
     }
 
-    private void removeDir1FilesThatAreNotInDir2ButHaveCopiesThere() throws Exception {
+    private void deleteDir1FilesThatAreNotInDir2ButHaveCopiesThere() throws Exception {
         ArrayList<ArrayList<File>> copies = listDir1FilesThatAreNotInDir2ButHaveCopiesThere();
         if (!copies.isEmpty() && confirm()) {
             display(text.getDeletingFilesMsg());

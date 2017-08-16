@@ -30,8 +30,8 @@ public class Finder {
         long totalComparisons = filesToSearch.size() * allFilesSize;
         int repeated = 0;
 
+        menu.displayProgress(completedComparisons, totalComparisons, repeated);
         for (File f1 : filesToSearch.values()) {
-            menu.displayProgress(completedComparisons, totalComparisons, repeated);
             ArrayList<File> equalsToF1 = new ArrayList<>();
             equalsToF1.add(f1);
 
@@ -41,6 +41,7 @@ public class Finder {
                     repeated++;
                 }
             completedComparisons += allFilesSize;
+            menu.displayProgress(completedComparisons, totalComparisons, repeated);
 
             if (equalsToF1.size() > 1)
                 repeatedWithoutDirectCorrespondent.add(equalsToF1);
@@ -61,8 +62,8 @@ public class Finder {
         for (int i = 0; i < size; i++)
             totalComparisons += size - i - 1;
 
+        menu.displayProgress(completedComparisons, totalComparisons, alreadyFound.size());
         for (int i = 0; i < size; i++) {
-            menu.displayProgress(completedComparisons, totalComparisons, alreadyFound.size());
             ArrayList<File> equalsToF1 = new ArrayList<>();
 
             File f1 = myFiles.get(i);
@@ -76,6 +77,7 @@ public class Finder {
                 }
             }
             completedComparisons += size - i - 1;
+            menu.displayProgress(completedComparisons, totalComparisons, alreadyFound.size());
 
             if (equalsToF1.size() > 1)
                 duplicates.add(equalsToF1);
