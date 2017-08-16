@@ -38,14 +38,14 @@ public class Text {
 
         if (language.equalsIgnoreCase("pt")) {
             optionsMsg = "\nOpções:\n" +
-                    "1. Comparar o conteúdo de todos os ficheiros correspondentes em dois diretórios com a mesma estrutura de ficheiros.\n" +
-                    "2. Comparar o conteúdo de dois ficheiros.\n" +
-                    "3. Comparar todos os ficheiros correspondentes em dois diretórios com a mesma estrutura de ficheiros por tamanho e data de modificação.\n" +
-                    "4. Comparar dois ficheiros por tamanho e data de modificação.\n" +
-                    "5. Listar ficheiros que estão no diretório 1, mas não estão no diretório 2 e têm cópias noutra localização no diretório 2. *\n" +
-                    "6. Remover ficheiros que estão no diretório 1, mas não estão no diretório 2 e têm cópias noutra localização no diretório 2. *\n" +
-                    "7. Listar todos os duplicados num dado diretório. *\n" +
-                    "0. Sair.\n" +
+                    "1-Comparar o conteúdo de todos os ficheiros correspondentes em dois diretórios com a mesma estrutura de ficheiros.\n" +
+                    "2-Comparar o conteúdo de dois ficheiros.\n" +
+                    "3-Comparar todos os ficheiros correspondentes em dois diretórios com a mesma estrutura de ficheiros por tamanho e data de modificação.\n" +
+                    "4-Comparar dois ficheiros por tamanho e data de modificação.\n" +
+                    "5-Listar ficheiros que estão no diretório 1, mas não estão no diretório 2 e têm cópias noutra localização no diretório 2. *\n" +
+                    "6-Remover ficheiros que estão no diretório 1, mas não estão no diretório 2 e têm cópias noutra localização no diretório 2. *\n" +
+                    "7-Listar todos os duplicados num dado diretório. *\n" +
+                    "0-Sair.\n" +
                     "* Esta operação pode ser demorada, pois usa comparação por conteúdo.\n\n";
             selectOptionMsg = "Seleciona uma opção (exemplo: " + specialSequence + "): ";
             notFileErrorMsg = "'" + specialSequence + "' não é um ficheiro. Extensão do ficheiro em falta?";
@@ -77,14 +77,14 @@ public class Text {
             invalidArgMsg = "Argumento inválido.";
         } else {
             optionsMsg = "Options:\n" +
-                    "1. Compare the content of all corresponding files in two directories with the same structure of files.\n" +
-                    "2. Compare the content of two files.\n" +
-                    "3. Compare all corresponding files in two directories with the same structure of files by size and modification date.\n" +
-                    "4. Compare two files by size and modification date.\n" +
-                    "5. List files that are in directory 1, but are not in directory 2 and have copies on other location in directory 2. *\n" +
-                    "6. Remove files that are in directory 1, but are not in directory 2 and have copies on other location in directory 2. *\n" +
-                    "7. List all duplicates in a given directory. *\n" +
-                    "0. Exit.\n" +
+                    "1-Compare the content of all corresponding files in two directories with the same structure of files.\n" +
+                    "2-Compare the content of two files.\n" +
+                    "3-Compare all corresponding files in two directories with the same structure of files by size and modification date.\n" +
+                    "4-Compare two files by size and modification date.\n" +
+                    "5-List files that are in directory 1, but are not in directory 2 and have copies on other location in directory 2. *\n" +
+                    "6-Remove files that are in directory 1, but are not in directory 2 and have copies on other location in directory 2. *\n" +
+                    "7-List all duplicates in a given directory. *\n" +
+                    "0-Exit.\n" +
                     "* This operation can be time-consuming because it uses comparison by content.\n\n";
             selectOptionMsg = "Select an option (example: " + specialSequence + "): ";
             notFileErrorMsg = "'" + specialSequence + "' is not a file. File extension missing?";
