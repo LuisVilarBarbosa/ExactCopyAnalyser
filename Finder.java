@@ -53,8 +53,8 @@ public class Finder {
         ArrayList<ArrayList<File>> duplicates = new ArrayList<>();
 
         ArrayList<File> myFiles = Converter.convertToArrayListOfValues(files);
-        HashSet<File> alreadyFound = new HashSet<>();
         int size = myFiles.size();
+        HashSet<File> alreadyFound = new HashSet<>(size);
         long completedComparisons = 0;
         long totalComparisons = 0;
 
