@@ -16,7 +16,7 @@ public class Menu {
 
         do {
             display(text.getOptionsMsg());
-            option = selectOption(EXIT, 7);
+            option = selectOption(EXIT, 8);
 
             try {
                 if (option != EXIT) {
@@ -45,6 +45,9 @@ public class Menu {
                         break;
                     case 7:
                         listDuplicates();
+                        break;
+                    case 8:
+                        listDir1FilesThatAreSomewhereInDir2();
                         break;
                 }
             } catch (Exception e) {
@@ -125,6 +128,15 @@ public class Menu {
         String message = text.getDuplicateFilesMsg(quantity, size);
         display(message);
         logger.list(message, duplicates);
+    }
+
+    private void listDir1FilesThatAreSomewhereInDir2() throws Exception {
+        HashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
+        HashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
+        ArrayList<ArrayList<File>> copies = Finder.findCopiesOfFilesToSearch(dir2, dir1, this);
+        String message = text.getDir1FilesSomewhereInDir2(copies.size());
+        display(message);
+        logger.list(message, copies);
     }
 
     private int selectOption(int begin, int end) {

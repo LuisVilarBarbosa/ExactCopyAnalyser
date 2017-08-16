@@ -32,6 +32,7 @@ public class Text {
     private String remainingTimeMsg;
     private String calculatingMsg;
     private String invalidArgMsg;
+    private String dir1FilesSomewhereInDir2;
 
     public Text() {
         language = Locale.getDefault().getLanguage();
@@ -45,6 +46,7 @@ public class Text {
                     "5-Listar ficheiros que estão no diretório 1, mas não estão no diretório 2 e têm cópias noutra localização no diretório 2. *\n" +
                     "6-Remover ficheiros que estão no diretório 1, mas não estão no diretório 2 e têm cópias noutra localização no diretório 2. *\n" +
                     "7-Listar todos os duplicados num dado diretório. *\n" +
+                    "8-Listar ficheiros do diretório 1 com cópias no diretório 2. *\n"+
                     "0-Sair.\n" +
                     "* Esta operação pode ser demorada, pois usa comparação por conteúdo.\n\n";
             selectOptionMsg = "Seleciona uma opção (exemplo: " + specialSequence + "): ";
@@ -75,6 +77,7 @@ public class Text {
             remainingTimeMsg = "Tempo restante: ";
             calculatingMsg = "calculando...";
             invalidArgMsg = "Argumento inválido.";
+            dir1FilesSomewhereInDir2 = "Ficheiros do diretório 1 com cópias no diretório 2: " + specialSequence + "\n";
         } else {
             optionsMsg = "Options:\n" +
                     "1-Compare the content of all corresponding files in two directories with the same structure of files.\n" +
@@ -84,6 +87,7 @@ public class Text {
                     "5-List files that are in directory 1, but are not in directory 2 and have copies on other location in directory 2. *\n" +
                     "6-Remove files that are in directory 1, but are not in directory 2 and have copies on other location in directory 2. *\n" +
                     "7-List all duplicates in a given directory. *\n" +
+                    "8-List files in directory 1 with copies in directory 2. *\n"+
                     "0-Exit.\n" +
                     "* This operation can be time-consuming because it uses comparison by content.\n\n";
             selectOptionMsg = "Select an option (example: " + specialSequence + "): ";
@@ -114,6 +118,7 @@ public class Text {
             remainingTimeMsg = "Remaining time: ";
             calculatingMsg = "calculating...";
             invalidArgMsg = "Invalid argument.";
+            dir1FilesSomewhereInDir2 = "Files in directory 1 with copies in directory 2: " + specialSequence + "\n";
         }
     }
 
@@ -231,5 +236,9 @@ public class Text {
 
     public String getInvalidArgMsg() {
         return invalidArgMsg;
+    }
+
+    public String getDir1FilesSomewhereInDir2(int number) {
+        return dir1FilesSomewhereInDir2.replaceFirst(specialSequence, Integer.toString(number));
     }
 }
