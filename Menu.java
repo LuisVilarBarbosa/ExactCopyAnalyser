@@ -97,12 +97,9 @@ public class Menu {
         HashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
         HashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
         ArrayList<ArrayList<File>> copies = Finder.findDir1FilesThatAreNotInDir2ButHaveCopiesThere(dir1, dir2, this);
-
-        if (copies.isEmpty())
-            display(text.getNoDuplicatesFoundMsg());
-        else {
-            logger.list(text.getFilesNotInDir2ButWithCopiesThereMsg(), copies);
-        }
+        String message = text.getFilesNotInDir2ButWithCopiesThereMsg();
+        display(message);
+        logger.list(message, copies);
         return copies;
     }
 
@@ -118,19 +115,16 @@ public class Menu {
         HashMap<String, File> files = getDirectoryFiles(text.getDirMsg());
         ArrayList<ArrayList<File>> duplicates = Finder.findDuplicates(files, this);
 
-        if (duplicates.isEmpty())
-            display(text.getNoDuplicatesFoundMsg());
-        else {
-            int quantity = 0;
-            long size = 0;
-            for (ArrayList<File> list : duplicates)
-                for (int i = 1; i < list.size(); i++) {
-                    quantity++;
-                    size += list.get(i).length();
-                }
-            String message = text.getDuplicateFilesMsg(quantity, size);
-            logger.list(message, duplicates);
-        }
+        int quantity = 0;
+        long size = 0;
+        for (ArrayList<File> list : duplicates)
+            for (int i = 1; i < list.size(); i++) {
+                quantity++;
+                size += list.get(i).length();
+            }
+        String message = text.getDuplicateFilesMsg(quantity, size);
+        display(message);
+        logger.list(message, duplicates);
     }
 
     private int selectOption(int begin, int end) {
