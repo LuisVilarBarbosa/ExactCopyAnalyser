@@ -18,16 +18,16 @@ public class Text {
     private String file2Msg;
     private String equalFilesMsg;
     private String notEqualFilesMsg;
-    private String noRepeatedFilesFoundMsg;
-    private String filesNotInDestinationButWithCopiesThereMsg;
+    private String noDuplicateFilesFoundMsg;
+    private String filesNotInDir2ButWithCopiesThereMsg;
     private String deletionErrorMsg;
     private String confirmationMsg;
     private String confirmInput;
     private String denyInput;
-    private String removingFilesMsg;
+    private String deletingFilesMsg;
     private String dirMsg;
     private String noDuplicatesFoundMsg;
-    private String duplicatedFilesMsg;
+    private String duplicateFilesMsg;
     private String loggerStartMsg;
     private String generatedLoggerMsg;
     private String foundMsg;
@@ -37,14 +37,15 @@ public class Text {
 
         if (language.equalsIgnoreCase("pt")) {
             optionsMsg = "\nOpções:\n" +
-                    "1. Comparar o conteúdo de todos os ficheiros correspondentes em dois diretórios com a mesma estrutura.\n" +
+                    "1. Comparar o conteúdo de todos os ficheiros correspondentes em dois diretórios com a mesma estrutura de ficheiros.\n" +
                     "2. Comparar o conteúdo de dois ficheiros.\n" +
-                    "3. Comparar todos os ficheiros correspondentes em dois diretórios com a mesma estrutura por tamanho e data de modificação.\n" +
+                    "3. Comparar todos os ficheiros correspondentes em dois diretórios com a mesma estrutura de ficheiros por tamanho e data de modificação.\n" +
                     "4. Comparar dois ficheiros por tamanho e data de modificação.\n" +
-                    "5. Listar ficheiros que estão no diretório origem, mas não estão no diretório destino e têm ficheiros iguais noutra localização no destino. (Operação possivelmente demorada)\n" +
-                    "6. Remover ficheiros que estão no diretório origem, mas não estão no diretório destino e têm ficheiros iguais noutra localização no destino. (Operação possivelmente demorada)\n" +
-                    "7. Listar todos os duplicados num dado diretório. (Operação possivelmente demorada)\n" +
-                    "0. Sair.\n";
+                    "5. Listar ficheiros que estão no diretório 1, mas não estão no diretório 2 e têm cópias noutra localização no diretório 2. *\n" +
+                    "6. Remover ficheiros que estão no diretório 1, mas não estão no diretório 2 e têm cópias noutra localização no diretório 2. *\n" +
+                    "7. Listar todos os duplicados num dado diretório. *\n" +
+                    "0. Sair.\n" +
+                    "* Esta operação pode ser demorada, pois usa comparação por conteúdo.\n\n";
             selectOptionMsg = "Seleciona uma opção (exemplo: " + specialSequence + "): ";
             notFileErrorMsg = "'" + specialSequence + "' não é um ficheiro. Extensão do ficheiro em falta?";
             invalidOptionMsg = "Opção inválida.\n";
@@ -54,34 +55,35 @@ public class Text {
             dir2Msg = "Diretório 2: ";
             notFoundOnDir1Msg = "Não encontrados no diretório 1: " + specialSequence + "\n";
             notFoundOnDir2Msg = "Não encontrados no diretório 2: " + specialSequence + "\n";
-            notEqualContentMsg = "Conteúdo não igual: " + specialSequence;
+            notEqualContentMsg = "Conteúdo não igual: " + specialSequence + "\n";
             file1Msg = "Ficheiro 1: ";
             file2Msg = "Ficheiro 2: ";
             equalFilesMsg = "Os ficheiros são iguais.\n";
-            notEqualFilesMsg = "Os ficheiros não são iguais";
-            noRepeatedFilesFoundMsg = "Não foram encontrados ficheiros repetidos.\n";
-            filesNotInDestinationButWithCopiesThereMsg = "Ficheiros que não estão no destino, mas têm cópias lá.";
-            deletionErrorMsg = "Não foi possível remover '" + specialSequence + "'.\n";
+            notEqualFilesMsg = "Os ficheiros não são iguais.\n";
+            noDuplicateFilesFoundMsg = "Não foram encontrados ficheiros duplicados.\n";
+            filesNotInDir2ButWithCopiesThereMsg = "Ficheiros que não estão no diretório 2, mas têm cópias lá:\n";
+            deletionErrorMsg = "Não foi possível eliminar '" + specialSequence + "'.\n";
             confirmationMsg = "Tem a certeza que deseja continuar? (S/N): ";
             confirmInput = "S";
             denyInput = "N";
-            removingFilesMsg = "Removendo os ficheiros...";
+            deletingFilesMsg = "Eliminando os ficheiros...\n";
             dirMsg = "Diretório: ";
             noDuplicatesFoundMsg = "Não foram encontrados ficheiros duplicados.\n";
-            duplicatedFilesMsg = "Ficheiros duplicados: " + specialSequence + " = " + specialSequence + " bytes";
+            duplicateFilesMsg = "Ficheiros duplicados: " + specialSequence + " = " + specialSequence + " bytes";
             loggerStartMsg = "Dados gerados pelo ExactCopyAnalyser serão guardados abaixo.\n\n";
             generatedLoggerMsg = "Dados adicionais serão guardados em '" + specialSequence + "'.\n";
-            foundMsg = "Encontrado(s)";
+            foundMsg = "Encontrado(s): ";
         } else {
-            optionsMsg = "\nOptions:\n" +
-                    "1. Compare the content of all corresponding files in two directories with the same structure.\n" +
+            optionsMsg = "Options:\n" +
+                    "1. Compare the content of all corresponding files in two directories with the same structure of files.\n" +
                     "2. Compare the content of two files.\n" +
-                    "3. Compare all corresponding files in two directories with the same structure by size and modification date.\n" +
+                    "3. Compare all corresponding files in two directories with the same structure of files by size and modification date.\n" +
                     "4. Compare two files by size and modification date.\n" +
-                    "5. List files that are in the source directory, but are not in the destination directory and have equal files placed on other location in the destination. (Possibly time consuming operation)\n" +
-                    "6. Remove files that are in the source directory, but are not in the destination directory and have equal files placed on other location in the destination. (Possibly time consuming operation)\n" +
-                    "7. List all duplicates in a given directory. (Possibly time consuming operation)\n" +
-                    "0. Exit.\n";
+                    "5. List files that are in directory 1, but are not in directory 2 and have copies on other location in directory 2. *\n" +
+                    "6. Remove files that are in directory 1, but are not in directory 2 and have copies on other location in directory 2. *\n" +
+                    "7. List all duplicates in a given directory. *\n" +
+                    "0. Exit.\n" +
+                    "* This operation can be time-consuming because it uses comparison by content.\n\n";
             selectOptionMsg = "Select an option (example: " + specialSequence + "): ";
             notFileErrorMsg = "'" + specialSequence + "' is not a file. File extension missing?";
             invalidOptionMsg = "Invalid option.\n";
@@ -96,19 +98,19 @@ public class Text {
             file2Msg = "File 2: ";
             equalFilesMsg = "The files are equal.\n";
             notEqualFilesMsg = "The files are not equal.\n";
-            noRepeatedFilesFoundMsg = "No repeated files have been found.\n";
-            filesNotInDestinationButWithCopiesThereMsg = "Files that are not in destination but have copies there:";
-            deletionErrorMsg = "It was not possible to remove '" + specialSequence + "'.\n";
+            noDuplicateFilesFoundMsg = "No duplicate files found.\n";
+            filesNotInDir2ButWithCopiesThereMsg = "Files that are not in directory 2 but have copies there:\n";
+            deletionErrorMsg = "It was not possible to delete '" + specialSequence + "'.\n";
             confirmationMsg = "Are you sure that you want to proceed? (Y/N): ";
             confirmInput = "Y";
             denyInput = "N";
-            removingFilesMsg = "Removing files...";
+            deletingFilesMsg = "Deleting files...\n";
             dirMsg = "Directory: ";
-            noDuplicatesFoundMsg = "No duplicates files have been found.\n";
-            duplicatedFilesMsg = "Duplicated files: " + specialSequence + " = " + specialSequence + " bytes";
-            loggerStartMsg = "ExactCopyAnalyser data will be stored below.\n\n";
+            noDuplicatesFoundMsg = "No duplicate files found.\n";
+            duplicateFilesMsg = "Duplicate files: " + specialSequence + " = " + specialSequence + " bytes";
+            loggerStartMsg = "Data generated by ExactCopyAnalyser will be stored below.\n\n";
             generatedLoggerMsg = "Additional data will be logged on '" + specialSequence + "'.\n";
-            foundMsg = "Found";
+            foundMsg = "Found: ";
         }
     }
 
@@ -172,12 +174,12 @@ public class Text {
         return notEqualFilesMsg;
     }
 
-    public String getNoRepeatedFilesFoundMsg() {
-        return noRepeatedFilesFoundMsg;
+    public String getNoDuplicateFilesFoundMsg() {
+        return noDuplicateFilesFoundMsg;
     }
 
-    public String getFilesNotInDestinationButWithCopiesThereMsg() {
-        return filesNotInDestinationButWithCopiesThereMsg;
+    public String getFilesNotInDir2ButWithCopiesThereMsg() {
+        return filesNotInDir2ButWithCopiesThereMsg;
     }
 
     public String getDeletionErrorMsg(String name) {
@@ -196,8 +198,8 @@ public class Text {
         return denyInput;
     }
 
-    public String getRemovingFilesMsg() {
-        return removingFilesMsg;
+    public String getDeletingFilesMsg() {
+        return deletingFilesMsg;
     }
 
     public String getDirMsg() {
@@ -208,8 +210,8 @@ public class Text {
         return noDuplicatesFoundMsg;
     }
 
-    public String getDuplicatedFilesMsg(int number, long size) {
-        return duplicatedFilesMsg.replaceFirst(specialSequence, Integer.toString(number)).replaceFirst(specialSequence, Long.toString(size));
+    public String getDuplicateFilesMsg(int number, long size) {
+        return duplicateFilesMsg.replaceFirst(specialSequence, Integer.toString(number)).replaceFirst(specialSequence, Long.toString(size));
     }
 
     public String getLoggerStartMsg() {
