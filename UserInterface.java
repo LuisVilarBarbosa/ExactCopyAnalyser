@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Menu {
+public class UserInterface {
     private static int EXIT = 0;
     private Text text = new Text();
     private Logger logger = null;

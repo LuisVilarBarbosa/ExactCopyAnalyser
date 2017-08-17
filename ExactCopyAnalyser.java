@@ -6,7 +6,7 @@ public class ExactCopyAnalyser {
             return;
         }
 
-        Menu menu = new Menu();
-        menu.start();
+        UserInterface userInterface = new UserInterface();
+        userInterface.start();
     }
 }

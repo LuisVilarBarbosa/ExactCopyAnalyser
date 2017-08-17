@@ -5,9 +5,9 @@ import java.util.HashSet;
 
 public class Finder {
 
-    public static ArrayList<ArrayList<File>> findDir1FilesThatAreNotInDir2ButHaveCopiesThere(HashMap<String, File> dir1, HashMap<String, File> dir2, Menu menu) throws Exception {
+    public static ArrayList<ArrayList<File>> findDir1FilesThatAreNotInDir2ButHaveCopiesThere(HashMap<String, File> dir1, HashMap<String, File> dir2, UserInterface userInterface) throws Exception {
         HashMap<String, File> notFound = findDir1FilesNonExistingOnDir2(dir1, dir2);
-        ArrayList<ArrayList<File>> copies = findCopiesOfFilesToSearch(dir2, notFound, menu);
+        ArrayList<ArrayList<File>> copies = findCopiesOfFilesToSearch(dir2, notFound, userInterface);
         return copies;
     }
 
@@ -22,7 +22,7 @@ public class Finder {
         return notFound;
     }
 
-    public static ArrayList<ArrayList<File>> findCopiesOfFilesToSearch(HashMap<String, File> allFiles, HashMap<String, File> filesToSearch, Menu menu) throws Exception {
+    public static ArrayList<ArrayList<File>> findCopiesOfFilesToSearch(HashMap<String, File> allFiles, HashMap<String, File> filesToSearch, UserInterface userInterface) throws Exception {
         Comparator comparator = new Comparator(true);
         ArrayList<ArrayList<File>> repeatedWithoutDirectCorrespondent = new ArrayList<>();
         int allFilesSize = allFiles.size();
@@ -30,18 +30,18 @@ public class Finder {
         long totalComparisons = filesToSearch.size() * allFilesSize;
         int repeated = 0;
 
-        menu.displayProgress(completedComparisons, totalComparisons, repeated);
+        userInterface.displayProgress(completedComparisons, totalComparisons, repeated);
         for (File f1 : filesToSearch.values()) {
             ArrayList<File> equalsToF1 = new ArrayList<>();
             equalsToF1.add(f1);
 
             for (File f2 : allFiles.values())
-                if (!f1.equals(f2) && comparator.areFilesEqual(f1, f2, menu)) {
+                if (!f1.equals(f2) && comparator.areFilesEqual(f1, f2, userInterface)) {
                     equalsToF1.add(f2);
                     repeated++;
                 }
             completedComparisons += allFilesSize;
-            menu.displayProgress(completedComparisons, totalComparisons, repeated);
+            userInterface.displayProgress(completedComparisons, totalComparisons, repeated);
 
             if (equalsToF1.size() > 1)
                 repeatedWithoutDirectCorrespondent.add(equalsToF1);
@@ -49,7 +49,7 @@ public class Finder {
         return repeatedWithoutDirectCorrespondent;
     }
 
-    public static ArrayList<ArrayList<File>> findDuplicates(HashMap<String, File> files, Menu menu) throws Exception {
+    public static ArrayList<ArrayList<File>> findDuplicates(HashMap<String, File> files, UserInterface userInterface) throws Exception {
         Comparator comparator = new Comparator(true);
         ArrayList<ArrayList<File>> duplicates = new ArrayList<>();
 
@@ -62,7 +62,7 @@ public class Finder {
         for (int i = 0; i < size; i++)
             totalComparisons += size - i - 1;
 
-        menu.displayProgress(completedComparisons, totalComparisons, alreadyFound.size());
+        userInterface.displayProgress(completedComparisons, totalComparisons, alreadyFound.size());
         for (int i = 0; i < size; i++) {
             ArrayList<File> equalsToF1 = new ArrayList<>();
 
@@ -71,13 +71,13 @@ public class Finder {
 
             for (int j = i + 1; j < size; j++) {
                 File f2 = myFiles.get(j);
-                if (!alreadyFound.contains(f2) && comparator.areFilesEqual(f1, f2, menu)) {
+                if (!alreadyFound.contains(f2) && comparator.areFilesEqual(f1, f2, userInterface)) {
                     equalsToF1.add(f2);
                     alreadyFound.add(f2);
                 }
             }
             completedComparisons += size - i - 1;
-            menu.displayProgress(completedComparisons, totalComparisons, alreadyFound.size());
+            userInterface.displayProgress(completedComparisons, totalComparisons, alreadyFound.size());
 
             if (equalsToF1.size() > 1)
                 duplicates.add(equalsToF1);

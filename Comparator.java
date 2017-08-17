@@ -12,7 +12,7 @@ public class Comparator {
         this.compareContent = compareContent;
     }
 
-    public HashMap<File, File> compareDirectoriesWithSameStructure(HashMap<String, File> source, HashMap<String, File> destination, Menu menu) throws Exception {
+    public HashMap<File, File> compareDirectoriesWithSameStructure(HashMap<String, File> source, HashMap<String, File> destination, UserInterface userInterface) throws Exception {
         HashMap<File, File> notEqual = new HashMap<>();
 
         int size = source.size();
@@ -25,16 +25,16 @@ public class Comparator {
                 File f2 = destination.get(key);
                 if (f2 != null) {
                     File f1 = source.get(key);
-                    if (!areFilesEqual(f1, f2, menu))
+                    if (!areFilesEqual(f1, f2, userInterface))
                         notEqual.put(f1, f2);
                 }
             }
-            menu.displayProgress(i, size, notEqual.size());
+            userInterface.displayProgress(i, size, notEqual.size());
         }
         return notEqual;
     }
 
-    public boolean areFilesEqual(File f1, File f2, Menu menu) throws Exception {
+    public boolean areFilesEqual(File f1, File f2, UserInterface userInterface) throws Exception {
         long f1Length = f1.length();
         if (f1Length != f2.length() || f1.lastModified() != f2.lastModified())
             return false;
@@ -65,7 +65,7 @@ public class Comparator {
             fis2.close();
 
             if (readError)
-                throw new Exception(menu.getText().getFileReadErrorMsg());
+                throw new Exception(userInterface.getText().getFileReadErrorMsg());
         }
 
         return equal;
