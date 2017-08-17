@@ -15,7 +15,7 @@ public class Logger {
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss").format(Calendar.getInstance().getTime());
 
         do {
-            filename = "ExactCopyAnalyser " + timeStamp + " " + Long.toHexString(Double.doubleToLongBits(Math.random())) + ".txt";
+            filename = "FilesStructureAnalyser " + timeStamp + " " + Long.toHexString(Double.doubleToLongBits(Math.random())) + ".txt";
             file = new File(filename);
         } while (file.exists());
 

@@ -1,1 +1,1 @@
-# ExactCopyAnalyser
+# FilesStructureAnalyser
