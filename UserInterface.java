@@ -203,7 +203,7 @@ public class UserInterface {
     }
 
     public void displayProgress(long done, long total, int found) {
-        double percentage = Math.round(done * 100000 / total) / 1000.0;
+        double percentage = done * 100.0 / total;
         if (remainingTime == null)
             remainingTime = new RemainingTime(total);
 
@@ -212,7 +212,7 @@ public class UserInterface {
             sb1.append("\b");
 
         StringBuilder sb2 = new StringBuilder();
-        sb2.append(done).append(" / ").append(total).append(" = ").append(percentage).append("% ").append(text.getFoundMsg()).append(found);
+        sb2.append(done).append(" / ").append(total).append(" = ").append(String.format("%.3f", percentage)).append("% ").append(text.getFoundMsg()).append(found);
         sb2.append(" ").append(text.getRemainingTimeMsg()).append(remainingTime.getRemainingTime(done, text));
 
         for (int i = sb2.length(); i < backtrackCounter; i++)

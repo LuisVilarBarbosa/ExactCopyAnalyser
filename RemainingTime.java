@@ -23,7 +23,7 @@ public class RemainingTime {
         long minutes = (remainingSeconds / 60) % 60;
         long hours = remainingSeconds / 3600;
         StringBuilder sb = new StringBuilder();
-        sb.append(hours).append("h").append(minutes).append("m").append(seconds).append("s");
+        sb.append(hours).append("h").append(String.format("%02d", minutes)).append("m").append(String.format("%02d", seconds)).append("s");
         return sb.toString();
     }
 }
