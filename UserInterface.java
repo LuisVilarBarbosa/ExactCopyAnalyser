@@ -22,33 +22,7 @@ public class UserInterface {
                 if (option != EXIT) {
                     logger = new Logger(text);
                     display(text.getGeneratedLoggerMsg(logger.getPath()));
-                }
-
-                switch (option) {
-                    case 1:
-                        compareDirectoriesWithSameStructure(true);
-                        break;
-                    case 2:
-                        compareFiles(true);
-                        break;
-                    case 3:
-                        compareDirectoriesWithSameStructure(false);
-                        break;
-                    case 4:
-                        compareFiles(false);
-                        break;
-                    case 5:
-                        listDir1FilesThatAreNotInDir2ButHaveCopiesThere();
-                        break;
-                    case 6:
-                        deleteDir1FilesThatAreNotInDir2ButHaveCopiesThere();
-                        break;
-                    case 7:
-                        listDuplicates();
-                        break;
-                    case 8:
-                        listDir1FilesThatAreSomewhereInDir2();
-                        break;
+                    executeOption(option);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -65,6 +39,38 @@ public class UserInterface {
 
     public Text getText() {
         return text;
+    }
+
+    private void executeOption(int option) throws Exception {
+        switch (option) {
+            case 1:
+                compareDirectoriesWithSameStructure(true);
+                break;
+            case 2:
+                compareFiles(true);
+                break;
+            case 3:
+                compareDirectoriesWithSameStructure(false);
+                break;
+            case 4:
+                compareFiles(false);
+                break;
+            case 5:
+                listDir1FilesThatAreNotInDir2ButHaveCopiesThere();
+                break;
+            case 6:
+                deleteDir1FilesThatAreNotInDir2ButHaveCopiesThere();
+                break;
+            case 7:
+                listDuplicates();
+                break;
+            case 8:
+                listDir1FilesThatAreSomewhereInDir2();
+                break;
+            default:
+                display(text.getInvalidOptionMsg());
+                break;
+        }
     }
 
     private void compareDirectoriesWithSameStructure(boolean compareContent) throws Exception {
