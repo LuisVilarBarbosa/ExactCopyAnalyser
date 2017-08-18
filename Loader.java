@@ -1,4 +1,3 @@
-import java.io.File;
 import java.util.HashMap;
 
 public class Loader {
