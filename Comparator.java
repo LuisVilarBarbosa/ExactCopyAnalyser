@@ -8,14 +8,16 @@ public class Comparator {
     private boolean compareContent;
     private byte[] data1;
     private byte[] data2;
+    private UserInterface userInterface;
 
-    public Comparator(boolean compareContent) {
+    public Comparator(boolean compareContent, UserInterface userInterface) {
         this.compareContent = compareContent;
         this.data1 = new byte[BUFFER_SIZE];
         this.data2 = new byte[BUFFER_SIZE];
+        this.userInterface = userInterface;
     }
 
-    public HashMap<File, File> compareDirectoriesWithSameStructure(HashMap<String, File> source, HashMap<String, File> destination, UserInterface userInterface) throws Exception {
+    public HashMap<File, File> compareDirectoriesWithSameStructure(HashMap<String, File> source, HashMap<String, File> destination) throws Exception {
         HashMap<File, File> notEqual = new HashMap<>();
 
         int size = source.size();
@@ -28,7 +30,7 @@ public class Comparator {
                 File f2 = destination.get(key);
                 if (f2 != null) {
                     File f1 = source.get(key);
-                    if (!areFilesEqual(f1, f2, userInterface))
+                    if (!areFilesEqual(f1, f2))
                         notEqual.put(f1, f2);
                 }
             }
@@ -37,7 +39,7 @@ public class Comparator {
         return notEqual;
     }
 
-    public boolean areFilesEqual(File f1, File f2, UserInterface userInterface) throws Exception {
+    public boolean areFilesEqual(File f1, File f2) throws Exception {
         long f1Length = f1.length();
         if (f1Length != f2.length() || f1.lastModified() != f2.lastModified())
             return false;

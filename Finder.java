@@ -23,7 +23,7 @@ public class Finder {
     }
 
     public static ArrayList<ArrayList<File>> findCopiesOfFilesToSearch(HashMap<String, File> allFiles, HashMap<String, File> filesToSearch, UserInterface userInterface) throws Exception {
-        Comparator comparator = new Comparator(true);
+        Comparator comparator = new Comparator(true, userInterface);
         ArrayList<ArrayList<File>> repeatedWithoutDirectCorrespondent = new ArrayList<>();
         int allFilesSize = allFiles.size();
         long completedComparisons = 0;
@@ -36,7 +36,7 @@ public class Finder {
             equalsToF1.add(f1);
 
             for (File f2 : allFiles.values())
-                if (!f1.equals(f2) && comparator.areFilesEqual(f1, f2, userInterface)) {
+                if (!f1.equals(f2) && comparator.areFilesEqual(f1, f2)) {
                     equalsToF1.add(f2);
                     repeated++;
                 }
@@ -50,7 +50,7 @@ public class Finder {
     }
 
     public static ArrayList<ArrayList<File>> findDuplicates(HashMap<String, File> files, UserInterface userInterface) throws Exception {
-        Comparator comparator = new Comparator(true);
+        Comparator comparator = new Comparator(true, userInterface);
         ArrayList<ArrayList<File>> duplicates = new ArrayList<>();
 
         ArrayList<File> myFiles = Converter.convertToArrayListOfValues(files);
@@ -71,7 +71,7 @@ public class Finder {
 
             for (int j = i + 1; j < size; j++) {
                 File f2 = myFiles.get(j);
-                if (!alreadyFound.contains(f2) && comparator.areFilesEqual(f1, f2, userInterface)) {
+                if (!alreadyFound.contains(f2) && comparator.areFilesEqual(f1, f2)) {
                     equalsToF1.add(f2);
                     alreadyFound.add(f2);
                 }

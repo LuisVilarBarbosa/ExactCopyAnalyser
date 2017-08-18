@@ -82,8 +82,8 @@ public class UserInterface {
         display(text.getNotFoundOnDir1Msg(notFoundOnDir1.size()));
         display(text.getNotFoundOnDir2Msg(notFoundOnDir2.size()));
 
-        Comparator comparator = new Comparator(compareContent);
-        HashMap<File, File> notEqual = comparator.compareDirectoriesWithSameStructure(dir1, dir2, this);
+        Comparator comparator = new Comparator(compareContent, this);
+        HashMap<File, File> notEqual = comparator.compareDirectoriesWithSameStructure(dir1, dir2);
         String message = text.getNotEqualContentMsg(notEqual.size());
         display(message);
         logger.list(message, notEqual);
@@ -95,8 +95,8 @@ public class UserInterface {
         File f1 = getFile(path1);
         File f2 = getFile(path2);
 
-        Comparator comparator = new Comparator(compareContent);
-        if (comparator.areFilesEqual(f1, f2, this))
+        Comparator comparator = new Comparator(compareContent, this);
+        if (comparator.areFilesEqual(f1, f2))
             display(text.getEqualFilesMsg());
         else
             display(text.getNotEqualFilesMsg());
