@@ -1,15 +1,18 @@
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
 public class Comparator {
-    private static int BUFFER_SIZE = 10485760;   // 10 MB
+    private static final int BUFFER_SIZE = 10485760;   // 10 MB
     private boolean compareContent;
+    private byte[] data1;
+    private byte[] data2;
 
     public Comparator(boolean compareContent) {
         this.compareContent = compareContent;
+        this.data1 = new byte[BUFFER_SIZE];
+        this.data2 = new byte[BUFFER_SIZE];
     }
 
     public HashMap<File, File> compareDirectoriesWithSameStructure(HashMap<String, File> source, HashMap<String, File> destination, UserInterface userInterface) throws Exception {
@@ -39,35 +42,32 @@ public class Comparator {
         if (f1Length != f2.length() || f1.lastModified() != f2.lastModified())
             return false;
 
-        boolean equal = true;
         if (compareContent) {
             FileInputStream fis1 = new FileInputStream(f1.getAbsolutePath());
             FileInputStream fis2 = new FileInputStream(f2.getAbsolutePath());
 
-            byte data1[] = new byte[BUFFER_SIZE];
-            byte data2[] = new byte[BUFFER_SIZE];
-            boolean readError = false;
-
-            for (long i = 0; i < f1Length && equal; i += BUFFER_SIZE) {
+            for (long i = 0; i < f1Length; i += BUFFER_SIZE) {
                 int read1 = fis1.read(data1);
                 int read2 = fis2.read(data2);
 
                 if (read1 != read2) {
-                    readError = true;
-                    break;
+                    fis1.close();
+                    fis2.close();
+                    throw new Exception(userInterface.getText().getFileReadErrorMsg());
                 }
 
-                if (!Arrays.equals(data1, data2))
-                    equal = false;
+                for (int j = 0; j < read1; j++)
+                    if (data1[j] != data2[j]) {
+                        fis1.close();
+                        fis2.close();
+                        return false;
+                    }
             }
 
             fis1.close();
             fis2.close();
-
-            if (readError)
-                throw new Exception(userInterface.getText().getFileReadErrorMsg());
         }
 
-        return equal;
+        return true;
     }
 }
