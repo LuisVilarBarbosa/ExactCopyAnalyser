@@ -52,9 +52,9 @@ public class Finder {
         Comparator comparator = new Comparator(true, userInterface);
         ArrayList<ArrayList<File>> duplicates = new ArrayList<>();
 
-        ArrayList<File> myFiles = Converter.convertToArrayListOfValues(files);
-        int size = myFiles.size();
-        HashSet<File> alreadyAnalysed = new HashSet<>(size);
+        ArrayList<String> keys = Converter.convertToArrayListOfKeys(files);
+        int size = keys.size();
+        HashSet<String> alreadyAnalysed = new HashSet<>(size);
         long completedComparisons = 0;
         long totalComparisons = 0;
         int alreadyFound = 0;
@@ -64,17 +64,19 @@ public class Finder {
 
         userInterface.displayProgress(completedComparisons, totalComparisons, alreadyFound);
         for (int i = 0; i < size; i++) {
-            File f1 = myFiles.get(i);
-            if (!alreadyAnalysed.contains(f1)) {
-                alreadyAnalysed.add(f1);
+            String key1 = keys.get(i);
+            File f1 = files.get(key1);
+            if (!alreadyAnalysed.contains(key1)) {
+                alreadyAnalysed.add(key1);
                 ArrayList<File> equalsToF1 = new ArrayList<>();
                 equalsToF1.add(f1);
 
                 for (int j = i + 1; j < size; j++) {
-                    File f2 = myFiles.get(j);
-                    if (!alreadyAnalysed.contains(f2) && comparator.areFilesEqual(f1, f2)) {
+                    String key2 = keys.get(j);
+                    File f2 = files.get(key2);
+                    if (!alreadyAnalysed.contains(key2) && comparator.areFilesEqual(f1, f2)) {
                         equalsToF1.add(f2);
-                        alreadyAnalysed.add(f2);
+                        alreadyAnalysed.add(key2);
                         alreadyFound++;
                     }
                 }

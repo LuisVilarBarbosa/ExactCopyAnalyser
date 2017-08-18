@@ -3,10 +3,10 @@ import java.util.HashMap;
 
 public class Converter {
 
-    public static ArrayList<File> convertToArrayListOfValues(HashMap<String, File> map) {
-        ArrayList<File> converted = new ArrayList<>(map.size());
-        for (File f : map.values())
-            converted.add(f);
+    public static ArrayList<String> convertToArrayListOfKeys(HashMap<String, File> map) {
+        ArrayList<String> converted = new ArrayList<>(map.size());
+        for (String key : map.keySet())
+            converted.add(key);
         return converted;
     }
 }
