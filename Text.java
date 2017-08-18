@@ -39,8 +39,8 @@ public class Text {
 
         if (language.equalsIgnoreCase("pt")) {
             optionsMsg = "\nOpções:\n" +
-                    "1-Comparar o conteúdo de todos os ficheiros correspondentes em dois diretórios com a mesma estrutura de ficheiros.\n" +
-                    "2-Comparar o conteúdo de dois ficheiros.\n" +
+                    "1-Comparar o conteúdo de todos os ficheiros correspondentes em dois diretórios com a mesma estrutura de ficheiros. *\n" +
+                    "2-Comparar o conteúdo de dois ficheiros. *\n" +
                     "3-Comparar todos os ficheiros correspondentes em dois diretórios com a mesma estrutura de ficheiros por tamanho e data de modificação.\n" +
                     "4-Comparar dois ficheiros por tamanho e data de modificação.\n" +
                     "5-Listar ficheiros que estão no diretório 1, mas não estão no diretório 2 e têm cópias noutra localização no diretório 2. *\n" +
@@ -80,8 +80,8 @@ public class Text {
             dir1FilesSomewhereInDir2 = "Ficheiros do diretório 1 com cópias no diretório 2: " + specialSequence + "\n";
         } else {
             optionsMsg = "Options:\n" +
-                    "1-Compare the content of all corresponding files in two directories with the same structure of files.\n" +
-                    "2-Compare the content of two files.\n" +
+                    "1-Compare the content of all corresponding files in two directories with the same structure of files. *\n" +
+                    "2-Compare the content of two files. *\n" +
                     "3-Compare all corresponding files in two directories with the same structure of files by size and modification date.\n" +
                     "4-Compare two files by size and modification date.\n" +
                     "5-List files that are in directory 1, but are not in directory 2 and have copies on other location in directory 2. *\n" +

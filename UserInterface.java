@@ -202,7 +202,7 @@ public class UserInterface {
     }
 
     public void displayProgress(long done, long total, int found) {
-        double percentage = done * 100.0 / total;
+        double percentage = total == 0 ? 100 : done * 100.0 / total;
         if (remainingTime == null)
             remainingTime = new RemainingTime(total);
 
