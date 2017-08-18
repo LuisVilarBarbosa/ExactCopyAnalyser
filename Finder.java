@@ -54,32 +54,36 @@ public class Finder {
 
         ArrayList<File> myFiles = Converter.convertToArrayListOfValues(files);
         int size = myFiles.size();
-        HashSet<File> alreadyFound = new HashSet<>(size);
+        HashSet<File> alreadyAnalysed = new HashSet<>(size);
         long completedComparisons = 0;
         long totalComparisons = 0;
+        int alreadyFound = 0;
 
         for (int i = 0; i < size; i++)
             totalComparisons += size - i - 1;
 
-        userInterface.displayProgress(completedComparisons, totalComparisons, alreadyFound.size());
+        userInterface.displayProgress(completedComparisons, totalComparisons, alreadyFound);
         for (int i = 0; i < size; i++) {
-            ArrayList<File> equalsToF1 = new ArrayList<>();
-
             File f1 = myFiles.get(i);
-            equalsToF1.add(f1);
+            if (!alreadyAnalysed.contains(f1)) {
+                alreadyAnalysed.add(f1);
+                ArrayList<File> equalsToF1 = new ArrayList<>();
+                equalsToF1.add(f1);
 
-            for (int j = i + 1; j < size; j++) {
-                File f2 = myFiles.get(j);
-                if (!alreadyFound.contains(f2) && comparator.areFilesEqual(f1, f2)) {
-                    equalsToF1.add(f2);
-                    alreadyFound.add(f2);
+                for (int j = i + 1; j < size; j++) {
+                    File f2 = myFiles.get(j);
+                    if (!alreadyAnalysed.contains(f2) && comparator.areFilesEqual(f1, f2)) {
+                        equalsToF1.add(f2);
+                        alreadyAnalysed.add(f2);
+                        alreadyFound++;
+                    }
                 }
+
+                if (equalsToF1.size() > 1)
+                    duplicates.add(equalsToF1);
             }
             completedComparisons += size - i - 1;
-            userInterface.displayProgress(completedComparisons, totalComparisons, alreadyFound.size());
-
-            if (equalsToF1.size() > 1)
-                duplicates.add(equalsToF1);
+            userInterface.displayProgress(completedComparisons, totalComparisons, alreadyFound);
         }
         return duplicates;
     }
