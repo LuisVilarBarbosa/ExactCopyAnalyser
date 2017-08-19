@@ -4,6 +4,8 @@ import logic.*;
 import objects.File;
 
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.NotDirectoryException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -28,8 +30,12 @@ public class UserInterface {
                     display(text.getGeneratedLoggerMsg(logger.getPath()));
                     executeOption(option);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (NotDirectoryException e) {
+                display(text.getNotDirErrorMsg(e.getFile()));
+            } catch (NoSuchFileException e){
+                display(text.getNotFileErrorMsg(e.getFile()));
+            } catch (IOException e) {
+               display(e.getMessage());
             } finally {
                 try {
                     if (logger != null)
@@ -45,7 +51,7 @@ public class UserInterface {
         return text;
     }
 
-    private void executeOption(int option) throws Exception {
+    private void executeOption(int option) throws IOException {
         switch (option) {
             case 1:
                 compareDirectoriesWithSameStructure(true);
@@ -77,7 +83,7 @@ public class UserInterface {
         }
     }
 
-    private void compareDirectoriesWithSameStructure(boolean compareContent) throws Exception {
+    private void compareDirectoriesWithSameStructure(boolean compareContent) throws IOException {
         HashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
         HashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
 
@@ -93,7 +99,7 @@ public class UserInterface {
         logger.list(message, notEqual);
     }
 
-    private void compareFiles(boolean compareContent) throws Exception {
+    private void compareFiles(boolean compareContent) throws IOException {
         String path1 = getString(text.getFile1Msg());
         String path2 = getString(text.getFile2Msg());
         File f1 = getFile(path1);
@@ -106,7 +112,7 @@ public class UserInterface {
             display(text.getNotEqualFilesMsg());
     }
 
-    private ArrayList<ArrayList<File>> listDir1FilesThatAreNotInDir2ButHaveCopiesThere() throws Exception {
+    private ArrayList<ArrayList<File>> listDir1FilesThatAreNotInDir2ButHaveCopiesThere() throws IOException {
         HashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
         HashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
         ArrayList<ArrayList<File>> copies = Finder.findDir1FilesThatAreNotInDir2ButHaveCopiesThere(dir1, dir2, this);
@@ -116,7 +122,7 @@ public class UserInterface {
         return copies;
     }
 
-    private void deleteDir1FilesThatAreNotInDir2ButHaveCopiesThere() throws Exception {
+    private void deleteDir1FilesThatAreNotInDir2ButHaveCopiesThere() throws IOException {
         ArrayList<ArrayList<File>> copies = listDir1FilesThatAreNotInDir2ButHaveCopiesThere();
         if (!copies.isEmpty() && confirm()) {
             display(text.getDeletingFilesMsg());
@@ -124,7 +130,7 @@ public class UserInterface {
         }
     }
 
-    private void listDuplicates() throws Exception {
+    private void listDuplicates() throws IOException {
         HashMap<String, File> files = getDirectoryFiles(text.getDirMsg());
         ArrayList<ArrayList<File>> duplicates = Finder.findDuplicates(files, this);
 
@@ -140,7 +146,7 @@ public class UserInterface {
         logger.list(message, duplicates);
     }
 
-    private void listDir1FilesThatAreSomewhereInDir2() throws Exception {
+    private void listDir1FilesThatAreSomewhereInDir2() throws IOException {
         HashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
         HashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
         ArrayList<ArrayList<File>> copies = Finder.findCopiesOfFilesToSearch(dir2, dir1, this);
@@ -183,10 +189,10 @@ public class UserInterface {
         return confirm;
     }
 
-    private HashMap<String, File> getDirectoryFiles(String message) throws Exception {
+    private HashMap<String, File> getDirectoryFiles(String message) throws NotDirectoryException {
         String dir = getString(message);
         dir = adjustDirectory(dir);
-        HashMap<String, File> files = Loader.getDirectoryFiles(dir, this);
+        HashMap<String, File> files = Loader.getDirectoryFiles(dir);
         return files;
     }
 
@@ -239,10 +245,10 @@ public class UserInterface {
         return newDir;
     }
 
-    private File getFile(String path) throws Exception {
+    private File getFile(String path) throws NoSuchFileException {
         File f = new File(path);
         if (!f.isFile())
-            throw new Exception(text.getNotFileErrorMsg(path));
+            throw new NoSuchFileException(path);
         return f;
     }
 }

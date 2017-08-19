@@ -1,16 +1,16 @@
 package logic;
 
 import objects.File;
-import ui.UserInterface;
 
+import java.nio.file.NotDirectoryException;
 import java.util.HashMap;
 
 public class Loader {
 
-    public static HashMap<String, File> getDirectoryFiles(String baseDirectory, UserInterface userInterface) throws Exception {
+    public static HashMap<String, File> getDirectoryFiles(String baseDirectory) throws NotDirectoryException {
         File directory = new File(baseDirectory);
         if (!directory.isDirectory())
-            throw new Exception(userInterface.getText().getNotDirErrorMsg(baseDirectory));
+            throw new NotDirectoryException(baseDirectory);
 
         HashMap<String, File> files = new HashMap<>();
         getDirectoryFilesAux(baseDirectory, directory, files);

@@ -4,6 +4,7 @@ import objects.File;
 import ui.UserInterface;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -21,7 +22,7 @@ public class Comparator {
         this.userInterface = userInterface;
     }
 
-    public HashMap<File, File> compareDirectoriesWithSameStructure(HashMap<String, File> source, HashMap<String, File> destination) throws Exception {
+    public HashMap<File, File> compareDirectoriesWithSameStructure(HashMap<String, File> source, HashMap<String, File> destination) throws IOException {
         HashMap<File, File> notEqual = new HashMap<>();
 
         int size = source.size();
@@ -43,7 +44,7 @@ public class Comparator {
         return notEqual;
     }
 
-    public boolean areFilesEqual(File f1, File f2) throws Exception {
+    public boolean areFilesEqual(File f1, File f2) throws IOException {
         long f1Length = f1.length();
         if (f1Length != f2.length() || f1.lastModified() != f2.lastModified())
             return false;
@@ -59,7 +60,7 @@ public class Comparator {
                 if (read1 != read2) {
                     fis1.close();
                     fis2.close();
-                    throw new Exception(userInterface.getText().getFileReadErrorMsg());
+                    throw new IOException(userInterface.getText().getFileReadErrorMsg());
                 }
 
                 for (int j = 0; j < read1; j++)
