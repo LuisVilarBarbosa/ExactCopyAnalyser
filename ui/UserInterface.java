@@ -18,10 +18,10 @@ public class UserInterface {
     private RemainingTime remainingTime = null;
 
     public void start() {
+        display(text.getOptionsMsg());
         int option;
 
         do {
-            display(text.getOptionsMsg());
             option = selectOption(EXIT, 8);
 
             try {

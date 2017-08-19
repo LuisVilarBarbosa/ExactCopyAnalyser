@@ -50,12 +50,12 @@ public class Text {
                     "7-Listar todos os duplicados num dado diretório. *\n" +
                     "8-Listar ficheiros do diretório 1 com cópias no diretório 2. *\n" +
                     "0-Sair.\n" +
-                    "* Esta operação pode ser demorada, pois usa comparação por conteúdo.\n\n";
-            selectOptionMsg = "Seleciona uma opção (exemplo: " + specialSequence + "): ";
-            notFileErrorMsg = "'" + specialSequence + "' não é um ficheiro. Extensão do ficheiro em falta?";
+                    "* Esta operação pode ser demorada, pois usa comparação por conteúdo.\n";
+            selectOptionMsg = "\nSeleciona uma opção (exemplo: " + specialSequence + "): ";
+            notFileErrorMsg = "'" + specialSequence + "' não é um ficheiro. Extensão do ficheiro em falta?\n";
             invalidOptionMsg = "Opção inválida.\n";
-            notDirErrorMsg = "'" + specialSequence + "' não é um diretório.";
-            fileReadErrorMsg = "Ocorreu um erro ao ler os dados dos ficheiros.";
+            notDirErrorMsg = "'" + specialSequence + "' não é um diretório.\n";
+            fileReadErrorMsg = "Ocorreu um erro ao ler os dados dos ficheiros.\n";
             dir1Msg = "Diretório 1: ";
             dir2Msg = "Diretório 2: ";
             notFoundOnDir1Msg = "Não encontrados no diretório 1: " + specialSequence + "\n";
@@ -91,19 +91,19 @@ public class Text {
                     "7-List all duplicates in a given directory. *\n" +
                     "8-List files in directory 1 with copies in directory 2. *\n" +
                     "0-Exit.\n" +
-                    "* This operation can be time-consuming because it uses comparison by content.\n\n";
-            selectOptionMsg = "Select an option (example: " + specialSequence + "): ";
-            notFileErrorMsg = "'" + specialSequence + "' is not a file. objects.File extension missing?";
+                    "* This operation can be time-consuming because it uses comparison by content.\n";
+            selectOptionMsg = "\nSelect an option (example: " + specialSequence + "): ";
+            notFileErrorMsg = "'" + specialSequence + "' is not a file. objects. File extension missing?\n";
             invalidOptionMsg = "Invalid option.\n";
-            notDirErrorMsg = "'" + specialSequence + "' is not a directory.";
-            fileReadErrorMsg = "An error occurred reading the data from the files.";
+            notDirErrorMsg = "'" + specialSequence + "' is not a directory.\n";
+            fileReadErrorMsg = "An error occurred reading the data from the files.\n";
             dir1Msg = "Directory 1: ";
             dir2Msg = "Directory 2: ";
             notFoundOnDir1Msg = "Not found on directory 1: " + specialSequence + "\n";
             notFoundOnDir2Msg = "Not found on directory 2: " + specialSequence + "\n";
-            notEqualContentMsg = "Not equal content: " + specialSequence;
-            file1Msg = "objects.File 1: ";
-            file2Msg = "objects.File 2: ";
+            notEqualContentMsg = "Not equal content: " + specialSequence + "\n";
+            file1Msg = "File 1: ";
+            file2Msg = "File 2: ";
             equalFilesMsg = "The files are equal.\n";
             notEqualFilesMsg = "The files are not equal.\n";
             filesNotInDir2ButWithCopiesThereMsg = "Files that are not in directory 2 but have copies there:\n";
