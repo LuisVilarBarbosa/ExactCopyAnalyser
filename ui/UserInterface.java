@@ -13,7 +13,6 @@ import java.util.Scanner;
 public class UserInterface {
     private static int EXIT = 0;
     private Text text = new Text();
-    private Logger logger = null;
     private int backtrackCounter = 0;
     private RemainingTime remainingTime = null;
 
@@ -25,24 +24,14 @@ public class UserInterface {
             option = selectOption(EXIT, 8);
 
             try {
-                if (option != EXIT) {
-                    logger = new Logger(text);
-                    display(text.getGeneratedLoggerMsg(logger.getPath()));
+                if (option != EXIT)
                     executeOption(option);
-                }
             } catch (NotDirectoryException e) {
                 display(text.getNotDirErrorMsg(e.getFile()));
             } catch (NoSuchFileException e){
                 display(text.getNotFileErrorMsg(e.getFile()));
             } catch (IOException e) {
                display(e.getMessage());
-            } finally {
-                try {
-                    if (logger != null)
-                        logger.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         } while (option != EXIT);
     }
@@ -96,7 +85,7 @@ public class UserInterface {
         HashMap<File, File> notEqual = comparator.compareDirectoriesWithSameStructure(dir1, dir2);
         String message = text.getNotEqualContentMsg(notEqual.size());
         display(message);
-        logger.list(message, notEqual);
+        log(message, notEqual);
     }
 
     private void compareFiles(boolean compareContent) throws IOException {
@@ -118,7 +107,7 @@ public class UserInterface {
         ArrayList<ArrayList<File>> copies = Finder.findDir1FilesThatAreNotInDir2ButHaveCopiesThere(dir1, dir2, this);
         String message = text.getFilesNotInDir2ButWithCopiesThereMsg();
         display(message);
-        logger.list(message, copies);
+        log(message, copies);
         return copies;
     }
 
@@ -143,7 +132,7 @@ public class UserInterface {
             }
         String message = text.getDuplicateFilesMsg(quantity, size);
         display(message);
-        logger.list(message, duplicates);
+        log(message, duplicates);
     }
 
     private void listDir1FilesThatAreSomewhereInDir2() throws IOException {
@@ -152,7 +141,7 @@ public class UserInterface {
         ArrayList<ArrayList<File>> copies = Finder.findCopiesOfFilesToSearch(dir2, dir1, this);
         String message = text.getDir1FilesSomewhereInDir2(copies.size());
         display(message);
-        logger.list(message, copies);
+        log(message, copies);
     }
 
     private int selectOption(int begin, int end) {
@@ -250,5 +239,19 @@ public class UserInterface {
         if (!f.isFile())
             throw new NoSuchFileException(path);
         return f;
+    }
+
+    private void log(String message, HashMap<File, File> map) throws IOException {
+        Logger logger = new Logger(text);
+        display(text.getGeneratedLoggerMsg(logger.getPath()));
+        logger.list(message, map);
+        logger.close();
+    }
+
+    private void log(String message, ArrayList<ArrayList<File>> list) throws IOException {
+        Logger logger = new Logger(text);
+        display(text.getGeneratedLoggerMsg(logger.getPath()));
+        logger.list(message, list);
+        logger.close();
     }
 }

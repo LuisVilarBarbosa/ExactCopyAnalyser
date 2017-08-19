@@ -1,7 +1,6 @@
-package logic;
+package ui;
 
 import objects.File;
-import ui.Text;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
