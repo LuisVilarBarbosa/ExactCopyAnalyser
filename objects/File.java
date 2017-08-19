@@ -1,3 +1,5 @@
+package objects;
+
 public class File extends java.io.File {
     private long length;
     private long lastModified;

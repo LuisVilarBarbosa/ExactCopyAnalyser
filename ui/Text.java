@@ -1,3 +1,5 @@
+package ui;
+
 import java.util.Locale;
 
 public class Text {
@@ -46,7 +48,7 @@ public class Text {
                     "5-Listar ficheiros que estão no diretório 1, mas não estão no diretório 2 e têm cópias noutra localização no diretório 2. *\n" +
                     "6-Remover ficheiros que estão no diretório 1, mas não estão no diretório 2 e têm cópias noutra localização no diretório 2. *\n" +
                     "7-Listar todos os duplicados num dado diretório. *\n" +
-                    "8-Listar ficheiros do diretório 1 com cópias no diretório 2. *\n"+
+                    "8-Listar ficheiros do diretório 1 com cópias no diretório 2. *\n" +
                     "0-Sair.\n" +
                     "* Esta operação pode ser demorada, pois usa comparação por conteúdo.\n\n";
             selectOptionMsg = "Seleciona uma opção (exemplo: " + specialSequence + "): ";
@@ -87,11 +89,11 @@ public class Text {
                     "5-List files that are in directory 1, but are not in directory 2 and have copies on other location in directory 2. *\n" +
                     "6-Remove files that are in directory 1, but are not in directory 2 and have copies on other location in directory 2. *\n" +
                     "7-List all duplicates in a given directory. *\n" +
-                    "8-List files in directory 1 with copies in directory 2. *\n"+
+                    "8-List files in directory 1 with copies in directory 2. *\n" +
                     "0-Exit.\n" +
                     "* This operation can be time-consuming because it uses comparison by content.\n\n";
             selectOptionMsg = "Select an option (example: " + specialSequence + "): ";
-            notFileErrorMsg = "'" + specialSequence + "' is not a file. File extension missing?";
+            notFileErrorMsg = "'" + specialSequence + "' is not a file. objects.File extension missing?";
             invalidOptionMsg = "Invalid option.\n";
             notDirErrorMsg = "'" + specialSequence + "' is not a directory.";
             fileReadErrorMsg = "An error occurred reading the data from the files.";
@@ -100,8 +102,8 @@ public class Text {
             notFoundOnDir1Msg = "Not found on directory 1: " + specialSequence + "\n";
             notFoundOnDir2Msg = "Not found on directory 2: " + specialSequence + "\n";
             notEqualContentMsg = "Not equal content: " + specialSequence;
-            file1Msg = "File 1: ";
-            file2Msg = "File 2: ";
+            file1Msg = "objects.File 1: ";
+            file2Msg = "objects.File 2: ";
             equalFilesMsg = "The files are equal.\n";
             notEqualFilesMsg = "The files are not equal.\n";
             filesNotInDir2ButWithCopiesThereMsg = "Files that are not in directory 2 but have copies there:\n";

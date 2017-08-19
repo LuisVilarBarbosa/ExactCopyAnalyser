@@ -1,3 +1,8 @@
+package ui;
+
+import logic.*;
+import objects.File;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;

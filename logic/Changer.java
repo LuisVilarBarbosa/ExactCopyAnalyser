@@ -1,3 +1,8 @@
+package logic;
+
+import objects.File;
+import ui.UserInterface;
+
 import java.util.ArrayList;
 
 public class Changer {

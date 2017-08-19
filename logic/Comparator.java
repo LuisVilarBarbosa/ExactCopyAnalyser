@@ -1,3 +1,8 @@
+package logic;
+
+import objects.File;
+import ui.UserInterface;
+
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Iterator;

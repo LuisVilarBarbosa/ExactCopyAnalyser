@@ -1,3 +1,7 @@
+package logic;
+
+import objects.File;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 

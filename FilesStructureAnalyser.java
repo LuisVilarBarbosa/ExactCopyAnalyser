@@ -1,3 +1,5 @@
+import ui.UserInterface;
+
 public class FilesStructureAnalyser {
 
     public static void main(String[] args) {

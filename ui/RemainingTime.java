@@ -1,3 +1,5 @@
+package ui;
+
 public class RemainingTime {
     private long begin;
     private long total;
