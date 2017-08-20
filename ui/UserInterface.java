@@ -27,7 +27,7 @@ public class UserInterface {
         int option;
 
         do {
-            option = selectOption(EXIT, 8);
+            option = selectOption(EXIT, 9);
 
             try {
                 if (option != EXIT)
@@ -71,6 +71,9 @@ public class UserInterface {
                 break;
             case 8:
                 listDir1FilesWithCopiesSomewhereInDir2();
+                break;
+            case 9:
+                listDir1FilesWithoutCopiesAnywhereInDir2();
                 break;
             default:
                 display(text.getInvalidOptionMsg());
@@ -149,9 +152,19 @@ public class UserInterface {
         HashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
         Finder finder = new Finder(this);
         ArrayList<File> withCopies = finder.findFiles1WithCopiesSomewhereInFiles2(dir1, dir2);
-        String message = text.getDir1FilesWithCopiesSomewhereInDir2(withCopies.size());
+        String message = text.getDir1FilesWithCopiesSomewhereInDir2Msg(withCopies.size());
         display(message);
         log(message, Converter.convertToArrayListOfArrayLists(withCopies));
+    }
+
+    private void listDir1FilesWithoutCopiesAnywhereInDir2() throws IOException {
+        HashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
+        HashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
+        Finder finder = new Finder(this);
+        ArrayList<File> withoutCopies = finder.findFiles1WithoutCopiesAnywhereOnFiles2(dir1, dir2);
+        String message = text.getDir1FilesWithoutCopiesAnywhereInDir2Msg(withoutCopies.size());
+        display(message);
+        log(message, Converter.convertToArrayListOfArrayLists(withoutCopies));
     }
 
     private int selectOption(int begin, int end) {

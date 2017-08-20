@@ -34,7 +34,8 @@ public class Text {
     private String remainingTimeMsg;
     private String calculatingMsg;
     private String invalidArgMsg;
-    private String dir1FilesWithCopiesSomewhereInDir2;
+    private String dir1FilesWithCopiesSomewhereInDir2Msg;
+    private String dir1FilesWithoutCopiesAnywhereInDir2Msg;
 
     public Text() {
         language = Locale.getDefault().getLanguage();
@@ -49,6 +50,7 @@ public class Text {
                     "6-Remover ficheiros do diretório 1 sem correspondente no diretório 2, mas com cópias noutra localização no diretório 2. *\n" +
                     "7-Listar todos os duplicados num dado diretório. *\n" +
                     "8-Listar ficheiros do diretório 1 com cópias algures no diretório 2. *\n" +
+                    "9-Listar ficheiros do diretório 1 sem cópias em nenhum local no diretório 2. *\n" +
                     "0-Sair.\n" +
                     "* Esta operação pode ser demorada, pois usa comparação por conteúdo.\n";
             selectOptionMsg = "\nSeleciona uma opção (exemplo: " + specialSequence + "): ";
@@ -79,7 +81,8 @@ public class Text {
             remainingTimeMsg = "Tempo restante: ";
             calculatingMsg = "calculando...";
             invalidArgMsg = "Argumento inválido.";
-            dir1FilesWithCopiesSomewhereInDir2 = "Ficheiros do diretório 1 com cópias no diretório 2: " + specialSequence + "\n";
+            dir1FilesWithCopiesSomewhereInDir2Msg = "Ficheiros do diretório 1 com cópias no diretório 2: " + specialSequence + "\n";
+            dir1FilesWithoutCopiesAnywhereInDir2Msg = "Ficheiros do diretório 1 sem cópias no diretório 2: " + specialSequence + "\n";
         } else {
             optionsMsg = "Options:\n" +
                     "1-Compare all corresponding files in two directories with the same structure of files by size, modification date and content. *\n" +
@@ -89,7 +92,8 @@ public class Text {
                     "5-List files from directory 1 without correspondent in directory 2, but with copies on other location in directory 2. *\n" +
                     "6-Remove files from directory 1 without correspondent in directory 2, but with copies on other location in directory 2. *\n" +
                     "7-List all duplicates in a given directory. *\n" +
-                    "8-List files in directory 1 with copies somewhere in directory 2. *\n" +
+                    "8-List files from directory 1 with copies somewhere in directory 2. *\n" +
+                    "9-List files from directory 1 without copies anywhere in directory 2. *\n" +
                     "0-Exit.\n" +
                     "* This operation can be time-consuming because it uses comparison by content.\n";
             selectOptionMsg = "\nSelect an option (example: " + specialSequence + "): ";
@@ -120,7 +124,8 @@ public class Text {
             remainingTimeMsg = "Remaining time: ";
             calculatingMsg = "calculating...";
             invalidArgMsg = "Invalid argument.";
-            dir1FilesWithCopiesSomewhereInDir2 = "Files in directory 1 with copies in directory 2: " + specialSequence + "\n";
+            dir1FilesWithCopiesSomewhereInDir2Msg = "Files from directory 1 with copies in directory 2: " + specialSequence + "\n";
+            dir1FilesWithoutCopiesAnywhereInDir2Msg = "Files from directory 1 without copies in directory 2: " + specialSequence + "\n";
         }
     }
 
@@ -240,7 +245,11 @@ public class Text {
         return invalidArgMsg;
     }
 
-    public String getDir1FilesWithCopiesSomewhereInDir2(int number) {
-        return dir1FilesWithCopiesSomewhereInDir2.replaceFirst(specialSequence, Integer.toString(number));
+    public String getDir1FilesWithCopiesSomewhereInDir2Msg(int number) {
+        return dir1FilesWithCopiesSomewhereInDir2Msg.replaceFirst(specialSequence, Integer.toString(number));
+    }
+
+    public String getDir1FilesWithoutCopiesAnywhereInDir2Msg(int number) {
+        return dir1FilesWithoutCopiesAnywhereInDir2Msg.replaceFirst(specialSequence, Integer.toString(number));
     }
 }

@@ -95,6 +95,14 @@ public class Finder {
         return duplicates;
     }
 
+    public ArrayList<File> findFiles1WithoutCopiesAnywhereOnFiles2(HashMap<String, File> files1, HashMap<String, File> files2) throws IOException {
+        ArrayList<File> withoutCopies = new ArrayList<>();
+        for (File f : files1.values())
+            if (findCopiesOfFile(f, files2, true).isEmpty())
+                withoutCopies.add(f);
+        return withoutCopies;
+    }
+
     private ArrayList<File> findCopiesOfFile(File file, HashMap<String, File> files, boolean stopOnFirstFound) throws IOException {
         ArrayList<File> copies = new ArrayList<>();
         for (File f : files.values())
