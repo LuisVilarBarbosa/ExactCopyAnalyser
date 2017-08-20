@@ -11,10 +11,16 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class UserInterface {
-    private static int EXIT = 0;
-    private Text text = new Text();
-    private int backtrackCounter = 0;
-    private RemainingTime remainingTime = null;
+    private static final int EXIT = 0;
+    private Text text;
+    private int backtrackCounter;
+    private RemainingTime remainingTime;
+
+    public UserInterface() {
+        this.text = new Text();
+        this.backtrackCounter = 0;
+        this.remainingTime = null;
+    }
 
     public void start() {
         display(text.getOptionsMsg());
