@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 
 public class Logger {
     private File file;
@@ -39,18 +38,6 @@ public class Logger {
             for (File f : l)
                 sb.append(f.getAbsolutePath()).append("\r\n");
             sb.append("\r\n");
-        }
-        fileOutputStream.write(sb.toString().getBytes());
-    }
-
-    public void list(String message, HashMap<File, File> map) throws IOException {
-        String myMessage = message.replaceAll("\n", "\r\n");
-        StringBuilder sb = new StringBuilder();
-        sb.append(myMessage).append("\r\n");
-        for (File f1 : map.keySet()) {
-            File f2 = map.get(f1);
-            sb.append(f1.getAbsolutePath()).append("\r\n")
-                    .append(f2.getAbsolutePath()).append("\r\n\r\n");
         }
         fileOutputStream.write(sb.toString().getBytes());
     }

@@ -5,6 +5,7 @@ import ui.UserInterface;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -22,21 +23,26 @@ public class Comparator {
         this.userInterface = userInterface;
     }
 
-    public HashMap<File, File> compareDirectoriesWithSameStructure(HashMap<String, File> source, HashMap<String, File> destination) throws IOException {
-        HashMap<File, File> notEqual = new HashMap<>();
+    // To move to Finder
+    public ArrayList<ArrayList<File>> findNotEqualCorrespondentsInDirectoriesWithSameStructure(HashMap<String, File> files1, HashMap<String, File> files2) throws IOException {
+        ArrayList<ArrayList<File>> notEqual = new ArrayList<>();
 
-        int size = source.size();
+        int size = files1.size();
         double interval = size > 100 ? size / 100 : 1;
-        Iterator<String> it = source.keySet().iterator();
+        Iterator<String> it = files1.keySet().iterator();
 
         for (int i = 0; it.hasNext(); ) {
             for (int j = 0; j < interval && it.hasNext(); j++, i++) {
                 String key = it.next();
-                File f2 = destination.get(key);
+                File f2 = files2.get(key);
                 if (f2 != null) {
-                    File f1 = source.get(key);
-                    if (!areFilesEqual(f1, f2))
-                        notEqual.put(f1, f2);
+                    File f1 = files1.get(key);
+                    if (!areFilesEqual(f1, f2)) {
+                        ArrayList<File> notEqualPair = new ArrayList<>();
+                        notEqualPair.add(f1);
+                        notEqualPair.add(f2);
+                        notEqual.add(notEqualPair);
+                    }
                 }
             }
             userInterface.displayProgress(i, size, notEqual.size());

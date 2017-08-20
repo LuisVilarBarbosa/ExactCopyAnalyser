@@ -28,10 +28,10 @@ public class UserInterface {
                     executeOption(option);
             } catch (NotDirectoryException e) {
                 display(text.getNotDirErrorMsg(e.getFile()));
-            } catch (NoSuchFileException e){
+            } catch (NoSuchFileException e) {
                 display(text.getNotFileErrorMsg(e.getFile()));
             } catch (IOException e) {
-               display(e.getMessage());
+                display(e.getMessage());
             }
         } while (option != EXIT);
     }
@@ -43,28 +43,28 @@ public class UserInterface {
     private void executeOption(int option) throws IOException {
         switch (option) {
             case 1:
-                compareDirectoriesWithSameStructure(true);
+                listCorrespondentsNotEqualInDirectoriesWithSameStructure(true);
                 break;
             case 2:
                 compareFiles(true);
                 break;
             case 3:
-                compareDirectoriesWithSameStructure(false);
+                listCorrespondentsNotEqualInDirectoriesWithSameStructure(false);
                 break;
             case 4:
                 compareFiles(false);
                 break;
             case 5:
-                listDir1FilesThatAreNotInDir2ButHaveCopiesThere();
+                listDir1FilesWithoutCorrespondentInDir2ButWithCopiesThere();
                 break;
             case 6:
-                deleteDir1FilesThatAreNotInDir2ButHaveCopiesThere();
+                deleteDir1FilesWithoutCorrespondentInDir2ButWithCopiesThere();
                 break;
             case 7:
                 listDuplicates();
                 break;
             case 8:
-                listDir1FilesThatAreSomewhereInDir2();
+                listDir1FilesWithCopiesSomewhereInDir2();
                 break;
             default:
                 display(text.getInvalidOptionMsg());
@@ -72,18 +72,19 @@ public class UserInterface {
         }
     }
 
-    private void compareDirectoriesWithSameStructure(boolean compareContent) throws IOException {
+    private void listCorrespondentsNotEqualInDirectoriesWithSameStructure(boolean compareContent) throws IOException {
         HashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
         HashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
 
-        HashMap<String, File> notFoundOnDir2 = Finder.findDir1FilesNonExistingOnDir2(dir1, dir2);
-        HashMap<String, File> notFoundOnDir1 = Finder.findDir1FilesNonExistingOnDir2(dir2, dir1);
-        display(text.getNotFoundOnDir1Msg(notFoundOnDir1.size()));
-        display(text.getNotFoundOnDir2Msg(notFoundOnDir2.size()));
+        Finder finder = new Finder(this);
+        HashMap<String, File> withoutCorrespondentOnDir2 = finder.findFiles1WithoutCorrespondentOnFiles2(dir1, dir2);
+        HashMap<String, File> withoutCorrespondentOnDir1 = finder.findFiles1WithoutCorrespondentOnFiles2(dir2, dir1);
+        display(text.getDir2FilesWithoutCorrespondentOnDir1Msg(withoutCorrespondentOnDir1.size()));
+        display(text.getDir1FilesWithoutCorrespondentOnDir2Msg(withoutCorrespondentOnDir2.size()));
 
         Comparator comparator = new Comparator(compareContent, this);
-        HashMap<File, File> notEqual = comparator.compareDirectoriesWithSameStructure(dir1, dir2);
-        String message = text.getNotEqualContentMsg(notEqual.size());
+        ArrayList<ArrayList<File>> notEqual = comparator.findNotEqualCorrespondentsInDirectoriesWithSameStructure(dir1, dir2);
+        String message = text.getNotEqualCorrespondentsMsg(notEqual.size());
         display(message);
         log(message, notEqual);
     }
@@ -101,27 +102,29 @@ public class UserInterface {
             display(text.getNotEqualFilesMsg());
     }
 
-    private ArrayList<ArrayList<File>> listDir1FilesThatAreNotInDir2ButHaveCopiesThere() throws IOException {
+    private ArrayList<File> listDir1FilesWithoutCorrespondentInDir2ButWithCopiesThere() throws IOException {
         HashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
         HashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
-        ArrayList<ArrayList<File>> copies = Finder.findDir1FilesThatAreNotInDir2ButHaveCopiesThere(dir1, dir2, this);
-        String message = text.getFilesNotInDir2ButWithCopiesThereMsg();
+        Finder finder = new Finder(this);
+        ArrayList<File> withCopies = finder.findFiles1WithoutCorrespondentInFiles2ButWithCopiesThere(dir1, dir2);
+        String message = text.getDir1FilesWithoutCorrespondentInDir2ButWithCopiesThereMsg(withCopies.size());
         display(message);
-        log(message, copies);
-        return copies;
+        log(message, Converter.convertToArrayListOfArrayLists(withCopies));
+        return withCopies;
     }
 
-    private void deleteDir1FilesThatAreNotInDir2ButHaveCopiesThere() throws IOException {
-        ArrayList<ArrayList<File>> copies = listDir1FilesThatAreNotInDir2ButHaveCopiesThere();
-        if (!copies.isEmpty() && confirm()) {
+    private void deleteDir1FilesWithoutCorrespondentInDir2ButWithCopiesThere() throws IOException {
+        ArrayList<File> withCopies = listDir1FilesWithoutCorrespondentInDir2ButWithCopiesThere();
+        if (!withCopies.isEmpty() && confirm()) {
             display(text.getDeletingFilesMsg());
-            Changer.deleteFirstFileInList(copies, this);
+            Changer.deleteFiles(withCopies, this);
         }
     }
 
     private void listDuplicates() throws IOException {
         HashMap<String, File> files = getDirectoryFiles(text.getDirMsg());
-        ArrayList<ArrayList<File>> duplicates = Finder.findDuplicates(files, this);
+        Finder finder = new Finder(this);
+        ArrayList<ArrayList<File>> duplicates = finder.findDuplicates(files);
 
         int quantity = 0;
         long size = 0;
@@ -135,13 +138,14 @@ public class UserInterface {
         log(message, duplicates);
     }
 
-    private void listDir1FilesThatAreSomewhereInDir2() throws IOException {
+    private void listDir1FilesWithCopiesSomewhereInDir2() throws IOException {
         HashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
         HashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
-        ArrayList<ArrayList<File>> copies = Finder.findCopiesOfFilesToSearch(dir2, dir1, this);
-        String message = text.getDir1FilesSomewhereInDir2(copies.size());
+        Finder finder = new Finder(this);
+        ArrayList<File> withCopies = finder.findFiles1WithCopiesSomewhereInFiles2(dir1, dir2);
+        String message = text.getDir1FilesWithCopiesSomewhereInDir2(withCopies.size());
         display(message);
-        log(message, copies);
+        log(message, Converter.convertToArrayListOfArrayLists(withCopies));
     }
 
     private int selectOption(int begin, int end) {
@@ -239,13 +243,6 @@ public class UserInterface {
         if (!f.isFile())
             throw new NoSuchFileException(path);
         return f;
-    }
-
-    private void log(String message, HashMap<File, File> map) throws IOException {
-        Logger logger = new Logger(text);
-        display(text.getGeneratedLoggerMsg(logger.getPath()));
-        logger.list(message, map);
-        logger.close();
     }
 
     private void log(String message, ArrayList<ArrayList<File>> list) throws IOException {

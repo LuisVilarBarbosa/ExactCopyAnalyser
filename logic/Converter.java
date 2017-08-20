@@ -13,4 +13,10 @@ public class Converter {
             converted.add(key);
         return converted;
     }
+
+    public static ArrayList<ArrayList<File>> convertToArrayListOfArrayLists(ArrayList<File> list) {
+        ArrayList<ArrayList<File>> converted = new ArrayList<>();
+        converted.add(list);
+        return converted;
+    }
 }
