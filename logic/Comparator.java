@@ -1,6 +1,7 @@
 package logic;
 
 import objects.File;
+import ui.Status;
 import ui.UserInterface;
 
 import java.io.FileInputStream;
@@ -15,12 +16,14 @@ public class Comparator {
     private byte[] data1;
     private byte[] data2;
     private UserInterface userInterface;
+    private Status status;
 
     public Comparator(boolean compareContent, UserInterface userInterface) {
         this.compareContent = compareContent;
         this.data1 = new byte[BUFFER_SIZE];
         this.data2 = new byte[BUFFER_SIZE];
         this.userInterface = userInterface;
+        this.status = this.userInterface.getStatus();
     }
 
     // To move to Finder
@@ -31,7 +34,9 @@ public class Comparator {
         double interval = size > 100 ? size / 100 : 1;
         Iterator<String> it = files1.keySet().iterator();
 
-        for (int i = 0; it.hasNext(); ) {
+        int i = 0;
+        status.setup(i, size, notEqual.size());
+        while (it.hasNext()) {
             for (int j = 0; j < interval && it.hasNext(); j++, i++) {
                 String key = it.next();
                 File f2 = files2.get(key);
@@ -45,8 +50,9 @@ public class Comparator {
                     }
                 }
             }
-            userInterface.displayProgress(i, size, notEqual.size());
+            status.update(i, notEqual.size());
         }
+        status.complete();
         return notEqual;
     }
 

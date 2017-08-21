@@ -36,6 +36,7 @@ public class Text {
     private String invalidArgMsg;
     private String dir1FilesWithCopiesSomewhereInDir2Msg;
     private String dir1FilesWithoutCopiesAnywhereInDir2Msg;
+    private String threadInterruptedExceptionMsg;
 
     public Text() {
         language = Locale.getDefault().getLanguage();
@@ -83,6 +84,7 @@ public class Text {
             invalidArgMsg = "Argumento inválido.";
             dir1FilesWithCopiesSomewhereInDir2Msg = "Ficheiros do diretório 1 com cópias no diretório 2: " + specialSequence + "\n";
             dir1FilesWithoutCopiesAnywhereInDir2Msg = "Ficheiros do diretório 1 sem cópias no diretório 2: " + specialSequence + "\n";
+            threadInterruptedExceptionMsg = "Um thread foi interrompido de forma anómala, gerando uma exceção.\n";
         } else {
             optionsMsg = "Options:\n" +
                     "1-Compare all corresponding files in two directories with the same structure of files by size, modification date and content. *\n" +
@@ -126,6 +128,7 @@ public class Text {
             invalidArgMsg = "Invalid argument.";
             dir1FilesWithCopiesSomewhereInDir2Msg = "Files from directory 1 with copies in directory 2: " + specialSequence + "\n";
             dir1FilesWithoutCopiesAnywhereInDir2Msg = "Files from directory 1 without copies in directory 2: " + specialSequence + "\n";
+            threadInterruptedExceptionMsg = "A thread has been interrupted anomalously, generating an exception.\n";
         }
     }
 
@@ -251,5 +254,9 @@ public class Text {
 
     public String getDir1FilesWithoutCopiesAnywhereInDir2Msg(int number) {
         return dir1FilesWithoutCopiesAnywhereInDir2Msg.replaceFirst(specialSequence, Integer.toString(number));
+    }
+
+    public String getThreadInterruptedExceptionMsg() {
+        return threadInterruptedExceptionMsg;
     }
 }

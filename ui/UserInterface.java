@@ -12,14 +12,16 @@ import java.util.Scanner;
 
 public class UserInterface {
     private static final int EXIT = 0;
+    private static final int SLEEP_MILLIS = 100;
+    private static final int EXIT_STATUS = 1;
     private Text text;
     private int backtrackCounter;
-    private RemainingTime remainingTime;
+    private Status status;
 
     public UserInterface() {
         this.text = new Text();
         this.backtrackCounter = 0;
-        this.remainingTime = null;
+        this.status = new Status(text);
     }
 
     public void start() {
@@ -28,22 +30,59 @@ public class UserInterface {
 
         do {
             option = selectOption(EXIT, 9);
-
-            try {
-                if (option != EXIT)
-                    executeOption(option);
-            } catch (NotDirectoryException e) {
-                display(text.getNotDirErrorMsg(e.getFile()));
-            } catch (NoSuchFileException e) {
-                display(text.getNotFileErrorMsg(e.getFile()));
-            } catch (IOException e) {
-                display(e.getMessage());
+            if (option != EXIT) {
+                Thread executionThread = executeOptionOnNewThread(option);
+                displayProgressWhileThreadAlive(executionThread);
             }
         } while (option != EXIT);
     }
 
     public Text getText() {
         return text;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    private Thread executeOptionOnNewThread(int option) {
+        Thread thread = new Thread() {
+            public void run() {
+                try {
+                    executeOption(option);
+                } catch (NotDirectoryException e) {
+                    display(text.getNotDirErrorMsg(e.getFile()));
+                } catch (NoSuchFileException e) {
+                    display(text.getNotFileErrorMsg(e.getFile()));
+                } catch (IOException e) {
+                    display(e.getMessage());
+                }
+            }
+        };
+        thread.start();
+        return thread;
+    }
+
+    private void displayProgressWhileThreadAlive(Thread thread) {
+        /*
+        Thread.sleep() and status.isUpdated() reduce the thread load
+        and reduce the probability of interleaving the text output
+        of tools as "java -Xprof" with the text output of this program.
+         */
+        try {
+            while (thread.isAlive() && !status.isActive())
+                Thread.sleep(SLEEP_MILLIS);
+            while (thread.isAlive() && status.isActive() && !status.isComplete()) {
+                if (status.isUpdated())
+                    displayProgress();
+                Thread.sleep(SLEEP_MILLIS);
+            }
+            while (thread.isAlive())
+                Thread.sleep(SLEEP_MILLIS);
+        } catch (InterruptedException e) {
+            display(text.getThreadInterruptedExceptionMsg());
+            System.exit(EXIT_STATUS);
+        }
     }
 
     private void executeOption(int option) throws IOException {
@@ -215,19 +254,24 @@ public class UserInterface {
         return str;
     }
 
-    public void display(String str) {
+    public synchronized void display(String str) {
         String myStr = str;
-        if (backtrackCounter > 0)
+        if (backtrackCounter > 0) {
+            if (status.isComplete() && status.isUpdated())
+                displayProgress();
             myStr = "\n" + myStr;
+        }
         displayAux(myStr);
         backtrackCounter = 0;
-        remainingTime = null;
     }
 
-    public void displayProgress(long done, long total, int found) {
+    public synchronized void displayProgress() {
+        long done = status.getDone();
+        long total = status.getTotal();
+        int found = status.getFound();
+        String remainingTime = status.getRemainingTime();
+
         double percentage = total == 0 ? 100 : done * 100.0 / total;
-        if (remainingTime == null)
-            remainingTime = new RemainingTime(total);
 
         StringBuilder sb1 = new StringBuilder();
         for (int i = 0; i < backtrackCounter; i++)
@@ -235,7 +279,7 @@ public class UserInterface {
 
         StringBuilder sb2 = new StringBuilder();
         sb2.append(done).append(" / ").append(total).append(" = ").append(String.format("%.3f", percentage)).append("% ").append(text.getFoundMsg()).append(found);
-        sb2.append(" ").append(text.getRemainingTimeMsg()).append(remainingTime.getRemainingTime(done, text));
+        sb2.append(" ").append(text.getRemainingTimeMsg()).append(remainingTime);
 
         for (int i = sb2.length(); i < backtrackCounter; i++)
             sb2.append(" ");
@@ -246,8 +290,10 @@ public class UserInterface {
     }
 
     private void displayAux(String str) {
-        System.out.print(str);
-        System.out.flush();
+        synchronized (System.out) {
+            System.out.print(str);
+            System.out.flush();
+        }
     }
 
     private String adjustDirectory(String dir) {

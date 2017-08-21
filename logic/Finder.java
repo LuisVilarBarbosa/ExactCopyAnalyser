@@ -1,6 +1,7 @@
 package logic;
 
 import objects.File;
+import ui.Status;
 import ui.UserInterface;
 
 import java.io.IOException;
@@ -11,10 +12,12 @@ import java.util.HashSet;
 public class Finder {
     private UserInterface userInterface;
     private Comparator comparator;
+    private Status status;
 
     public Finder(UserInterface userInterface) {
         this.userInterface = userInterface;
         this.comparator = new Comparator(true, this.userInterface);
+        this.status = this.userInterface.getStatus();
     }
 
     public ArrayList<File> findFiles1WithoutCorrespondentInFiles2ButWithCopiesThere(HashMap<String, File> files1, HashMap<String, File> files2) throws IOException {
@@ -40,13 +43,14 @@ public class Finder {
         long completedComparisons = 0;
         long totalComparisons = files1.size() * files2Size;
 
-        userInterface.displayProgress(completedComparisons, totalComparisons, withCopies.size());
+        status.setup(completedComparisons, totalComparisons, withCopies.size());
         for (File f : files1.values()) {
             if (!findCopiesOfFile(f, files2, true).isEmpty())
                 withCopies.add(f);
             completedComparisons += files2Size;
-            userInterface.displayProgress(completedComparisons, totalComparisons, withCopies.size());
+            status.update(completedComparisons, withCopies.size());
         }
+        status.complete();
         return withCopies;
     }
 
@@ -63,7 +67,7 @@ public class Finder {
         for (int i = 0; i < size; i++)
             totalComparisons += size - i - 1;
 
-        userInterface.displayProgress(completedComparisons, totalComparisons, alreadyFound);
+        status.setup(completedComparisons, totalComparisons, alreadyFound);
         for (int i = 0; i < size; i++) {
             String key1 = keys.get(i);
             if (!alreadyAnalysed.contains(key1)) {
@@ -90,8 +94,9 @@ public class Finder {
                 }
             }
             completedComparisons += size - i - 1;
-            userInterface.displayProgress(completedComparisons, totalComparisons, alreadyFound);
+            status.update(completedComparisons, alreadyFound);
         }
+        status.complete();
         return duplicates;
     }
 
