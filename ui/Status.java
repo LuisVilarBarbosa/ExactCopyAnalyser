@@ -11,6 +11,11 @@ public class Status {
     private Text text;
 
     public Status(Text text) {
+        this.text = text;
+        this.reset();
+    }
+
+    public synchronized void reset() {
         this.active = false;
         this.updated = false;
         this.complete = false;
@@ -18,7 +23,6 @@ public class Status {
         this.total = 0;
         this.found = 0;
         this.remainingTime = new RemainingTime(this.total);
-        this.text = text;
     }
 
     public synchronized void setup(long done, long total, int found) {

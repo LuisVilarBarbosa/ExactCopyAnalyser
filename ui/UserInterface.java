@@ -29,6 +29,7 @@ public class UserInterface {
         int option;
 
         do {
+            status.reset();
             option = selectOption(EXIT, 9);
             if (option != EXIT) {
                 Thread executionThread = executeOptionOnNewThread(option);
