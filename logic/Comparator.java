@@ -7,8 +7,8 @@ import ui.UserInterface;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 
 public class Comparator {
     private static final int BUFFER_SIZE = 10485760;   // 10 MB
@@ -27,7 +27,7 @@ public class Comparator {
     }
 
     // To move to Finder
-    public ArrayList<ArrayList<File>> findNotEqualCorrespondentsInDirectoriesWithSameStructure(HashMap<String, File> files1, HashMap<String, File> files2) throws IOException {
+    public ArrayList<ArrayList<File>> findNotEqualCorrespondentsInDirectoriesWithSameStructure(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2) throws IOException {
         ArrayList<ArrayList<File>> notEqual = new ArrayList<>();
 
         int size = files1.size();

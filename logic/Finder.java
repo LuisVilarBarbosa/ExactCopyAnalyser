@@ -6,8 +6,8 @@ import ui.UserInterface;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 
 public class Finder {
     private UserInterface userInterface;
@@ -20,14 +20,14 @@ public class Finder {
         this.status = this.userInterface.getStatus();
     }
 
-    public ArrayList<File> findFiles1WithoutCorrespondentInFiles2ButWithCopiesThere(HashMap<String, File> files1, HashMap<String, File> files2) throws IOException {
-        HashMap<String, File> withoutCorrespondent = findFiles1WithoutCorrespondentOnFiles2(files1, files2);
+    public ArrayList<File> findFiles1WithoutCorrespondentInFiles2ButWithCopiesThere(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2) throws IOException {
+        LinkedHashMap<String, File> withoutCorrespondent = findFiles1WithoutCorrespondentOnFiles2(files1, files2);
         ArrayList<File> withCopies = findFiles1WithCopiesSomewhereInFiles2(withoutCorrespondent, files2);
         return withCopies;
     }
 
-    public HashMap<String, File> findFiles1WithoutCorrespondentOnFiles2(HashMap<String, File> files1, HashMap<String, File> files2) {
-        HashMap<String, File> withoutCorrespondent = new HashMap<>();
+    public LinkedHashMap<String, File> findFiles1WithoutCorrespondentOnFiles2(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2) {
+        LinkedHashMap<String, File> withoutCorrespondent = new LinkedHashMap<>();
         for (String key1 : files1.keySet()) {
             File f1 = files1.get(key1);
             File f2 = files2.get(key1);
@@ -37,7 +37,7 @@ public class Finder {
         return withoutCorrespondent;
     }
 
-    public ArrayList<File> findFiles1WithCopiesSomewhereInFiles2(HashMap<String, File> files1, HashMap<String, File> files2) throws IOException {
+    public ArrayList<File> findFiles1WithCopiesSomewhereInFiles2(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2) throws IOException {
         ArrayList<File> withCopies = new ArrayList<>();
         int files2Size = files2.size();
         long completedComparisons = 0;
@@ -54,7 +54,7 @@ public class Finder {
         return withCopies;
     }
 
-    public ArrayList<ArrayList<File>> findDuplicates(HashMap<String, File> files) throws IOException {
+    public ArrayList<ArrayList<File>> findDuplicates(LinkedHashMap<String, File> files) throws IOException {
         ArrayList<ArrayList<File>> duplicates = new ArrayList<>();
 
         ArrayList<String> keys = Converter.convertToArrayListOfKeys(files);
@@ -100,7 +100,7 @@ public class Finder {
         return duplicates;
     }
 
-    public ArrayList<File> findFiles1WithoutCopiesAnywhereOnFiles2(HashMap<String, File> files1, HashMap<String, File> files2) throws IOException {
+    public ArrayList<File> findFiles1WithoutCopiesAnywhereOnFiles2(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2) throws IOException {
         ArrayList<File> withoutCopies = new ArrayList<>();
         for (File f : files1.values())
             if (findCopiesOfFile(f, files2, true).isEmpty())
@@ -108,7 +108,7 @@ public class Finder {
         return withoutCopies;
     }
 
-    private ArrayList<File> findCopiesOfFile(File file, HashMap<String, File> files, boolean stopOnFirstFound) throws IOException {
+    private ArrayList<File> findCopiesOfFile(File file, LinkedHashMap<String, File> files, boolean stopOnFirstFound) throws IOException {
         ArrayList<File> copies = new ArrayList<>();
         for (File f : files.values())
             if (comparator.areFilesEqual(file, f)) {

@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.NotDirectoryException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -121,12 +121,12 @@ public class UserInterface {
     }
 
     private void listCorrespondentsNotEqualInDirectoriesWithSameStructure(boolean compareContent) throws IOException {
-        HashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
-        HashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
+        LinkedHashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
+        LinkedHashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
 
         Finder finder = new Finder(this);
-        HashMap<String, File> withoutCorrespondentOnDir2 = finder.findFiles1WithoutCorrespondentOnFiles2(dir1, dir2);
-        HashMap<String, File> withoutCorrespondentOnDir1 = finder.findFiles1WithoutCorrespondentOnFiles2(dir2, dir1);
+        LinkedHashMap<String, File> withoutCorrespondentOnDir2 = finder.findFiles1WithoutCorrespondentOnFiles2(dir1, dir2);
+        LinkedHashMap<String, File> withoutCorrespondentOnDir1 = finder.findFiles1WithoutCorrespondentOnFiles2(dir2, dir1);
         display(text.getDir2FilesWithoutCorrespondentOnDir1Msg(withoutCorrespondentOnDir1.size()));
         display(text.getDir1FilesWithoutCorrespondentOnDir2Msg(withoutCorrespondentOnDir2.size()));
 
@@ -151,8 +151,8 @@ public class UserInterface {
     }
 
     private ArrayList<File> listDir1FilesWithoutCorrespondentInDir2ButWithCopiesThere() throws IOException {
-        HashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
-        HashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
+        LinkedHashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
+        LinkedHashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
         Finder finder = new Finder(this);
         ArrayList<File> withCopies = finder.findFiles1WithoutCorrespondentInFiles2ButWithCopiesThere(dir1, dir2);
         String message = text.getDir1FilesWithoutCorrespondentInDir2ButWithCopiesThereMsg(withCopies.size());
@@ -170,7 +170,7 @@ public class UserInterface {
     }
 
     private void listDuplicates() throws IOException {
-        HashMap<String, File> files = getDirectoryFiles(text.getDirMsg());
+        LinkedHashMap<String, File> files = getDirectoryFiles(text.getDirMsg());
         Finder finder = new Finder(this);
         ArrayList<ArrayList<File>> duplicates = finder.findDuplicates(files);
 
@@ -187,8 +187,8 @@ public class UserInterface {
     }
 
     private void listDir1FilesWithCopiesSomewhereInDir2() throws IOException {
-        HashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
-        HashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
+        LinkedHashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
+        LinkedHashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
         Finder finder = new Finder(this);
         ArrayList<File> withCopies = finder.findFiles1WithCopiesSomewhereInFiles2(dir1, dir2);
         String message = text.getDir1FilesWithCopiesSomewhereInDir2Msg(withCopies.size());
@@ -197,8 +197,8 @@ public class UserInterface {
     }
 
     private void listDir1FilesWithoutCopiesAnywhereInDir2() throws IOException {
-        HashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
-        HashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
+        LinkedHashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
+        LinkedHashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
         Finder finder = new Finder(this);
         ArrayList<File> withoutCopies = finder.findFiles1WithoutCopiesAnywhereOnFiles2(dir1, dir2);
         String message = text.getDir1FilesWithoutCopiesAnywhereInDir2Msg(withoutCopies.size());
@@ -240,10 +240,10 @@ public class UserInterface {
         return confirm;
     }
 
-    private HashMap<String, File> getDirectoryFiles(String message) throws NotDirectoryException {
+    private LinkedHashMap<String, File> getDirectoryFiles(String message) throws NotDirectoryException {
         String dir = getString(message);
         dir = adjustDirectory(dir);
-        HashMap<String, File> files = Loader.getDirectoryFiles(dir);
+        LinkedHashMap<String, File> files = Loader.getDirectoryFiles(dir);
         return files;
     }
 

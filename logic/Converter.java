@@ -3,11 +3,11 @@ package logic;
 import objects.File;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Converter {
 
-    public static ArrayList<String> convertToArrayListOfKeys(HashMap<String, File> map) {
+    public static ArrayList<String> convertToArrayListOfKeys(LinkedHashMap<String, File> map) {
         ArrayList<String> converted = new ArrayList<>(map.size());
         for (String key : map.keySet())
             converted.add(key);
