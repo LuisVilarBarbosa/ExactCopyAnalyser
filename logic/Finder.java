@@ -102,9 +102,18 @@ public class Finder {
 
     public ArrayList<File> findFiles1WithoutCopiesAnywhereOnFiles2(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2) throws IOException {
         ArrayList<File> withoutCopies = new ArrayList<>();
-        for (File f : files1.values())
+        int files2Size = files2.size();
+        long completedComparisons = 0;
+        long totalComparisons = files1.size() * files2Size;
+
+        status.setup(completedComparisons, totalComparisons, withoutCopies.size());
+        for (File f : files1.values()) {
             if (findCopiesOfFile(f, files2, true).isEmpty())
                 withoutCopies.add(f);
+            completedComparisons += files2Size;
+            status.update(completedComparisons, withoutCopies.size());
+        }
+        status.complete();
         return withoutCopies;
     }
 
