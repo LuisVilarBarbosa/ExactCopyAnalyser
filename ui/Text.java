@@ -3,7 +3,7 @@ package ui;
 import java.util.Locale;
 
 public class Text {
-    private String specialSequence = "\0";
+    private static final String specialSequence = "\0";
     private String language;
     private String optionsMsg;
     private String selectOptionMsg;
