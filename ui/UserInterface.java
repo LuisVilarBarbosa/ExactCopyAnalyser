@@ -278,10 +278,7 @@ public class UserInterface {
         for (int i = 0; i < backtrackCounter; i++)
             sb1.append("\b");
 
-        StringBuilder sb2 = new StringBuilder();
-        sb2.append(done).append(" / ").append(total).append(" = ").append(String.format("%.3f", percentage)).append("% ").append(text.getFoundMsg()).append(found);
-        sb2.append(" ").append(text.getRemainingTimeMsg()).append(remainingTime);
-
+        StringBuilder sb2 = new StringBuilder(text.getProgressMsg(done, total, percentage, found, remainingTime));
         for (int i = sb2.length(); i < backtrackCounter; i++)
             sb2.append(" ");
 
