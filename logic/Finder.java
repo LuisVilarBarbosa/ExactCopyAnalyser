@@ -44,9 +44,10 @@ public class Finder {
         long totalComparisons = files1.size() * files2Size;
 
         status.setup(completedComparisons, totalComparisons, withCopies.size());
-        for (File f : files1.values()) {
-            if (!findCopiesOfFile(f, files2, true).isEmpty())
-                withCopies.add(f);
+        for (String key1 : files1.keySet()) {
+            File f1 = files1.get(key1);
+            if (fileHasCopy(key1, f1, files2))
+                withCopies.add(f1);
             completedComparisons += files2Size;
             status.update(completedComparisons, withCopies.size());
         }
@@ -107,9 +108,10 @@ public class Finder {
         long totalComparisons = files1.size() * files2Size;
 
         status.setup(completedComparisons, totalComparisons, withoutCopies.size());
-        for (File f : files1.values()) {
-            if (findCopiesOfFile(f, files2, true).isEmpty())
-                withoutCopies.add(f);
+        for (String key1 : files1.keySet()) {
+            File f1 = files1.get(key1);
+            if (!fileHasCopy(key1, f1, files2))
+                withoutCopies.add(f1);
             completedComparisons += files2Size;
             status.update(completedComparisons, withoutCopies.size());
         }
@@ -117,14 +119,15 @@ public class Finder {
         return withoutCopies;
     }
 
-    private ArrayList<File> findCopiesOfFile(File file, LinkedHashMap<String, File> files, boolean stopOnFirstFound) throws IOException {
-        ArrayList<File> copies = new ArrayList<>();
+    private boolean fileHasCopy(String fileKey, File file, LinkedHashMap<String, File> files) throws IOException {
+        File fileOfKey = files.get(fileKey);
+        if (fileOfKey != null && comparator.areFilesEqual(file, fileOfKey))
+            return true;
+
         for (File f : files.values())
-            if (comparator.areFilesEqual(file, f)) {
-                copies.add(f);
-                if (stopOnFirstFound)
-                    break;
-            }
-        return copies;
+            if (comparator.areFilesEqual(file, f))
+                return true;
+
+        return false;
     }
 }
