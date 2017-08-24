@@ -65,26 +65,23 @@ public class Comparator {
             FileInputStream fis1 = new FileInputStream(f1.getAbsolutePath());
             FileInputStream fis2 = new FileInputStream(f2.getAbsolutePath());
 
-            for (long i = 0; i < f1Length; i += BUFFER_SIZE) {
-                int read1 = fis1.read(data1);
-                int read2 = fis2.read(data2);
+            try {
+                for (long i = 0; i < f1Length; i += BUFFER_SIZE) {
+                    int read1 = fis1.read(data1);
+                    int read2 = fis2.read(data2);
 
-                if (read1 != read2) {
-                    fis1.close();
-                    fis2.close();
-                    throw new IOException(userInterface.getText().getFileReadErrorMsg());
+                    if (read1 != read2)
+                        throw new IOException(userInterface.getText().getFileReadErrorMsg());
+
+                    for (int j = 0; j < read1; j++)
+                        if (data1[j] != data2[j])
+                            return false;
                 }
-
-                for (int j = 0; j < read1; j++)
-                    if (data1[j] != data2[j]) {
-                        fis1.close();
-                        fis2.close();
-                        return false;
-                    }
+            } finally {
+                // This code has been tested to be executed before the return, before the throw and on normal execution.
+                fis1.close();
+                fis2.close();
             }
-
-            fis1.close();
-            fis2.close();
         }
 
         return true;
