@@ -41,7 +41,7 @@ public class Finder {
         ArrayList<File> withCopies = new ArrayList<>();
         int files2Size = files2.size();
         long completedComparisons = 0;
-        long totalComparisons = files1.size() * files2Size;
+        long totalComparisons = (long) files1.size() * files2Size;
 
         status.setup(completedComparisons, totalComparisons, withCopies.size());
         for (String key1 : files1.keySet()) {
@@ -105,7 +105,7 @@ public class Finder {
         ArrayList<File> withoutCopies = new ArrayList<>();
         int files2Size = files2.size();
         long completedComparisons = 0;
-        long totalComparisons = files1.size() * files2Size;
+        long totalComparisons = (long) files1.size() * files2Size;
 
         status.setup(completedComparisons, totalComparisons, withoutCopies.size());
         for (String key1 : files1.keySet()) {
