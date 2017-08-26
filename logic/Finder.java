@@ -10,13 +10,15 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 
 public class Finder {
+    private boolean compareLastModified;
     private UserInterface userInterface;
     private Comparator comparator;
     private Status status;
 
-    public Finder(UserInterface userInterface) {
+    public Finder(boolean compareLastModified, UserInterface userInterface) {
+        this.compareLastModified = compareLastModified;
         this.userInterface = userInterface;
-        this.comparator = new Comparator(true, this.userInterface);
+        this.comparator = new Comparator(this.compareLastModified, true, this.userInterface);
         this.status = this.userInterface.getStatus();
     }
 

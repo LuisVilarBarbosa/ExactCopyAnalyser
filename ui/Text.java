@@ -43,17 +43,26 @@ public class Text {
 
         if (language.equalsIgnoreCase("pt")) {
             optionsMsg = "\nOpções:\n" +
-                    "1-Comparar todos os ficheiros correspondentes em dois diretórios com a mesma estrutura de ficheiros por tamanho, data de modificação e conteúdo. *\n" +
-                    "2-Comparar dois ficheiros por tamanho, data de modificação e conteúdo. *\n" +
-                    "3-Comparar todos os ficheiros correspondentes em dois diretórios com a mesma estrutura de ficheiros por tamanho e data de modificação.\n" +
-                    "4-Comparar dois ficheiros por tamanho e data de modificação.\n" +
-                    "5-Listar ficheiros do diretório 1 sem correspondente no diretório 2, mas com cópias noutra localização no diretório 2. *\n" +
-                    "6-Remover ficheiros do diretório 1 sem correspondente no diretório 2, mas com cópias noutra localização no diretório 2. *\n" +
-                    "7-Listar todos os duplicados num dado diretório. *\n" +
-                    "8-Listar ficheiros do diretório 1 com cópias algures no diretório 2. *\n" +
-                    "9-Listar ficheiros do diretório 1 sem cópias em nenhum local no diretório 2. *\n" +
-                    "0-Sair.\n" +
-                    "* Esta operação pode ser demorada, pois usa comparação por conteúdo.\n";
+                    " 1-Comparar todos os ficheiros correspondentes em dois diretórios com a mesma estrutura de ficheiros (modo 1).\n" +
+                    " 2-Comparar todos os ficheiros correspondentes em dois diretórios com a mesma estrutura de ficheiros (modo 2).\n" +
+                    " 3-Comparar todos os ficheiros correspondentes em dois diretórios com a mesma estrutura de ficheiros (modo 3).\n" +
+                    " 4-Comparar dois ficheiros (modo 1).\n" +
+                    " 5-Comparar dois ficheiros (modo 2).\n" +
+                    " 6-Comparar dois ficheiros (modo 3).\n" +
+                    " 7-Listar ficheiros do diretório 1 sem correspondente no diretório 2, mas com cópias noutra localização no diretório 2 (modo 2).\n" +
+                    " 8-Listar ficheiros do diretório 1 sem correspondente no diretório 2, mas com cópias noutra localização no diretório 2 (modo 3).\n" +
+                    " 9-Remover ficheiros do diretório 1 sem correspondente no diretório 2, mas com cópias noutra localização no diretório 2 (não remove pastas vazias) (modo 2).\n" +
+                    "10-Remover ficheiros do diretório 1 sem correspondente no diretório 2, mas com cópias noutra localização no diretório 2 (não remove pastas vazias) (modo 3).\n" +
+                    "11-Listar todos os duplicados num dado diretório (modo 2).\n" +
+                    "12-Listar todos os duplicados num dado diretório (modo 3).\n" +
+                    "13-Listar ficheiros do diretório 1 com cópias algures no diretório 2 (modo 2).\n" +
+                    "14-Listar ficheiros do diretório 1 com cópias algures no diretório 2 (modo 3).\n" +
+                    "15-Listar ficheiros do diretório 1 sem cópias em nenhum local no diretório 2 (modo 2).\n" +
+                    "16-Listar ficheiros do diretório 1 sem cópias em nenhum local no diretório 2 (modo 3).\n" +
+                    " 0-Sair.\n" +
+                    "Modo 1: Comparação por tamanho e data de modificação.\n" +
+                    "Modo 2: Comparação por tamanho e conteúdo. A análise do conteúdo pode ser demorada.\n" +
+                    "Modo 3: Comparação por tamanho, data de modificação e conteúdo. A análise do conteúdo pode ser demorada.\n";
             selectOptionMsg = "\nSeleciona uma opção (exemplo: " + specialSequence + "): ";
             notFileErrorMsg = "'" + specialSequence + "' não é um ficheiro. Extensão do ficheiro em falta?\n";
             invalidOptionMsg = "Opção inválida.\n";
@@ -87,17 +96,26 @@ public class Text {
             threadInterruptedExceptionMsg = "Um thread foi interrompido de forma anómala, gerando uma exceção.\n";
         } else {
             optionsMsg = "Options:\n" +
-                    "1-Compare all corresponding files in two directories with the same structure of files by size, modification date and content. *\n" +
-                    "2-Compare two files by size, modification date and content. *\n" +
-                    "3-Compare all corresponding files in two directories with the same structure of files by size and modification date.\n" +
-                    "4-Compare two files by size and modification date.\n" +
-                    "5-List files from directory 1 without correspondent in directory 2, but with copies on other location in directory 2. *\n" +
-                    "6-Remove files from directory 1 without correspondent in directory 2, but with copies on other location in directory 2. *\n" +
-                    "7-List all duplicates in a given directory. *\n" +
-                    "8-List files from directory 1 with copies somewhere in directory 2. *\n" +
-                    "9-List files from directory 1 without copies anywhere in directory 2. *\n" +
-                    "0-Exit.\n" +
-                    "* This operation can be time-consuming because it uses comparison by content.\n";
+                    " 1-Compare all corresponding files in two directories with the same structure of files (mode 1).\n" +
+                    " 2-Compare all corresponding files in two directories with the same structure of files (mode 2).\n" +
+                    " 3-Compare all corresponding files in two directories with the same structure of files (mode 3).\n" +
+                    " 4-Compare two files (mode 1).\n" +
+                    " 5-Compare two files (mode 2).\n" +
+                    " 6-Compare two files (mode 3).\n" +
+                    " 7-List files from directory 1 without correspondent in directory 2, but with copies on other location in directory 2 (mode 2).\n" +
+                    " 8-List files from directory 1 without correspondent in directory 2, but with copies on other location in directory 2 (mode 3).\n" +
+                    " 9-Remove files from directory 1 without correspondent in directory 2, but with copies on other location in directory 2 (does not remove empty folders) (mode 2).\n" +
+                    "10-Remove files from directory 1 without correspondent in directory 2, but with copies on other location in directory 2 (does not remove empty folders) (mode 3).\n" +
+                    "11-List all duplicates in a given directory (mode 2).\n" +
+                    "12-List all duplicates in a given directory (mode 3).\n" +
+                    "13-List files from directory 1 with copies somewhere in directory 2 (mode 2).\n" +
+                    "14-List files from directory 1 with copies somewhere in directory 2 (mode 3).\n" +
+                    "15-List files from directory 1 without copies anywhere in directory 2 (mode 2).\n" +
+                    "16-List files from directory 1 without copies anywhere in directory 2 (mode 3).\n" +
+                    " 0-Exit.\n" +
+                    "Mode 1: Comparison by size and modification date.\n" +
+                    "Mode 2: Comparison by size and content. Content analysis can be time-consuming.\n" +
+                    "Mode 3: Comparison by size, modification date and content. Content analysis can be time-consuming.\n";
             selectOptionMsg = "\nSelect an option (example: " + specialSequence + "): ";
             notFileErrorMsg = "'" + specialSequence + "' is not a file. objects. File extension missing?\n";
             invalidOptionMsg = "Invalid option.\n";

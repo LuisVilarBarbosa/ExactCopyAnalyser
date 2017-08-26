@@ -12,13 +12,15 @@ import java.util.LinkedHashMap;
 
 public class Comparator {
     private static final int BUFFER_SIZE = 10485760;   // 10 MB
+    private boolean compareLastModified;
     private boolean compareContent;
     private byte[] data1;
     private byte[] data2;
     private UserInterface userInterface;
     private Status status;
 
-    public Comparator(boolean compareContent, UserInterface userInterface) {
+    public Comparator(boolean compareLastModified, boolean compareContent, UserInterface userInterface) {
+        this.compareLastModified = compareLastModified;
         this.compareContent = compareContent;
         this.data1 = new byte[BUFFER_SIZE];
         this.data2 = new byte[BUFFER_SIZE];
@@ -58,7 +60,7 @@ public class Comparator {
 
     public boolean areFilesEqual(File f1, File f2) throws IOException {
         long f1Length = f1.length();
-        if (f1Length != f2.length() || f1.lastModified() != f2.lastModified())
+        if (f1Length != f2.length() || (compareLastModified && f1.lastModified() != f2.lastModified()))
             return false;
 
         if (compareContent) {
