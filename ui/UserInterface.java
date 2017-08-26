@@ -30,7 +30,7 @@ public class UserInterface {
 
         do {
             status.reset();
-            option = selectOption(EXIT, 16);
+            option = selectOption(EXIT, 18);
             if (option != EXIT) {
                 Thread executionThread = executeOptionOnNewThread(option);
                 displayProgressWhileThreadAlive(executionThread);
@@ -137,6 +137,12 @@ public class UserInterface {
             case 16:
                 listDir1FilesWithoutCopiesAnywhereInDir2(true);
                 break;
+            case 17:
+                listFoldersWithoutFilesAsDescendants();
+                break;
+            case 18:
+                removeFoldersWithoutFilesAsDescendants();
+                break;
             default:
                 display(text.getInvalidOptionMsg());
                 break;
@@ -227,6 +233,26 @@ public class UserInterface {
         String message = text.getDir1FilesWithoutCopiesAnywhereInDir2Msg(withoutCopies.size());
         display(message);
         log(message, Converter.convertToArrayListOfArrayLists(withoutCopies));
+    }
+
+    private ArrayList<File> listFoldersWithoutFilesAsDescendants() throws IOException {
+        String dir = getString(text.getDirMsg());
+        dir = adjustDirectory(dir);
+        File baseDirectory = new File(dir);
+        Finder finder = new Finder(false, this);
+        ArrayList<File> foldersWithoutFiles = finder.findFoldersWithoutFilesAsDescendants(baseDirectory);
+        String message = text.getFoldersWithoutFilesAsDescendantsMsg(foldersWithoutFiles.size());
+        display(message);
+        log(message, Converter.convertToArrayListOfArrayLists(foldersWithoutFiles));
+        return foldersWithoutFiles;
+    }
+
+    private void removeFoldersWithoutFilesAsDescendants() throws IOException {
+        ArrayList<File> foldersWithoutFiles = listFoldersWithoutFilesAsDescendants();
+        if (!foldersWithoutFiles.isEmpty() && confirm()) {
+            display(text.getDeletingFoldersMsg());
+            Changer.deleteFolders(foldersWithoutFiles, this);
+        }
     }
 
     private int selectOption(int begin, int end) {

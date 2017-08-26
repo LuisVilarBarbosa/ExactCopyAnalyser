@@ -5,7 +5,9 @@ import ui.Status;
 import ui.UserInterface;
 
 import java.io.IOException;
+import java.nio.file.NotDirectoryException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 
@@ -131,5 +133,25 @@ public class Finder {
                 return true;
 
         return false;
+    }
+
+    public ArrayList<File> findFoldersWithoutFilesAsDescendants(File baseDirectory) throws NotDirectoryException {
+        if (!baseDirectory.isDirectory())
+            throw new NotDirectoryException(baseDirectory.getAbsolutePath());
+
+        ArrayList<File> folders = new ArrayList<>();
+        findFoldersWithoutFilesAsDescendantsAux(baseDirectory, folders);
+        return folders;
+    }
+
+    private void findFoldersWithoutFilesAsDescendantsAux(File baseDirectory, ArrayList<File> folders) {
+        for (File f : baseDirectory.listFiles())
+            if (f.isDirectory())
+                findFoldersWithoutFilesAsDescendantsAux(f, folders);
+
+        ArrayList<File> listedFiles = new ArrayList<>();
+        Collections.addAll(listedFiles, baseDirectory.listFiles());
+        if(listedFiles.isEmpty() || folders.containsAll(listedFiles))
+            folders.add(baseDirectory);
     }
 }

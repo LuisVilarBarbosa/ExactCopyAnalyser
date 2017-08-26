@@ -37,6 +37,8 @@ public class Text {
     private String dir1FilesWithCopiesSomewhereInDir2Msg;
     private String dir1FilesWithoutCopiesAnywhereInDir2Msg;
     private String threadInterruptedExceptionMsg;
+    private String foldersWithoutFilesAsDescendantsMsg;
+    private String deletingFoldersMsg;
 
     public Text() {
         language = Locale.getDefault().getLanguage();
@@ -59,6 +61,8 @@ public class Text {
                     "14-Listar ficheiros do diretório 1 com cópias algures no diretório 2 (modo 3).\n" +
                     "15-Listar ficheiros do diretório 1 sem cópias em nenhum local no diretório 2 (modo 2).\n" +
                     "16-Listar ficheiros do diretório 1 sem cópias em nenhum local no diretório 2 (modo 3).\n" +
+                    "17-Listar pastas sem ficheiros como descendentes.\n" +
+                    "18-Remover pastas sem ficheiros como descendentes.\n" +
                     " 0-Sair.\n" +
                     "Modo 1: Comparação por tamanho e data de modificação.\n" +
                     "Modo 2: Comparação por tamanho e conteúdo. A análise do conteúdo pode ser demorada.\n" +
@@ -94,6 +98,8 @@ public class Text {
             dir1FilesWithCopiesSomewhereInDir2Msg = "Ficheiros do diretório 1 com cópias no diretório 2: " + specialSequence + "\n";
             dir1FilesWithoutCopiesAnywhereInDir2Msg = "Ficheiros do diretório 1 sem cópias no diretório 2: " + specialSequence + "\n";
             threadInterruptedExceptionMsg = "Um thread foi interrompido de forma anómala, gerando uma exceção.\n";
+            foldersWithoutFilesAsDescendantsMsg = "Pastas sem ficheiros como descendentes: " + specialSequence + "\n";
+            deletingFoldersMsg = "Eliminando as pastas...\n";
         } else {
             optionsMsg = "Options:\n" +
                     " 1-Compare all corresponding files in two directories with the same structure of files (mode 1).\n" +
@@ -112,6 +118,8 @@ public class Text {
                     "14-List files from directory 1 with copies somewhere in directory 2 (mode 3).\n" +
                     "15-List files from directory 1 without copies anywhere in directory 2 (mode 2).\n" +
                     "16-List files from directory 1 without copies anywhere in directory 2 (mode 3).\n" +
+                    "17-List folders without files as descendants.\n" +
+                    "18-Remove folders without files as descendants.\n" +
                     " 0-Exit.\n" +
                     "Mode 1: Comparison by size and modification date.\n" +
                     "Mode 2: Comparison by size and content. Content analysis can be time-consuming.\n" +
@@ -147,6 +155,8 @@ public class Text {
             dir1FilesWithCopiesSomewhereInDir2Msg = "Files from directory 1 with copies in directory 2: " + specialSequence + "\n";
             dir1FilesWithoutCopiesAnywhereInDir2Msg = "Files from directory 1 without copies in directory 2: " + specialSequence + "\n";
             threadInterruptedExceptionMsg = "A thread has been interrupted anomalously, generating an exception.\n";
+            foldersWithoutFilesAsDescendantsMsg = "Folders without files as descendants: " + specialSequence + "\n";
+            deletingFoldersMsg = "Deleting folders...\n";
         }
     }
 
@@ -283,6 +293,14 @@ public class Text {
 
     public String getThreadInterruptedExceptionMsg() {
         return threadInterruptedExceptionMsg;
+    }
+
+    public String getFoldersWithoutFilesAsDescendantsMsg(int number) {
+        return foldersWithoutFilesAsDescendantsMsg.replaceFirst(specialSequence, formatInteger(number));
+    }
+
+    public String getDeletingFoldersMsg() {
+        return deletingFoldersMsg;
     }
 
     private static String formatInteger(long number) {
