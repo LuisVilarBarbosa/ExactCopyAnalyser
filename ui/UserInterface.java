@@ -56,7 +56,7 @@ public class UserInterface {
                 } catch (NoSuchFileException e) {
                     display(text.getNotFileErrorMsg(e.getFile()));
                 } catch (IOException e) {
-                    display(e.getMessage());
+                    display(e.getMessage() + '\n');
                 }
             }
         };
