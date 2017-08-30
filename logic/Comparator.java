@@ -33,7 +33,7 @@ public class Comparator {
         ArrayList<ArrayList<File>> notEqual = new ArrayList<>();
 
         int size = files1.size();
-        double interval = size > 100 ? size / 100 : 1;
+        double interval = size > 100000 ? size / 100000 : (size > 100 ? size / 100 : 1);
         Iterator<String> it = files1.keySet().iterator();
 
         int i = 0;
