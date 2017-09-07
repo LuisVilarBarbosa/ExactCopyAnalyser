@@ -219,7 +219,7 @@ public class UserInterface {
         LinkedHashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
         LinkedHashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
         Finder finder = new Finder(compareLastModified, this);
-        ArrayList<File> withCopies = finder.findFiles1WithCopiesSomewhereInFiles2(dir1, dir2);
+        ArrayList<File> withCopies = finder.findFiles1WithOrWithoutCopiesSomewhereInFiles2(dir1, dir2, true);
         String message = text.getDir1FilesWithCopiesSomewhereInDir2Msg(withCopies.size());
         display(message);
         log(message, Converter.convertToArrayListOfArrayLists(withCopies));
@@ -229,7 +229,7 @@ public class UserInterface {
         LinkedHashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
         LinkedHashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
         Finder finder = new Finder(compareLastModified, this);
-        ArrayList<File> withoutCopies = finder.findFiles1WithoutCopiesAnywhereOnFiles2(dir1, dir2);
+        ArrayList<File> withoutCopies = finder.findFiles1WithOrWithoutCopiesSomewhereInFiles2(dir1, dir2, false);
         String message = text.getDir1FilesWithoutCopiesAnywhereInDir2Msg(withoutCopies.size());
         display(message);
         log(message, Converter.convertToArrayListOfArrayLists(withoutCopies));

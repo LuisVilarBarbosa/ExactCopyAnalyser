@@ -26,8 +26,7 @@ public class Finder {
 
     public ArrayList<File> findFiles1WithoutCorrespondentInFiles2ButWithCopiesThere(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2) throws IOException {
         LinkedHashMap<String, File> withoutCorrespondent = findFiles1WithoutCorrespondentOnFiles2(files1, files2);
-        ArrayList<File> withCopies = findFiles1WithCopiesSomewhereInFiles2(withoutCorrespondent, files2);
-        return withCopies;
+        return findFiles1WithOrWithoutCopiesSomewhereInFiles2(withoutCorrespondent, files2, true);
     }
 
     public LinkedHashMap<String, File> findFiles1WithoutCorrespondentOnFiles2(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2) {
@@ -41,22 +40,23 @@ public class Finder {
         return withoutCorrespondent;
     }
 
-    public ArrayList<File> findFiles1WithCopiesSomewhereInFiles2(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2) throws IOException {
-        ArrayList<File> withCopies = new ArrayList<>();
+    public ArrayList<File> findFiles1WithOrWithoutCopiesSomewhereInFiles2(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2, boolean withCopies) throws IOException {
+        ArrayList<File> withOrWithoutCopies = new ArrayList<>();
         int files2Size = files2.size();
         long completedComparisons = 0;
         long totalComparisons = (long) files1.size() * files2Size;
 
-        status.setup(completedComparisons, totalComparisons, withCopies.size());
+        status.setup(completedComparisons, totalComparisons, withOrWithoutCopies.size());
         for (String key1 : files1.keySet()) {
             File f1 = files1.get(key1);
-            if (fileHasCopy(key1, f1, files2))
-                withCopies.add(f1);
+            boolean hasCopy = fileHasCopy(key1, f1, files2);
+            if ((withCopies && hasCopy) || (!withCopies && !hasCopy))
+                withOrWithoutCopies.add(f1);
             completedComparisons += files2Size;
-            status.update(completedComparisons, withCopies.size());
+            status.update(completedComparisons, withOrWithoutCopies.size());
         }
         status.complete();
-        return withCopies;
+        return withOrWithoutCopies;
     }
 
     public ArrayList<ArrayList<File>> findDuplicates(LinkedHashMap<String, File> files) throws IOException {
@@ -105,24 +105,6 @@ public class Finder {
         return duplicates;
     }
 
-    public ArrayList<File> findFiles1WithoutCopiesAnywhereOnFiles2(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2) throws IOException {
-        ArrayList<File> withoutCopies = new ArrayList<>();
-        int files2Size = files2.size();
-        long completedComparisons = 0;
-        long totalComparisons = (long) files1.size() * files2Size;
-
-        status.setup(completedComparisons, totalComparisons, withoutCopies.size());
-        for (String key1 : files1.keySet()) {
-            File f1 = files1.get(key1);
-            if (!fileHasCopy(key1, f1, files2))
-                withoutCopies.add(f1);
-            completedComparisons += files2Size;
-            status.update(completedComparisons, withoutCopies.size());
-        }
-        status.complete();
-        return withoutCopies;
-    }
-
     private boolean fileHasCopy(String fileKey, File file, LinkedHashMap<String, File> files) throws IOException {
         File fileOfKey = files.get(fileKey);
         if (fileOfKey != null && comparator.areFilesEqual(file, fileOfKey))
@@ -151,7 +133,7 @@ public class Finder {
 
         ArrayList<File> listedFiles = new ArrayList<>();
         Collections.addAll(listedFiles, baseDirectory.listFiles());
-        if(listedFiles.isEmpty() || folders.containsAll(listedFiles))
+        if (listedFiles.isEmpty() || folders.containsAll(listedFiles))
             folders.add(baseDirectory);
     }
 }
