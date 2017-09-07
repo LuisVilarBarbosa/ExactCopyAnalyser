@@ -42,10 +42,6 @@ public class UserInterface {
         return text;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
     private Thread executeOptionOnNewThread(int option) {
         Thread thread = new Thread() {
             public void run() {
@@ -153,14 +149,13 @@ public class UserInterface {
         LinkedHashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
         LinkedHashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
 
-        Finder finder = new Finder(compareLastModified, this);
+        Finder finder = new Finder(compareLastModified, text, status);
         LinkedHashMap<String, File> withoutCorrespondentOnDir2 = finder.findFiles1WithoutCorrespondentOnFiles2(dir1, dir2);
         LinkedHashMap<String, File> withoutCorrespondentOnDir1 = finder.findFiles1WithoutCorrespondentOnFiles2(dir2, dir1);
         display(text.getDir2FilesWithoutCorrespondentOnDir1Msg(withoutCorrespondentOnDir1.size()));
         display(text.getDir1FilesWithoutCorrespondentOnDir2Msg(withoutCorrespondentOnDir2.size()));
 
-        Comparator comparator = new Comparator(compareLastModified, compareContent, this);
-        ArrayList<ArrayList<File>> notEqual = comparator.findNotEqualCorrespondentsInDirectoriesWithSameStructure(dir1, dir2);
+        ArrayList<ArrayList<File>> notEqual = finder.findNotEqualCorrespondentsInDirectoriesWithSameStructure(dir1, dir2, compareContent);
         String message = text.getNotEqualCorrespondentsMsg(notEqual.size());
         display(message);
         log(message, notEqual);
@@ -172,8 +167,7 @@ public class UserInterface {
         File f1 = getFile(path1);
         File f2 = getFile(path2);
 
-        Comparator comparator = new Comparator(compareLastModified, compareContent, this);
-        if (comparator.areFilesEqual(f1, f2))
+        if (Comparator.areFilesEqual(f1, f2, compareLastModified, compareContent, text))
             display(text.getEqualFilesMsg());
         else
             display(text.getNotEqualFilesMsg());
@@ -182,7 +176,7 @@ public class UserInterface {
     private ArrayList<File> listDir1FilesWithoutCorrespondentInDir2ButWithCopiesThere(boolean compareLastModified) throws IOException {
         LinkedHashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
         LinkedHashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
-        Finder finder = new Finder(compareLastModified, this);
+        Finder finder = new Finder(compareLastModified, text, status);
         ArrayList<File> withCopies = finder.findFiles1WithoutCorrespondentInFiles2ButWithCopiesThere(dir1, dir2);
         String message = text.getDir1FilesWithoutCorrespondentInDir2ButWithCopiesThereMsg(withCopies.size());
         display(message);
@@ -200,7 +194,7 @@ public class UserInterface {
 
     private void listDuplicates(boolean compareLastModified) throws IOException {
         LinkedHashMap<String, File> files = getDirectoryFiles(text.getDirMsg());
-        Finder finder = new Finder(compareLastModified, this);
+        Finder finder = new Finder(compareLastModified, text, status);
         ArrayList<ArrayList<File>> duplicates = finder.findDuplicates(files);
 
         int quantity = 0;
@@ -218,7 +212,7 @@ public class UserInterface {
     private void listDir1FilesWithCopiesSomewhereInDir2(boolean compareLastModified) throws IOException {
         LinkedHashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
         LinkedHashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
-        Finder finder = new Finder(compareLastModified, this);
+        Finder finder = new Finder(compareLastModified, text, status);
         ArrayList<File> withCopies = finder.findFiles1WithOrWithoutCopiesSomewhereInFiles2(dir1, dir2, true);
         String message = text.getDir1FilesWithCopiesSomewhereInDir2Msg(withCopies.size());
         display(message);
@@ -228,7 +222,7 @@ public class UserInterface {
     private void listDir1FilesWithoutCopiesAnywhereInDir2(boolean compareLastModified) throws IOException {
         LinkedHashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
         LinkedHashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
-        Finder finder = new Finder(compareLastModified, this);
+        Finder finder = new Finder(compareLastModified, text, status);
         ArrayList<File> withoutCopies = finder.findFiles1WithOrWithoutCopiesSomewhereInFiles2(dir1, dir2, false);
         String message = text.getDir1FilesWithoutCopiesAnywhereInDir2Msg(withoutCopies.size());
         display(message);
@@ -239,7 +233,7 @@ public class UserInterface {
         String dir = getString(text.getDirMsg());
         dir = adjustDirectory(dir);
         File baseDirectory = new File(dir);
-        Finder finder = new Finder(false, this);
+        Finder finder = new Finder(false, text, status);
         ArrayList<File> foldersWithoutFiles = finder.findFoldersWithoutFilesAsDescendants(baseDirectory);
         String message = text.getFoldersWithoutFilesAsDescendantsMsg(foldersWithoutFiles.size());
         display(message);

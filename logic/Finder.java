@@ -2,26 +2,21 @@ package logic;
 
 import objects.File;
 import ui.Status;
-import ui.UserInterface;
+import ui.Text;
 
 import java.io.IOException;
 import java.nio.file.NotDirectoryException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 public class Finder {
     private boolean compareLastModified;
-    private UserInterface userInterface;
-    private Comparator comparator;
+    private Text text;
     private Status status;
 
-    public Finder(boolean compareLastModified, UserInterface userInterface) {
+    public Finder(boolean compareLastModified, Text text, Status status) {
         this.compareLastModified = compareLastModified;
-        this.userInterface = userInterface;
-        this.comparator = new Comparator(this.compareLastModified, true, this.userInterface);
-        this.status = this.userInterface.getStatus();
+        this.text = text;
+        this.status = status;
     }
 
     public ArrayList<File> findFiles1WithoutCorrespondentInFiles2ButWithCopiesThere(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2) throws IOException {
@@ -38,6 +33,35 @@ public class Finder {
                 withoutCorrespondent.put(key1, f1);
         }
         return withoutCorrespondent;
+    }
+
+    public ArrayList<ArrayList<File>> findNotEqualCorrespondentsInDirectoriesWithSameStructure(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2, boolean compareContent) throws IOException {
+        ArrayList<ArrayList<File>> notEqual = new ArrayList<>();
+
+        int size = files1.size();
+        double interval = size > 100000 ? size / 100000 : (size > 100 ? size / 100 : 1);
+        Iterator<String> it = files1.keySet().iterator();
+
+        int i = 0;
+        status.setup(i, size, notEqual.size());
+        while (it.hasNext()) {
+            for (int j = 0; j < interval && it.hasNext(); j++, i++) {
+                String key = it.next();
+                File f2 = files2.get(key);
+                if (f2 != null) {
+                    File f1 = files1.get(key);
+                    if (!Comparator.areFilesEqual(f1, f2, compareLastModified, compareContent, text)) {
+                        ArrayList<File> notEqualPair = new ArrayList<>();
+                        notEqualPair.add(f1);
+                        notEqualPair.add(f2);
+                        notEqual.add(notEqualPair);
+                    }
+                }
+            }
+            status.update(i, notEqual.size());
+        }
+        status.complete();
+        return notEqual;
     }
 
     public ArrayList<File> findFiles1WithOrWithoutCopiesSomewhereInFiles2(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2, boolean withCopies) throws IOException {
@@ -85,7 +109,7 @@ public class Finder {
                     String key2 = keys.get(j);
                     if (!alreadyAnalysed.contains(key2)) {
                         File f2 = files.get(key2);
-                        if (comparator.areFilesEqual(f1, f2)) {
+                        if (Comparator.areFilesEqual(f1, f2, compareLastModified, true, text)) {
                             equalsToF1.add(f2);
                             alreadyAnalysed.add(key2);
                         }
@@ -106,12 +130,13 @@ public class Finder {
     }
 
     private boolean fileHasCopy(String fileKey, File file, LinkedHashMap<String, File> files) throws IOException {
+        final boolean compareContent = true;
         File fileOfKey = files.get(fileKey);
-        if (fileOfKey != null && comparator.areFilesEqual(file, fileOfKey))
+        if (fileOfKey != null && Comparator.areFilesEqual(file, fileOfKey, compareLastModified, compareContent, text))
             return true;
 
         for (File f : files.values())
-            if (comparator.areFilesEqual(file, f))
+            if (Comparator.areFilesEqual(file, f, compareLastModified, compareContent, text))
                 return true;
 
         return false;
