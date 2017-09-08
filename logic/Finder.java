@@ -9,7 +9,7 @@ import java.nio.file.NotDirectoryException;
 import java.util.*;
 
 public class Finder {
-    private boolean compareLastModified;
+    private final boolean compareLastModified;
     private Text text;
     private Status status;
 

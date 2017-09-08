@@ -1,8 +1,8 @@
 package ui;
 
 public class RemainingTime {
-    private long begin;
-    private long total;
+    private final long begin;
+    private final long total;
 
     public RemainingTime(long totalToDo) {
         this.begin = System.currentTimeMillis();

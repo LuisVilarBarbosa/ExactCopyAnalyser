@@ -1,8 +1,8 @@
 package objects;
 
 public class File extends java.io.File {
-    private long length;
-    private long lastModified;
+    private final long length;
+    private final long lastModified;
 
     public File(String pathname) {
         super(pathname);
