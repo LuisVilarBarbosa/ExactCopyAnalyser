@@ -19,9 +19,9 @@ public class Finder {
         this.status = status;
     }
 
-    public ArrayList<File> findFiles1WithoutCorrespondentInFiles2ButWithCopiesThere(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2) throws IOException {
+    public ArrayList<File> findFiles1WithoutCorrespondentInFiles2WithOrWithoutCopiesThere(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2, boolean withCopies) throws IOException {
         LinkedHashMap<String, File> withoutCorrespondent = findFiles1WithoutCorrespondentOnFiles2(files1, files2);
-        return findFiles1WithOrWithoutCopiesSomewhereInFiles2(withoutCorrespondent, files2, true);
+        return findFiles1WithOrWithoutCopiesSomewhereInFiles2(withoutCorrespondent, files2, withCopies);
     }
 
     public LinkedHashMap<String, File> findFiles1WithoutCorrespondentOnFiles2(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2) {

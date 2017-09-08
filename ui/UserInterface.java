@@ -30,7 +30,7 @@ public class UserInterface {
 
         do {
             status.reset();
-            option = selectOption(EXIT, 18);
+            option = selectOption(EXIT, 20);
             if (option != EXIT) {
                 Thread executionThread = executeOptionOnNewThread(option);
                 displayProgressWhileThreadAlive(executionThread);
@@ -139,6 +139,12 @@ public class UserInterface {
             case 18:
                 removeFoldersWithoutFilesAsDescendants();
                 break;
+            case 19:
+                listDir1FilesWithoutCorrespondentInDir2AndWithoutCopiesThere(false);
+                break;
+            case 20:
+                listDir1FilesWithoutCorrespondentInDir2AndWithoutCopiesThere(true);
+                break;
             default:
                 display(text.getInvalidOptionMsg());
                 break;
@@ -177,7 +183,7 @@ public class UserInterface {
         LinkedHashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
         LinkedHashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
         Finder finder = new Finder(compareLastModified, text, status);
-        ArrayList<File> withCopies = finder.findFiles1WithoutCorrespondentInFiles2ButWithCopiesThere(dir1, dir2);
+        ArrayList<File> withCopies = finder.findFiles1WithoutCorrespondentInFiles2WithOrWithoutCopiesThere(dir1, dir2, true);
         String message = text.getDir1FilesWithoutCorrespondentInDir2ButWithCopiesThereMsg(withCopies.size());
         display(message);
         log(message, Converter.convertToArrayListOfArrayLists(withCopies));
@@ -247,6 +253,16 @@ public class UserInterface {
             display(text.getDeletingFoldersMsg());
             Changer.deleteFolders(foldersWithoutFiles, this);
         }
+    }
+
+    private void listDir1FilesWithoutCorrespondentInDir2AndWithoutCopiesThere(boolean compareLastModified) throws IOException {
+        LinkedHashMap<String, File> dir1 = getDirectoryFiles(text.getDir1Msg());
+        LinkedHashMap<String, File> dir2 = getDirectoryFiles(text.getDir2Msg());
+        Finder finder = new Finder(compareLastModified, text, status);
+        ArrayList<File> withoutCopies = finder.findFiles1WithoutCorrespondentInFiles2WithOrWithoutCopiesThere(dir1, dir2, false);
+        String message = text.getDir1FilesWithoutCorrespondentInDir2AndWithoutCopiesThereMsg(withoutCopies.size());
+        display(message);
+        log(message, Converter.convertToArrayListOfArrayLists(withoutCopies));
     }
 
     private int selectOption(int begin, int end) {
