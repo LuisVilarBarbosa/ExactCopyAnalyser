@@ -38,14 +38,23 @@ public class Finder {
     public ArrayList<ArrayList<File>> findNotEqualCorrespondentsInDirectoriesWithSameStructure(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2, boolean compareContent) throws IOException {
         ArrayList<ArrayList<File>> notEqual = new ArrayList<>();
 
-        int size = files1.size();
-        double interval = size > 100000 ? size / 100000 : (size > 100 ? size / 100 : 1);
+        final int size = files1.size();
+        final double interval = size > 100000 ? size / 100000 : (size > 100 ? size / 100 : 1);
         Iterator<String> it = files1.keySet().iterator();
 
-        int i = 0;
-        status.setup(i, size, notEqual.size());
+        long analysedBytes = 0;
+        long totalBytes = 0;
+        for (String key : files1.keySet()) {
+            File f2 = files2.get(key);
+            if (f2 != null) {
+                File f1 = files1.get(key);
+                totalBytes += f1.length() + f2.length();
+            }
+        }
+
+        status.setup(analysedBytes, totalBytes, notEqual.size());
         while (it.hasNext()) {
-            for (int j = 0; j < interval && it.hasNext(); j++, i++) {
+            for (int j = 0; j < interval && it.hasNext(); j++) {
                 String key = it.next();
                 File f2 = files2.get(key);
                 if (f2 != null) {
@@ -56,9 +65,10 @@ public class Finder {
                         notEqualPair.add(f2);
                         notEqual.add(notEqualPair);
                     }
+                    analysedBytes += f1.length() + f2.length();
                 }
             }
-            status.update(i, notEqual.size());
+            status.update(analysedBytes, notEqual.size());
         }
         status.complete();
         return notEqual;
@@ -66,18 +76,18 @@ public class Finder {
 
     public ArrayList<File> findFiles1WithOrWithoutCopiesSomewhereInFiles2(LinkedHashMap<String, File> files1, LinkedHashMap<String, File> files2, boolean withCopies) throws IOException {
         ArrayList<File> withOrWithoutCopies = new ArrayList<>();
-        int files2Size = files2.size();
-        long completedComparisons = 0;
-        long totalComparisons = (long) files1.size() * files2Size;
+        final long files2SumLengths = sumLengths(files2);
+        long analysedBytes = 0;
+        final long totalBytes = sumLengths(files1) + files2SumLengths * files1.size();
 
-        status.setup(completedComparisons, totalComparisons, withOrWithoutCopies.size());
+        status.setup(analysedBytes, totalBytes, withOrWithoutCopies.size());
         for (String key1 : files1.keySet()) {
             File f1 = files1.get(key1);
             boolean hasCopy = fileHasCopy(key1, f1, files2);
             if ((withCopies && hasCopy) || (!withCopies && !hasCopy))
                 withOrWithoutCopies.add(f1);
-            completedComparisons += files2Size;
-            status.update(completedComparisons, withOrWithoutCopies.size());
+            analysedBytes += f1.length() + files2SumLengths;
+            status.update(analysedBytes, withOrWithoutCopies.size());
         }
         status.complete();
         return withOrWithoutCopies;
@@ -87,20 +97,25 @@ public class Finder {
         ArrayList<ArrayList<File>> duplicates = new ArrayList<>();
 
         ArrayList<String> keys = Converter.convertToArrayListOfKeys(files);
-        int size = keys.size();
+        final int size = keys.size();
         HashSet<String> alreadyAnalysed = new HashSet<>(size);
-        long completedComparisons = 0;
-        long totalComparisons = 0;
+        long analysedBytes = 0;
+        long totalBytes = 0;
         int alreadyFound = 0;
 
-        for (int i = 0; i < size; i++)
-            totalComparisons += size - i - 1;
+        final long filesSumLengths = sumLengths(files);
+        long filesSumLengthsReducing = filesSumLengths;
+        for (File f : files.values()) {
+            totalBytes += filesSumLengthsReducing;
+            filesSumLengthsReducing -= f.length();
+        }
 
-        status.setup(completedComparisons, totalComparisons, alreadyFound);
+        filesSumLengthsReducing = filesSumLengths;
+        status.setup(analysedBytes, totalBytes, alreadyFound);
         for (int i = 0; i < size; i++) {
             String key1 = keys.get(i);
+            File f1 = files.get(key1);
             if (!alreadyAnalysed.contains(key1)) {
-                File f1 = files.get(key1);
                 alreadyAnalysed.add(key1);
                 ArrayList<File> equalsToF1 = new ArrayList<>();
                 equalsToF1.add(f1);
@@ -122,8 +137,9 @@ public class Finder {
                     alreadyFound += duplicatesOfF1;
                 }
             }
-            completedComparisons += size - i - 1;
-            status.update(completedComparisons, alreadyFound);
+            analysedBytes += filesSumLengthsReducing;
+            filesSumLengthsReducing -= f1.length();
+            status.update(analysedBytes, alreadyFound);
         }
         status.complete();
         return duplicates;
@@ -160,5 +176,12 @@ public class Finder {
         Collections.addAll(listedFiles, baseDirectory.listFiles());
         if (listedFiles.isEmpty() || folders.containsAll(listedFiles))
             folders.add(baseDirectory);
+    }
+
+    private long sumLengths(LinkedHashMap<String, File> files) {
+        long sum = 0;
+        for (File f : files.values())
+            sum += f.length();
+        return sum;
     }
 }
